@@ -8,6 +8,7 @@ import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import NotableScreen from '../screens/NotableScreen';
 
 export default TabNavigator(
   {
@@ -19,6 +20,9 @@ export default TabNavigator(
     },
     Settings: {
       screen: SettingsScreen,
+    },
+    Notable: {
+      screen: NotableScreen,
     },
   },
   {
