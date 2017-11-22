@@ -52,7 +52,6 @@ export default class HomeScreen extends React.Component {
             />
           </View>
         </ScrollView>
-
         <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>lol i am tab bar info text</Text>
         </View>
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   noteInputContainer: {
-    alignItems: 'left',
+    alignItems: 'center',
     marginHorizontal: 10,
   },
   noteInput: {
