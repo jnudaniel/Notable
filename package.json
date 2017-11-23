@@ -15,6 +15,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-22.0.2.tar.gz",
     "react-native-cache-image": "^1.0.0",
     "react-native-fs": "^2.8.5",
+    "react-native-lightbox": "^0.7.0",
     "react-native-photo-upload": "^1.1.1",
     "react-native-swipe-cards": "^0.1.1",
     "react-navigation": "^1.0.0-beta.17",

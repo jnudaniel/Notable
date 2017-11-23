@@ -16,35 +16,38 @@ import SwipeCards from 'react-native-swipe-cards';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Iconz from 'react-native-vector-icons/Ionicons';
 import { MonoText } from '../components/StyledText';
+import Lightbox from 'react-native-lightbox'; // 0.6.0
 
 var image1 = require('../images/image1.jpeg')
 var image2 = require('../images/image2.jpeg')
 var image3 = require('../images/image3.jpeg')
 var image4 = require('../images/image4.jpeg')
 var image5 = require('../images/image5.jpeg')
+var empty_image = ' '
+var drawing = require('../images/image6.jpeg')
 
 var number_slides = 5
 
 const Cards = [{
   "id": 1,
-  "slide_title": "Biology is the study of LIFE",
+  "slide_title": "Sony Google TV Remote",
   "image": image1
 }, {
   "id": 2,
-  "slide_title": "Big idea 1",
-  "image": image2
-}, {
-  "id": 3,
-  "slide_title": "Big idea 2",
+  "slide_title": "Design Thinking",
   "image": image3
 }, {
-  "id": 4,
-  "slide_title": "Big idea 3",
+  "id": 3,
+  "slide_title": "Ideate",
   "image": image4
 }, {
-  "id": 5,
-  "slide_title": "Big idea 4",
+  "id": 4,
+  "slide_title": "Test",
   "image": image5
+}, {
+  "id": 5,
+  "slide_title": "Point of View",
+  "image": image2
 }]
 
 export default class HomeScreen extends React.Component {
@@ -52,15 +55,15 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
-
-
   _loadStoredText = async () => {
     try {
       for (let i = 0; i < number_slides; i++) {
         var value = i.toString();
         var storedText = await AsyncStorage.getItem(value);
-        if (storedText != null) {
+        if (storedText != null && storedText != undefined) {
           this.setState({[i]: storedText});
+        } else {
+          this.setState({[i]: " "});
         }
       }
     } catch (error) {
@@ -68,12 +71,31 @@ export default class HomeScreen extends React.Component {
     }
   }
 
+  _loadStoredDrawings = async () => {
+    try {
+      for (let i = 0; i < number_slides; i++) {
+        var value = i.toString() + 'drawing';
+        var storedDrawing = await AsyncStorage.getItem(value);
+        if (storedDrawing != null && storedDrawing != undefined) {
+          this.setState({['drawings' + i]: storedDrawing});
+        } else {
+          this.setState({['drawings' + i]: drawing});
+        }
+      }
+    } catch (error) {
+      console.log('Error fetching stored drawings from AsyncStorage')
+    }
+  }
+
   constructor(props) {
     super(props);
-    for (let i = 0; i < number_slides; i++) {
-      this.state = {[i]: 'a'};
+    for (var i = 0; i < number_slides; i++) {
+      this.state = {[i]: ' '};
+      this.state = {['drawings' + i]: drawing};
     }
     this._loadStoredText();
+    this._loadStoredDrawings();
+    this.saveNotes = this.saveNotes.bind(this)
     console.log('done in constructor')
   }
 
@@ -81,6 +103,8 @@ export default class HomeScreen extends React.Component {
     var slide_notes = [];
     for (let i = 0; i < number_slides; i++) {
       var x = Cards[i]
+      var value = 'drawings' + i
+      var drawing = this.state[value]
       slide_notes.push(
         <View key={i} style={styles.card}>
           <Text> {x.slide_title} </Text>
@@ -94,7 +118,28 @@ export default class HomeScreen extends React.Component {
             value={this.state[i]}
             onEndEditing={this.saveNotes}
           />
-          <Image source ={x.image} resizeMode="contain" style ={{width:100, height:100, position: "absolute", top: 0, right: 0}} />
+           <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:0, right:0}} activeProps={
+                        {
+                            style: {
+                                width: 350,
+                                height: 500,
+                            },
+                            resizeMode: 'contain'
+                        }
+                    }>
+              <Image source={x.image} resizeMode="contain" style ={{width:100, height:100}} />
+           </Lightbox>
+           <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, bottom:0, right:0}} activeProps={
+                        {
+                            style: {
+                                width: 350,
+                                height: 500,
+                            },
+                            resizeMode: 'contain'
+                        }
+                    }>
+              <Image source={drawing} resizeMode="contain" style ={{width:100, height:100, bottom:0, right:0}} />   
+           </Lightbox>
         </View>
         )
     }
@@ -116,16 +161,6 @@ export default class HomeScreen extends React.Component {
     } catch (error) {
       console.log('Unable to save notes to AsyncStorage')
     }
-  };
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
   };
 }
 
