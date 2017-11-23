@@ -22,52 +22,29 @@ var image2 = require('../images/image2.jpeg')
 var image3 = require('../images/image3.jpeg')
 var image4 = require('../images/image4.jpeg')
 var image5 = require('../images/image5.jpeg')
-var image6 = require('../images/image6.jpeg')
 
-var number_slides = 6
+var number_slides = 5
 
 const Cards = [{
   "id": 1,
-  "first_name": "Denise",
-  "age": 21,
-  "friends": 9,
-  "interests": 38,
+  "slide_title": "Biology is the study of LIFE",
   "image": image1
 }, {
   "id": 2,
-  "first_name": "Cynthia",
-  "age": 27,
-  "friends": 16,
-  "interests": 49,
+  "slide_title": "Big idea 1",
   "image": image2
 }, {
   "id": 3,
-  "first_name": "Maria",
-  "age": 29,
-  "friends": 2,
-  "interests": 39,
+  "slide_title": "Big idea 2",
   "image": image3
 }, {
   "id": 4,
-  "first_name": "Jessica",
-  "age": 20,
-  "friends": 18,
-  "interests": 50,
+  "slide_title": "Big idea 3",
   "image": image4
 }, {
   "id": 5,
-  "first_name": "Julie",
-  "age": 28,
-  "friends": 2,
-  "interests": 13,
+  "slide_title": "Big idea 4",
   "image": image5
-}, {
-  "id": 6,
-  "first_name": "Anna",
-  "age": 24,
-  "friends": 12,
-  "interests": 44,
-  "image": image6
 }]
 
 export default class HomeScreen extends React.Component {
@@ -106,18 +83,19 @@ export default class HomeScreen extends React.Component {
       var x = Cards[i]
       slide_notes.push(
         <View key={i} style={styles.card}>
-        <TextInput
-          style={styles.noteInput}
-          multiline={true}
-          autogrow={true}
-          placeholder="Start taking notes..."
-          onChangeText={ (text) => {
-            this.setState({[i]: text}) }}
-          value={this.state[i]}
-          onEndEditing={this.saveNotes}
-        />
-        <Image source ={x.image} resizeMode="contain" style ={{width:350, height:350}} />
-      </View>
+          <Text> {x.slide_title} </Text>
+          <TextInput
+            style={styles.noteInput}
+            multiline={true}
+            autogrow={true}
+            placeholder="Start taking notes..."
+            onChangeText={ (text) => {
+              this.setState({[i]: text}) }}
+            value={this.state[i]}
+            onEndEditing={this.saveNotes}
+          />
+          <Image source ={x.image} resizeMode="contain" style ={{width:100, height:100, position: "absolute", top: 0, right: 0}} />
+        </View>
         )
     }
     return (
