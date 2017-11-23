@@ -1,9 +1,11 @@
 import { Notifications } from 'expo';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
 import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import MenuSide from '../components/MenuSide';
+import SideMenu from 'react-native-side-menu';
 
 const RootStackNavigator = StackNavigator(
   {
@@ -30,7 +32,13 @@ export default class RootNavigator extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator />;
+    const menuContents = <MenuSide />
+
+    return (
+      <SideMenu menu={menuContents}>
+        <RootStackNavigator />
+      </SideMenu>
+      );
   }
 
   _registerForPushNotifications() {
