@@ -97,10 +97,20 @@ export default class NotesScreen extends React.Component {
     this._loadStoredText();
     this._loadStoredDrawings();
     this.saveNotes = this.saveNotes.bind(this)
-    console.log('done in constructor')
+    console.log('done in notes constructor')
   }
 
+  // componentWillFocus(nextProps){
+  //   // console.log(nextProps)
+  //   console.log("fhskjhfksdh")
+  //   // if(nextProps.screenProps.currentScreen === 'Note') {
+  //   //   this._loadStoredText();
+  //   // }
+  // }
+
   render() {
+    console.log(this.props.navigation.state)
+    console.log("LOLOLOL")
     var slide_notes = [];
     for (let i = 0; i < number_slides; i++) {
       var x = Cards[i]
@@ -144,6 +154,7 @@ export default class NotesScreen extends React.Component {
         </View>
         )
     }
+    console.log("render was called in notes screen!")
     return (
       <View style={styles.container}>
         <View style={styles.header}>

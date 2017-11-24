@@ -46,6 +46,7 @@ export default class NotableScreen extends Component {
       this.state = {[i]: ' '};
     }
     this._loadStoredText();
+    console.log("done in compare constructor")
   }
 
   _loadStoredText = async () => {
@@ -75,8 +76,16 @@ export default class NotableScreen extends Component {
       class_notes.push(
         <View key={i} style={styles.card}>
           <Text> {x.slide_title} </Text>
-          <Button
-            onPress = { this.saveNotes }
+          <Button key={i} onPress={() => {
+            var curr_notes = this.state[i] + x.notes
+            this.setState({ [i]: curr_notes }, () => {
+              try {
+                var value = i.toString();
+                AsyncStorage.setItem(value, this.state[i]);
+              } catch (error) {
+                alert('AsyncStorage error: ' + error.message);
+              }
+            });}}
             title={x.notes}
             color="#841584"
             accessibilityLabel="Learn more about this purple button"
@@ -90,7 +99,7 @@ export default class NotableScreen extends Component {
         </View>
         )
     }
-    console.log("render was called here!")
+    console.log("render was called in compare!")
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -115,7 +124,7 @@ export default class NotableScreen extends Component {
   }
 
   saveNotes = async () => {
-    console.log('attempting to save notes');
+    console.log('attempting to save notes in compare');
     try {
       for (let i = 0; i < number_slides; i++) {
         await AsyncStorage.setItem(i.toString(), this.state[i]);

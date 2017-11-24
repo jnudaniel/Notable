@@ -31,12 +31,26 @@ export default class RootNavigator extends React.Component {
     this._notificationSubscription && this._notificationSubscription.remove();
   }
 
+  _onNavigationStateChange(prevState, newState, action) {
+    // const currentScreen = getCurrentRouteName(currentState)
+    // const prevScreen = getCurrentRouteName(prevState)
+    // console.debug('onNavigationStateChange currentScreen=', currentScreen,
+    //   'prevScreen=', prevScreen, 'action.routeName=', action.routeName)
+    console.log("change in navigation")
+    console.log(this.props)
+    // const currentScreen = getCurrentRouteName(currentState)
+    // const prevScreen = getCurrentRouteName(prevState)
+    // if (prevScreen !== currentScreen) {
+    // this.forceUpdate()
+    // }
+  }
+
   render() {
     const menuContents = <MenuSide />
 
     return (
       <SideMenu menu={menuContents}>
-        <RootStackNavigator />
+       <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange.bind(this)}/>
       </SideMenu>
       );
   }
