@@ -23,6 +23,7 @@ var image2 = require('../images/image2.jpeg')
 var image3 = require('../images/image3.jpeg')
 var image4 = require('../images/image4.jpeg')
 var image5 = require('../images/image5.jpeg')
+var logo = require('../images/logo.jpeg')
 var empty_image = ' '
 var drawing = require('../images/image6.jpeg')
 
@@ -50,7 +51,7 @@ const Cards = [{
   "image": image2
 }]
 
-export default class HomeScreen extends React.Component {
+export default class NotesScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -145,6 +146,9 @@ export default class HomeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
+        <View style={styles.header}>
+          <Image style={styles.navBar} source={logo} resizeMode="contain" />  
+        </View> 
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
           {slide_notes}
         </ScrollView>
@@ -228,6 +232,16 @@ const styles = StyleSheet.create({
     justifyContent:'center', 
     alignItems:'center',
     borderRadius:25
+  },
+  navBar: {
+    flex: 1,
+    paddingTop: 30,
+    height: 64,
+    backgroundColor: 'black',
+  },
+  header: {
+    flex: 0,
+    flexDirection: 'row',
   },
    card: {
     flex: 1,

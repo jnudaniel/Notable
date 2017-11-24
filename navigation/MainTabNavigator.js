@@ -5,24 +5,16 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import NotableScreen from '../screens/NotableScreen';
+import NotesScreen from '../screens/NotesScreen';
+import CompareScreen from '../screens/CompareScreen';
 
 export default TabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
+    Notes: {
+      screen: NotesScreen,
     },
-    Links: {
-      screen: LinksScreen,
-    },
-    Settings: {
-      screen: SettingsScreen,
-    },
-    Notable: {
-      screen: NotableScreen,
+    Compare: {
+      screen: CompareScreen,
     },
   },
   {
@@ -31,18 +23,18 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Home':
+          case 'Notes':
+            iconName = 
+              Platform.OS === 'ios'
+                ? `ios-information-circle${focused ? '' : '-outline'}`
+                : 'md-information-circle';
+            break;
+          case 'Compare':
             iconName =
               Platform.OS === 'ios'
                 ? `ios-information-circle${focused ? '' : '-outline'}`
                 : 'md-information-circle';
             break;
-          case 'Links':
-            iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
-            break;
-          case 'Settings':
-            iconName =
-              Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
         }
         return (
           <Ionicons
