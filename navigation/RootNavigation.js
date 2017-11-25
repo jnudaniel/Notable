@@ -6,11 +6,19 @@ import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 import MenuSide from '../components/MenuSide';
 import SideMenu from 'react-native-side-menu';
+import NotesScreen from '../screens/NotesScreen';
+import CompareScreen from '../screens/CompareScreen';
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
       screen: MainTabNavigator,
+    },
+    Notes: {
+    screen: NotesScreen,
+  },
+    Compare: {
+      screen: CompareScreen,
     },
   },
   {
@@ -23,6 +31,8 @@ const RootStackNavigator = StackNavigator(
 );
 
 export default class RootNavigator extends React.Component {
+  state = {currentScreen: null}
+
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }
@@ -31,18 +41,8 @@ export default class RootNavigator extends React.Component {
     this._notificationSubscription && this._notificationSubscription.remove();
   }
 
-  _onNavigationStateChange(prevState, newState, action) {
-    // const currentScreen = getCurrentRouteName(currentState)
-    // const prevScreen = getCurrentRouteName(prevState)
-    // console.debug('onNavigationStateChange currentScreen=', currentScreen,
-    //   'prevScreen=', prevScreen, 'action.routeName=', action.routeName)
-    console.log("change in navigation")
-    console.log(this.props)
-    // const currentScreen = getCurrentRouteName(currentState)
-    // const prevScreen = getCurrentRouteName(prevState)
-    // if (prevScreen !== currentScreen) {
-    // this.forceUpdate()
-    // }
+  _onNavigationStateChange = (prevState, newState) => {
+    this.setState({...this.state, route_index: newState.index});
   }
 
   render() {
@@ -50,7 +50,7 @@ export default class RootNavigator extends React.Component {
 
     return (
       <SideMenu menu={menuContents}>
-       <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange.bind(this)}/>
+       <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange} screenProps={this.state}/>
       </SideMenu>
       );
   }

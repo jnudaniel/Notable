@@ -46,7 +46,7 @@ export default class NotableScreen extends Component {
       this.state = {[i]: ' '};
     }
     this._loadStoredText();
-    console.log("done in compare constructor")
+    // console.log("done in compare constructor")
   }
 
   _loadStoredText = async () => {
@@ -68,6 +68,12 @@ export default class NotableScreen extends Component {
     header: () => null,
   };
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.screenProps.route_index == 0) {
+      this._loadStoredText()
+    }
+  }
+
   render() {
     var personal_notes = [];
     var class_notes = [];
@@ -88,7 +94,6 @@ export default class NotableScreen extends Component {
             });}}
             title={x.notes}
             color="#841584"
-            accessibilityLabel="Learn more about this purple button"
           />
         </View>
         )
@@ -99,7 +104,7 @@ export default class NotableScreen extends Component {
         </View>
         )
     }
-    console.log("render was called in compare!")
+    // console.log("render was called in compare!")
     return (
       <View style={styles.container}>
         <View style={styles.header}>

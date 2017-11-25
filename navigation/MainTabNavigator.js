@@ -22,7 +22,7 @@ export default TabNavigator(
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
         let iconName;
-        console.log("in navigation");
+        // console.log("in navigation");
         switch (routeName) {
           case 'Notes':
             iconName = 
