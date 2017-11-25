@@ -20,23 +20,23 @@ var constructed = 0
 const combined_notes = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "notes": "Hall of shame"
+  "notes": "hall of shame"
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "notes": "Hall of shame"
+  "notes": "used by IDEO"
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "notes": "Hall of shame"
+  "notes": "middle step"
 }, {
   "id": 4,
   "slide_title": "Test",
-  "notes": "Hall of shame"
+  "notes": "user studies"
 }, {
   "id": 5,
   "slide_title": "Point of View",
-  "notes": "Hall of shame"
+  "notes": "use open-ended questions"
 }]
 
 export default class NotableScreen extends Component {
@@ -81,9 +81,9 @@ export default class NotableScreen extends Component {
       var x = combined_notes[i]
       class_notes.push(
         <View key={i} style={styles.card}>
-          <Text> {x.slide_title} </Text>
+          <Text> {combined_notes[i].slide_title} </Text>
           <Button key={i} onPress={() => {
-            var curr_notes = this.state[i] + x.notes
+            var curr_notes = this.state[i] + "\n" + combined_notes[i].notes
             this.setState({ [i]: curr_notes }, () => {
               try {
                 var value = i.toString();
@@ -92,7 +92,7 @@ export default class NotableScreen extends Component {
                 alert('AsyncStorage error: ' + error.message);
               }
             });}}
-            title={x.notes}
+            title={combined_notes[i].notes}
             color="#841584"
           />
         </View>
@@ -100,7 +100,7 @@ export default class NotableScreen extends Component {
       personal_notes.push(
         <View key={i} style={styles.card}>
           <Text> {x.slide_title} </Text>
-          <Text> {this.state[i]} </Text>
+          <Text style={styles.notes_text}> {this.state[i]} </Text>
         </View>
         )
     }
@@ -144,6 +144,9 @@ export default class NotableScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f7f7f7',
+    // flexDirection: 'row',
+    // alignItems: 'center',
   },
   navBar: {
     flex: 1,
@@ -164,10 +167,10 @@ const styles = StyleSheet.create({
     width: 350,
     height: 420,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#f7f7f7',
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: '#f7f7f7',
+  // },
   scrollContentContainer: {
     paddingTop: 30,
   },
@@ -201,4 +204,8 @@ const styles = StyleSheet.create({
   box2: {
       backgroundColor: '#F0DCCA'
   },
+  notes_text: {
+    flexWrap:'wrap',
+    flex: 1,
+  }
 });
