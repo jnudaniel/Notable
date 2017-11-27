@@ -7,11 +7,16 @@ import Colors from '../constants/Colors';
 
 import NotesScreen from '../screens/NotesScreen';
 import CompareScreen from '../screens/CompareScreen';
+import DrawScreen from '../screens/DrawScreen';
+
 
 export default TabNavigator(
   {
     Notes: {
       screen: NotesScreen,
+    },
+    Draw: {
+      screen: DrawScreen,
     },
     Compare: {
       screen: CompareScreen,
@@ -25,16 +30,22 @@ export default TabNavigator(
         // console.log("in navigation");
         switch (routeName) {
           case 'Notes':
-            iconName = 
+            iconName =
               Platform.OS === 'ios'
-                ? `ios-information-circle${focused ? '' : '-outline'}`
-                : 'md-information-circle';
+                ? `ios-text${focused ? '' : '-outline'}`
+                : 'md-text';
             break;
+            case 'Draw':
+              iconName =
+                Platform.OS === 'ios'
+                  ? `ios-brush${focused ? '' : '-outline'}`
+                  : 'md-brush';
+              break;
           case 'Compare':
             iconName =
               Platform.OS === 'ios'
-                ? `ios-information-circle${focused ? '' : '-outline'}`
-                : 'md-information-circle';
+                ? `ios-git-compare${focused ? '' : '-outline'}`
+                : 'md-git-compare';
             break;
         }
         return (
