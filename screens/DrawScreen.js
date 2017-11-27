@@ -83,7 +83,7 @@ export default class DrawScreen extends React.Component {
    let saveResult = await CameraRoll.saveToCameraRoll(result, 'photo');
    Alert.alert(
     'Saved to your photos!',
-    'Horray!',
+    'Hooray!',
   );
  };
 
