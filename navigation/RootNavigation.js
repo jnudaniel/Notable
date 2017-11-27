@@ -8,6 +8,8 @@ import MenuSide from '../components/MenuSide';
 import SideMenu from 'react-native-side-menu';
 import NotesScreen from '../screens/NotesScreen';
 import CompareScreen from '../screens/CompareScreen';
+import DrawScreen from '../screens/DrawScreen';
+
 
 const RootStackNavigator = StackNavigator(
   {
@@ -17,6 +19,9 @@ const RootStackNavigator = StackNavigator(
     Notes: {
     screen: NotesScreen,
   },
+  Draw: {
+  screen: DrawScreen,
+},
     Compare: {
       screen: CompareScreen,
     },
