@@ -1,14 +1,24 @@
 import { Notifications } from 'expo';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
 import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import MenuSide from '../components/MenuSide';
+import SideMenu from 'react-native-side-menu';
+import NotesScreen from '../screens/NotesScreen';
+import CompareScreen from '../screens/CompareScreen';
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
       screen: MainTabNavigator,
+    },
+    Notes: {
+    screen: NotesScreen,
+  },
+    Compare: {
+      screen: CompareScreen,
     },
   },
   {
@@ -21,6 +31,8 @@ const RootStackNavigator = StackNavigator(
 );
 
 export default class RootNavigator extends React.Component {
+  state = {currentScreen: null}
+
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }
@@ -29,8 +41,18 @@ export default class RootNavigator extends React.Component {
     this._notificationSubscription && this._notificationSubscription.remove();
   }
 
+  _onNavigationStateChange = (prevState, newState) => {
+    this.setState({...this.state, route_index: newState.index});
+  }
+
   render() {
-    return <RootStackNavigator />;
+    const menuContents = <MenuSide />
+
+    return (
+      <SideMenu menu={menuContents}>
+       <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange} screenProps={this.state}/>
+      </SideMenu>
+      );
   }
 
   _registerForPushNotifications() {
