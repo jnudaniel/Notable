@@ -18,6 +18,8 @@ import Iconz from 'react-native-vector-icons/Ionicons';
 import { MonoText } from '../components/StyledText';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 // import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 var image1 = require('../images/image1.jpeg')
 var image2 = require('../images/image2.jpeg')
@@ -159,8 +161,9 @@ export default class NotesScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
+          <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />  
-        </View> 
+        </View>
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
           {slide_notes}
         </ScrollView>
@@ -249,11 +252,17 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
     height: 64,
-    backgroundColor: 'black',
   },
   header: {
     flex: 0,
     flexDirection: 'row',
+    backgroundColor: 'black',
+    justifyContent: 'center',
+  },
+  leftSwipe: {
+    position: 'absolute',
+    left: 15,
+    top: 7,
   },
    card: {
     flex: 1,

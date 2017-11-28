@@ -12,6 +12,8 @@ import {
   Dimensions,
   Button
 } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 var number_slides = 5;
 var logo = require('../images/logo.jpeg')
@@ -49,6 +51,7 @@ export default class NotableScreen extends Component {
     // console.log("done in compare constructor")
   }
 
+  // loads personal notes from database
   _loadStoredText = async () => {
     try {
       for (let i = 0; i < number_slides; i++) {
@@ -74,6 +77,8 @@ export default class NotableScreen extends Component {
     }
   }
 
+  // adds buttons for each
+  // TODO: turn class notes into array & make buttons for each
   render() {
     var personal_notes = [];
     var class_notes = [];
@@ -97,7 +102,7 @@ export default class NotableScreen extends Component {
           />
         </View>
         )
-      personal_notes.push(
+      personal_notes.push( // iterate through state and create divs each time
         <View key={i} style={styles.card}>
           <Text> {x.slide_title} </Text>
           <Text style={styles.notes_text}> {this.state[i]} </Text>
@@ -108,6 +113,7 @@ export default class NotableScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
+          <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />  
         </View> 
         <View style={styles.context}>
@@ -152,11 +158,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
     height: 64,
-    backgroundColor: 'black',
   },
   header: {
     flex: 0,
     flexDirection: 'row',
+    backgroundColor: 'black',
+    justifyContent: 'center',
   },
   card: {
     flex: 1,
@@ -184,6 +191,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  leftSwipe: {
+    position: 'absolute',
+    left: 15,
+    top: 7,
   },
   context: {
     flex: 1,
