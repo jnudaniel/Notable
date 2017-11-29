@@ -29,6 +29,8 @@ var empty_image = ' '
 var drawing = require('../images/image6.jpeg')
 
 var number_slides = 5
+var class_name = "CS147"
+var notes_name = "Lecture 2: User Interviews"
 
 const Cards = [{
   "id": 1,
@@ -161,6 +163,8 @@ export default class NotesScreen extends React.Component {
         <View style={styles.header}>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />  
         </View> 
+        <Text style={styles.class_name}> {class_name} </Text>
+        <Text style={styles.notes_name}> {notes_name} </Text>
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
           {slide_notes}
         </ScrollView>
@@ -226,6 +230,18 @@ const styles = StyleSheet.create({
   },
   navigationFilename: {
     marginTop: 5,
+  },
+  class_name: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+  },
+  notes_name: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
   },
   buttons:{
     width:80, 
