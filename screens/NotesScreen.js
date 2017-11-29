@@ -121,7 +121,7 @@ export default class NotesScreen extends React.Component {
       var drawing = this.state[value]
       slide_notes.push(
         <View key={i} style={styles.card}>
-          <Text> {x.slide_title} </Text>
+          <Text style={styles.slide_title}> {x.slide_title} </Text>
           <TextInput
             style={styles.noteInput}
             multiline={true}
@@ -187,7 +187,7 @@ export default class NotesScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#ffffff',
   },
   scrollContentContainer: {
     paddingTop: 30,
@@ -243,6 +243,12 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
   },
+  slide_title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+  },
   buttons:{
     width:80, 
     height:80, 
@@ -276,7 +282,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf:'center',
     borderWidth:2,
-    borderColor:'#e3e3e3',
+    borderColor:'#b2bab7',
+    borderWidth:1,
+    backgroundColor: '#f4f7f6',
     width: 350,
     height: 420,
   }

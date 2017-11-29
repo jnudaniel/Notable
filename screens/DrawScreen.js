@@ -265,12 +265,6 @@ export default class DrawScreen extends React.Component {
               title="Clear"
               accessibilityLabel="Clear everything you have drawn"
             />
-            <Button
-              style = {styles.button}
-              onPress={this.save}
-              title="Save"
-              accessibilityLabel="Save everything you have drawn"
-            />
         </View>
 
       </View>
