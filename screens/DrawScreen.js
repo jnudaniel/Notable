@@ -1,13 +1,4 @@
-// import React, { Component } from 'react';
-// import { Text } from 'react-native';
-//
-// export default class HelloWorldApp extends Component {
-//   render() {
-//     return (
-//       <Text>I commented out the actual code bc everything breaks for some reason!!</Text>
-//     );
-//   }
-// }
+
 
 // import React, { Component } from 'react';
 // import { StyleSheet, Button, Text, View, Alert, CameraRoll } from 'react-native';
@@ -122,12 +113,17 @@ import {
   PanResponder,
   StyleSheet,
   Platform,
+  Alert,
+  Text,
+  CameraRoll,
   Button
 } from 'react-native'
+ import { takeSnapshotAsync } from "expo";
+
 import {Svg} from '../config'
 const {
-  G, 
-  Surface, 
+  G,
+  Surface,
   Path
 } = Svg
 import Pen from '../tools/pen'
@@ -159,7 +155,7 @@ export default class DrawScreen extends React.Component {
       rewind: rewind(this.rewind),
       clear: clear(this.clear),
     }
-    
+
   }
 
   rewind = () => {
@@ -168,7 +164,7 @@ export default class DrawScreen extends React.Component {
     strokes.pop()
 
     this.state.pen.rewindStroke()
-    
+
     this.setState({
       previousStrokes: [...strokes],
       currentPoints: [],
@@ -185,6 +181,19 @@ export default class DrawScreen extends React.Component {
     })
     this.state.pen.clear()
   }
+    save = async () => {
+     let result = await takeSnapshotAsync(this._canvas, {
+       format: 'png',
+       quality: 1,
+       result: 'file',
+     });
+
+     let saveResult = await CameraRoll.saveToCameraRoll(result, 'photo');
+     Alert.alert(
+      'Saved to your photos!',
+      'Hooray!',
+    );
+   };
 
   onTouch(evt) {
     let x, y, timestamp
@@ -222,7 +231,7 @@ export default class DrawScreen extends React.Component {
     )
 
     this.state.pen.addStroke(this.state.currentPoints)
-    
+
     this.setState({
       previousStrokes: [...this.state.previousStrokes, newElement],
       currentPoints: [],
@@ -242,7 +251,9 @@ export default class DrawScreen extends React.Component {
           styles.drawContainer,
           this.props.containerStyle,
         ]}>
-        <View style={styles.svgContainer} {...this._panResponder.panHandlers}>
+        <View         ref={ref => (this._canvas = ref)}
+ style={styles.svgContainer} {...this._panResponder.panHandlers}>
+
           <Svg style={styles.drawSurface}>
             <G>
               {this.state.previousStrokes}
@@ -265,6 +276,18 @@ export default class DrawScreen extends React.Component {
               title="Clear"
               accessibilityLabel="Clear everything you have drawn"
             />
+            <Button
+              style = {styles.button}
+              onPress={this.save}
+              title="Save"
+              accessibilityLabel="Save everything you have drawn"
+            />
+            <Button
+              style = {styles.button}
+              onPress={this.rewind}
+              title="Undo"
+              accessibilityLabel="Undo whatever you just drew"
+            />
         </View>
 
       </View>
@@ -276,11 +299,22 @@ let styles = StyleSheet.create({
   drawContainer: {
     flex: 1,
     display: 'flex',
+    backgroundColor: 'lightcyan'
+
   },
   svgContainer: {
     flex: 1,
   },
   drawSurface: {
     flex: 1,
+  },
+   button: {
+    color: 'skyblue',
+  },
+  buttonContainer: {
+    margin: 20,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'lavender'
   },
 })
