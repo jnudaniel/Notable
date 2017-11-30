@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   AsyncStorage,
+  Switch,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import Nav from './global-widgets/nav'
@@ -53,6 +54,42 @@ const Cards = [{
   "slide_title": "Point of View",
   "image": image2
 }]
+
+Format = (props) => {
+  const possTags = ["#def", "#section", "#important", "#exam"];
+  const means = ["definition", "Section", "Imp", "Exam"]
+  const currLine = props.line;
+  const toFormat = currLine[0] == '#';
+  if(!toFormat) {  <Text> {props.line} </Text> }
+
+  const tag = currLine.split(" ", 1)[0];
+  const content = currLine.substring(currLine.indexOf(" "));
+
+  switch (possTags.indexOf(tag)) {
+    case 0: return <Text style={styles.definitionText}> {content}{'\n'}</Text>;
+    case 1: return <Text style={styles.sectionText}>-{content}-{'\n'}</Text>;
+    case 2: return <Text style={styles.importantText}> {content}{'\n'}</Text>;
+    case 3: return <Text style={styles.examText}> {content}{'\n'}</Text>;
+
+  }
+
+  return <Text> {props.line}{'\n'} </Text>;
+}
+
+ViewNotes = (props) => {
+  if (props.toFormat) {
+  const lines = String(props.text).split('\n');
+
+  const listItems = lines.map((line) =>
+    <Format line = {line}> </Format>
+  );
+return (
+    <Text>{listItems}</Text>
+  );
+  }
+
+
+}
 
 export default class NotesScreen extends React.Component {
   static navigationOptions = {
@@ -99,7 +136,8 @@ export default class NotesScreen extends React.Component {
     }
     this._loadStoredText();
     this._loadStoredDrawings();
-    this.saveNotes = this.saveNotes.bind(this)
+    this.saveNotes = this.saveNotes.bind(this);
+    this.viewFormat = true;
     // console.log('done in notes constructor')
   }
 
@@ -112,6 +150,13 @@ export default class NotesScreen extends React.Component {
       this._loadStoredText()
     }
   }
+
+  NotesView = (isOn) => {
+  return <Text>{this.state.eventSwitchRegressionIsOn ? 'On' : 'Off'}</Text>
+
+  } 
+
+
 
   render() {
     var slide_notes = [];
@@ -132,7 +177,8 @@ export default class NotesScreen extends React.Component {
             value={this.state[i]}
             onEndEditing={this.saveNotes}
           />
-           <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:0, right:0}} activeProps={
+          <ViewNotes text = {this.state[i]} toFormat = {this.viewFormat}/>
+            <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:0, right:0}} activeProps={
                         {
                             style: {
                                 width: 350,
@@ -248,6 +294,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
+  },
+  definitionText: {
+    fontStyle: 'italic',
+  },
+  sectionText: {
+    fontSize: 25,
+  },
+  importantText: {
+    textDecorationLine: 'underline',
+  },
+  examText: {
+    fontWeight: 'bold',
+    color: 'rgba(255, 100, 100, .8)',
   },
   buttons:{
     width:80, 
