@@ -22,23 +22,23 @@ var constructed = 0
 const combined_notes = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "notes": "hall of shame"
+  "notes": ["hall of shame", "by Sony"]
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "notes": "used by IDEO"
+  "notes": ["used by IDEO", "what CS147 is all about", "d.school"]
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "notes": "middle step"
+  "notes": ["middle step", "after needfinding", "before prototyping"]
 }, {
   "id": 4,
   "slide_title": "Test",
-  "notes": "user studies"
+  "notes": ["user studies", "there's no right answer", "just make sure it works"]
 }, {
   "id": 5,
   "slide_title": "Point of View",
-  "notes": "use open-ended questions"
+  "notes": ["use open-ended questions", "people always make sense to themselves"]
 }]
 
 export default class NotableScreen extends Component {
@@ -60,7 +60,7 @@ export default class NotableScreen extends Component {
         if (storedText != null && storedText != undefined) {
           this.setState({[i]: storedText});
         } else {
-          this.setState({[i]: " "});
+          this.setState({[i]: []});
         }
       }
     } catch (error) {
@@ -83,7 +83,7 @@ export default class NotableScreen extends Component {
     var personal_notes = [];
     var class_notes = [];
     for (let i = 0; i < number_slides; i++) {
-      var x = combined_notes[i]
+      var combined_slide_notes = combined_notes[i]
       class_notes.push(
         <View key={i} style={styles.card}>
           <Text> {combined_notes[i].slide_title} </Text>
@@ -104,7 +104,7 @@ export default class NotableScreen extends Component {
         )
       personal_notes.push( // iterate through state and create divs each time
         <View key={i} style={styles.card}>
-          <Text> {x.slide_title} </Text>
+          <Text> {combined_slide_notes.slide_title} </Text>
           <Text style={styles.notes_text}> {this.state[i]} </Text>
         </View>
         )
