@@ -167,7 +167,9 @@ export default class NotesScreen extends React.Component {
       var drawing = this.state[value]
       slide_notes.push(
         <View key={i} style={styles.card}>
-          <Text style={styles.slide_title}> {x.slide_title} </Text>
+          <View key={i+"sup"} style={styles[i%4]}>
+            <Text style={styles.text_format}> {x.slide_title} </Text>
+          </View>
           <TextInput
             style={styles.noteInput}
             ref={i}
@@ -180,7 +182,7 @@ export default class NotesScreen extends React.Component {
             onEndEditing={(e)=>{this.saveNotes(e, i)}}
           />
           <ViewNotes key={i} text = {this.state[i]} toFormat = {this.viewFormat}/>
-            <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:0, right:0}} activeProps={
+            <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
                         {
                             style: {
                                 width: 350,
@@ -300,7 +302,7 @@ const styles = StyleSheet.create({
   },
   definitionText: {
     fontWeight: 'bold',
-    color: 'rgb(252, 7, 7)',
+    color: 'rgb(242, 74, 65)',
   },
   sectionText: {
     fontWeight: 'bold',
@@ -332,6 +334,12 @@ const styles = StyleSheet.create({
     alignItems:'center',
     borderRadius:25
   },
+  text_format: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+  },
   navBar: {
     flex: 1,
     paddingTop: 30,
@@ -349,6 +357,30 @@ const styles = StyleSheet.create({
     height: 20,
     flexDirection: 'column',
     backgroundColor: '#eae8e8',
+  },
+  0: {
+    backgroundColor: 'rgb(242, 74, 65)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
+  },
+  1: {
+    backgroundColor: 'rgb(244, 153, 17)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
+  },
+  2: {
+    backgroundColor: 'rgb(15, 193, 39)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
+  },
+  3: {
+    backgroundColor: 'rgb(84, 94, 247)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
   },
    card: {
     flex: 1,

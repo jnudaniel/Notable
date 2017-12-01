@@ -80,16 +80,16 @@ export default class NotableScreen extends Component {
     for (let i = 0; i < number_slides; i++) {
       var x = combined_notes[i]
       class_notes.push(
-        <View>
-          <View style={styles.slide_title}>
-            <Text> {x.slide_title} </Text>
+        <View key={i+"hi"}>
+          <View key={i+"sup"} style={styles[i%4]}>
+            <Text style={styles.text_format}> {x.slide_title} </Text>
           </View>
-          <View key={i} style={styles.card}>
+          <View key={i+"yo"} style={styles.card}>
             <View style={[styles.box, styles.box1]}>
               <Text style={styles.notes_text}> {this.state[i]} </Text>
             </View>
             <View style={[styles.box, styles.box2]}>
-              <Button key={i} onPress={() => {
+              <Button key={i+"lol"} onPress={() => {
                 var curr_notes = this.state[i] + "\n" + combined_notes[i].notes
                 this.setState({ [i]: curr_notes }, () => {
                   try {
@@ -117,7 +117,10 @@ export default class NotableScreen extends Component {
         <View style={styles.context}>
             <View style={[styles.box, styles.box2]}>
               <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
-                <Text>Class Notes</Text>
+                <View style={styles.title_text}>
+                  <Text style={[styles.box, styles.my_notes]}>My Notes</Text>
+                  <Text style={[styles.box, styles.my_notes]}>Class Notes</Text>
+                </View>
                 {class_notes}
               </ScrollView>
             </View>
@@ -162,10 +165,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#eae8e8',
   },
+  title_text: {
+    flex: 1,
+    flexDirection: 'row',
+    // alignItems: 'center',
+    alignSelf:'center',
+    // borderWidth:2,
+    // borderColor:'#b2bab7',
+    // borderWidth:1,
+    // backgroundColor: '#f2f7f5',
+    width: 350,
+    height: 30,
+  },
   card: {
     flex: 1,
     flexDirection: 'row',
-    // flexDirection: 'row',
     // alignItems: 'center',
     alignSelf:'center',
     // borderWidth:2,
@@ -173,7 +187,7 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     backgroundColor: '#f4f7f6',
     width: 350,
-    height: 420,
+    height: 400,
   },
   scrollContentContainer: {
     paddingTop: 30,
@@ -188,16 +202,53 @@ const styles = StyleSheet.create({
   box1: {
     flex: 1,
     backgroundColor: '#f4f7f6',
+    borderWidth:.5,
+    borderColor:'#b2bab7',
+    // backgroundColor: '#f4f7f6',
   },
   //content
   box2: {
     flex: 1,
-    backgroundColor: '#eff2f1',
+    borderWidth:.5,
+    borderColor:'#b2bab7',
+    backgroundColor: '#f4f7f6',
+    // backgroundColor: '#eff2f1',
   },
-  slide_title: {
-    backgroundColor: '#eae8e8',
+  0: {
+    backgroundColor: 'rgb(242, 74, 65)',
     width: 350,
+    height: 30,
     alignSelf:'center',
+  },
+  1: {
+    backgroundColor: 'rgb(244, 153, 17)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
+  },
+  2: {
+    backgroundColor: 'rgb(15, 193, 39)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
+  },
+  3: {
+    backgroundColor: 'rgb(84, 94, 247)',
+    width: 350,
+    height: 30,
+    alignSelf:'center',
+  },
+  text_format: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+  },
+  my_notes: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
   },
   notes_text: {
     flexWrap:'wrap',
