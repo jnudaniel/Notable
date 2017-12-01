@@ -5,13 +5,15 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Button,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   View,
   AsyncStorage,
   Switch,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { WebBrowser, ImagePicker } from 'expo';
 import Nav from './global-widgets/nav'
 import SwipeCards from 'react-native-swipe-cards';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -27,7 +29,7 @@ var image4 = require('../images/image4.jpeg')
 var image5 = require('../images/image5.jpeg')
 var logo = require('../images/puzzle_piece.png')
 var empty_image = ' '
-var drawing = require('../images/image6.jpeg')
+var drawing = 'https://cdn2.iconfinder.com/data/icons/edit/100/edit-set-10-512.png'
 
 var number_slides = 5
 var class_name = "CS147"
@@ -81,7 +83,7 @@ ViewNotes = (props) => {
   if (props.toFormat) {
   const lines = String(props.text).split('\n');
   key_val = key_val + 1
-  const listItems = lines.map((line) => 
+  const listItems = lines.map((line) =>
     <Format key={line + Math.random()} line = {line}> </Format>
   );
 return (
@@ -96,6 +98,7 @@ export default class NotesScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
 
   _loadStoredText = async () => {
     try {
@@ -142,9 +145,7 @@ export default class NotesScreen extends React.Component {
     // console.log('done in notes constructor')
   }
 
-  _myRocketFunction = () => {
-    alert('Here is rocket tab!');
-  }
+
 
   componentWillReceiveProps(newProps) {
     if (newProps.screenProps.route_index == 0) {
@@ -155,13 +156,14 @@ export default class NotesScreen extends React.Component {
   NotesView = (isOn) => {
   return <Text>{this.state.eventSwitchRegressionIsOn ? 'On' : 'Off'}</Text>
 
-  } 
+  }
 
 
 
   render() {
     var slide_notes = [];
     for (let i = 0; i < number_slides; i++) {
+      var image  = drawing;
       var x = Cards[i]
       var value = 'drawings' + i
       var drawing = this.state[value]
@@ -193,17 +195,13 @@ export default class NotesScreen extends React.Component {
                     }>
               <Image source={x.image} resizeMode="contain" style ={{width:100, height:100}} />
            </Lightbox>
-           <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, bottom:0, right:0}} activeProps={
-                        {
-                            style: {
-                                width: 350,
-                                height: 500,
-                            },
-                            resizeMode: 'contain'
-                        }
-                    }>
-              <Image source={drawing} resizeMode="contain" style ={{width:100, height:100, bottom:0, right:0}} />   
-           </Lightbox>
+
+
+      <TouchableHighlight onPress={(e)=>{this.pickImage(e, i)}}>
+      <Image source={{ uri: `${drawing}` }} resizeMode="contain" style ={{ width:100, height:100, bottom:10, right: 0}} />
+     </TouchableHighlight>
+
+
         </View>
         )
     }
@@ -212,16 +210,30 @@ export default class NotesScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
-          <Image style={styles.navBar} source={logo} resizeMode="contain" />  
-        </View> 
+          <Image style={styles.navBar} source={logo} resizeMode="contain" />
+        </View>
         <Text style={styles.class_name}> {class_name} </Text>
         <Text style={styles.notes_name}> {notes_name} </Text>
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
           {slide_notes}
         </ScrollView>
+
       </View>
     );
   }
+
+  pickImage = async (e, i) => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    allowsEditing: true,
+    aspect: [4, 3],
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    this.setState({['drawings' + i]: result.uri});
+  }
+};
 
   saveNotes = async (e, i) => {
     console.log('attempting to save notes');
@@ -317,20 +329,20 @@ const styles = StyleSheet.create({
     color: 'rgb(84, 94, 247)',
   },
   buttons:{
-    width:80, 
-    height:80, 
-    borderWidth:10, 
-    borderColor:'#e7e7e7', 
-    justifyContent:'center', 
+    width:80,
+    height:80,
+    borderWidth:10,
+    borderColor:'#e7e7e7',
+    justifyContent:'center',
     alignItems:'center',
     borderRadius:40
   },
   buttonSmall:{
-    width:50, 
-    height:50, 
-    borderWidth:10, 
-    borderColor:'#e7e7e7', 
-    justifyContent:'center', 
+    width:50,
+    height:50,
+    borderWidth:10,
+    borderColor:'#e7e7e7',
+    justifyContent:'center',
     alignItems:'center',
     borderRadius:25
   },
