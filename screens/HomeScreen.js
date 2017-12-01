@@ -212,14 +212,17 @@ const styles = StyleSheet.create({
   navigationFilename: {
     marginTop: 5,
   },
-    definitionText: {
-    fontStyle: 'italic',
+  definitionText: {
+    fontWeight: 'bold',
+    color: 'rgba(255, 100, 100, .8)',
   },
   sectionText: {
-    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'rgba(255, 100, 100, .8)',
   },
   importantText: {
-    textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    color: 'rgba(255, 100, 100, .8)',
   },
   examText: {
     fontWeight: 'bold',

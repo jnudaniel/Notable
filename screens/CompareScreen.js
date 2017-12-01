@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 var number_slides = 5;
-var logo = require('../images/logo.jpeg')
+var logo = require('../images/puzzle_piece.png')
 var constructed = 0
 
 const combined_notes = [{
@@ -80,43 +80,41 @@ export default class NotableScreen extends Component {
     for (let i = 0; i < number_slides; i++) {
       var x = combined_notes[i]
       class_notes.push(
-        <View key={i} style={styles.card}>
-          <Text> {combined_notes[i].slide_title} </Text>
-          <Button key={i} onPress={() => {
-            var curr_notes = this.state[i] + "\n" + combined_notes[i].notes
-            this.setState({ [i]: curr_notes }, () => {
-              try {
-                var value = i.toString();
-                AsyncStorage.setItem(value, this.state[i]);
-              } catch (error) {
-                alert('AsyncStorage error: ' + error.message);
-              }
-            });}}
-            title={combined_notes[i].notes}
-            color="#841584"
-          />
-        </View>
-        )
-      personal_notes.push(
-        <View key={i} style={styles.card}>
-          <Text> {x.slide_title} </Text>
-          <Text style={styles.notes_text}> {this.state[i]} </Text>
+        <View>
+          <View style={styles.slide_title}>
+            <Text> {x.slide_title} </Text>
+          </View>
+          <View key={i} style={styles.card}>
+            <View style={[styles.box, styles.box1]}>
+              <Text style={styles.notes_text}> {this.state[i]} </Text>
+            </View>
+            <View style={[styles.box, styles.box2]}>
+              <Button key={i} onPress={() => {
+                var curr_notes = this.state[i] + "\n" + combined_notes[i].notes
+                this.setState({ [i]: curr_notes }, () => {
+                  try {
+                    var value = i.toString();
+                    AsyncStorage.setItem(value, this.state[i]);
+                  } catch (error) {
+                    alert('AsyncStorage error: ' + error.message);
+                  }
+                });}}
+                title={combined_notes[i].notes}
+                color="#841584"
+              />
+            </View>
+          </View>
         </View>
         )
     }
     // console.log("render was called in compare!")
     return (
       <View style={styles.container}>
+        <View style={styles.padding_header}></View>
         <View style={styles.header}>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />  
         </View> 
         <View style={styles.context}>
-            <View style={[styles.box, styles.box1]}>
-              <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
-                 <Text>My Notes</Text>
-                {personal_notes}
-              </ScrollView>
-            </View>
             <View style={[styles.box, styles.box2]}>
               <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
                 <Text>Class Notes</Text>
@@ -144,65 +142,62 @@ export default class NotableScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f7f7f7',
-    // flexDirection: 'row',
-    // alignItems: 'center',
+    backgroundColor: '#ffffff',
   },
   navBar: {
     flex: 1,
     paddingTop: 30,
-    height: 64,
-    backgroundColor: 'black',
+    height: 50,
+    backgroundColor: '#eae8e8',
   },
   header: {
     flex: 0,
     flexDirection: 'row',
+    borderBottomWidth:.5,
+    borderColor:'#b2bab7',
+    backgroundColor: '#eae8e8',
+  },
+  padding_header: {
+    height: 20,
+    flexDirection: 'column',
+    backgroundColor: '#eae8e8',
   },
   card: {
     flex: 1,
-    alignItems: 'center',
+    flexDirection: 'row',
+    // flexDirection: 'row',
+    // alignItems: 'center',
     alignSelf:'center',
-    borderWidth:2,
-    borderColor:'#e3e3e3',
+    // borderWidth:2,
+    // borderColor:'#b2bab7',
+    // borderWidth:1,
+    backgroundColor: '#f4f7f6',
     width: 350,
     height: 420,
   },
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: '#f7f7f7',
-  // },
   scrollContentContainer: {
     paddingTop: 30,
-  },
-  navBarButton: {
-    color: '#FFFFFF',
-    textAlign:'center',
-    width: 64
-  },
-  navBarHeader: {
-    flex: 1,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    textAlign: 'center'
   },
   context: {
     flex: 1,
     flexDirection: 'row'
   },
-  notes: {
-    flex:1,
-    flexDirection: 'column'
-  },
   box: {
     flex: 1,
-    borderWidth:2,
-    borderColor:'#e3e3e3',
   },
   box1: {
-      backgroundColor: '#EFDDC9'
+    flex: 1,
+    backgroundColor: '#f4f7f6',
   },
+  //content
   box2: {
-      backgroundColor: '#F0DCCA'
+    flex: 1,
+    backgroundColor: '#eff2f1',
+  },
+  slide_title: {
+    backgroundColor: '#eae8e8',
+    width: 350,
+    alignSelf:'center',
   },
   notes_text: {
     flexWrap:'wrap',
