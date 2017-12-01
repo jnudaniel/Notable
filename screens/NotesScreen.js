@@ -167,12 +167,9 @@ export default class NotesScreen extends React.Component {
       var x = Cards[i]
       var value = 'drawings' + i
       var drawing = this.state[value]
-      slide_notes.push(
-        <View key={i} style={styles.card}>
-          <View key={i+"sup"} style={styles[i%4]}>
-            <Text style={styles.text_format}> {x.slide_title} </Text>
-          </View>
-          <TextInput
+      var textView = null;
+      if(this.state.eventSwitchIsOn) {
+        textView = <TextInput
             style={styles.noteInput}
             ref={i}
             multiline={true}
@@ -183,7 +180,20 @@ export default class NotesScreen extends React.Component {
             value={this.state[i]}
             onEndEditing={(e)=>{this.saveNotes(e, i)}}
           />
-          <ViewNotes key={i} text = {this.state[i]} toFormat = {this.viewFormat}/>
+        } else {
+          textView =  <ViewNotes key={i} text = {this.state[i]} toFormat = {this.viewFormat}/>
+        }
+      slide_notes.push(
+        <View key={i} style={styles.card}>
+          <View key={i+"sup"} style={styles[i%4]}>
+            <Text style={styles.text_format}> {x.slide_title} </Text>
+          </View>
+          <Switch
+            onValueChange={(value) => this.setState({eventSwitchIsOn: value})}
+            style={{marginBottom: 10}}
+            value={this.state.eventSwitchIsOn} />
+            <Text>{this.state.eventSwitchIsOn ? 'Formatted Off' : 'Formatted On'}</Text>
+          {textView}
             <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
                         {
                             style: {
