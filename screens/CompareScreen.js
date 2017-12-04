@@ -77,6 +77,49 @@ export default class NotableScreen extends Component {
     }
   }
 
+  one_slide_array_of_buttons = (slide_index) => {
+    console.log('slide_index is',slide_index)
+    var combined_slide_notes = combined_notes[slide_index]
+    var buttons_array = []
+    for (let i = 0; i < combined_slide_notes.notes.length; i++) {
+      buttons_array.push(
+        <Button
+          key={(slide_index) * 100 + i}
+          onPress={
+            () => {
+              var curr_notes = this.state[slide_index] + "\n" + combined_slide_notes.notes[i];
+              this.setState(
+                { [slide_index]: curr_notes },
+                () => {
+                  try {
+                    var value = i.toString();
+                    AsyncStorage.setItem(value, this.state[slide_index]);
+                  } catch (error) {
+                    alert('AsyncStorage error: ' + error.message);
+                  }
+                }
+              );
+            }
+          }
+          title={combined_slide_notes.notes[i]}
+          color="#841584"
+        />
+      );
+    }
+    return (buttons_array);
+  }
+
+  one_slide_of_class_notes = (slide_index) => {
+    console.log('slide_index is',slide_index)
+    var combined_slide_notes = combined_notes[slide_index]
+    return (
+      <View key={slide_index} style={styles.card}>
+          <Text> {combined_slide_notes.slide_title} </Text>
+          { this.one_slide_array_of_buttons(slide_index) }
+        </View>
+    )
+  }
+
   // adds buttons for each
   // TODO: turn class notes into array & make buttons for each
   render() {
@@ -84,24 +127,7 @@ export default class NotableScreen extends Component {
     var class_notes = [];
     for (let i = 0; i < number_slides; i++) {
       var combined_slide_notes = combined_notes[i]
-      class_notes.push(
-        <View key={i} style={styles.card}>
-          <Text> {combined_notes[i].slide_title} </Text>
-          <Button key={i} onPress={() => {
-            var curr_notes = this.state[i] + "\n" + combined_notes[i].notes
-            this.setState({ [i]: curr_notes }, () => {
-              try {
-                var value = i.toString();
-                AsyncStorage.setItem(value, this.state[i]);
-              } catch (error) {
-                alert('AsyncStorage error: ' + error.message);
-              }
-            });}}
-            title={combined_notes[i].notes}
-            color="#841584"
-          />
-        </View>
-        )
+      class_notes.push(this.one_slide_of_class_notes(i));
       personal_notes.push( // iterate through state and create divs each time
         <View key={i} style={styles.card}>
           <Text> {combined_slide_notes.slide_title} </Text>
