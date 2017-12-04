@@ -161,6 +161,7 @@ export default class NotesScreen extends React.Component {
 
 
   render() {
+    const { navigate } = this.props.navigation;
     var slide_notes = [];
     for (let i = 0; i < number_slides; i++) {
       var image  = drawing;
@@ -218,6 +219,12 @@ export default class NotesScreen extends React.Component {
     // console.log("render was called in notes screen!")
     return (
       <View style={styles.container}>
+        <Button
+          title="Go to Jane's profile"
+          onPress={() =>
+            navigate('Draw')
+          }
+        />
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />
