@@ -78,7 +78,6 @@ export default class NotableScreen extends Component {
   }
 
   one_slide_array_of_buttons = (slide_index) => {
-    console.log('slide_index is',slide_index)
     var combined_slide_notes = combined_notes[slide_index]
     var buttons_array = []
     for (let i = 0; i < combined_slide_notes.notes.length; i++) {
@@ -110,7 +109,6 @@ export default class NotableScreen extends Component {
   }
 
   one_slide_of_class_notes = (slide_index) => {
-    console.log('slide_index is',slide_index)
     var combined_slide_notes = combined_notes[slide_index]
     return (
       <View key={slide_index} style={styles.card}>
