@@ -21,6 +21,8 @@ import Iconz from 'react-native-vector-icons/Ionicons';
 import { MonoText } from '../components/StyledText';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 // import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 var image1 = require('../images/image1.jpeg')
 var image2 = require('../images/image2.jpeg')
@@ -227,6 +229,7 @@ export default class NotesScreen extends React.Component {
         />
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
+          <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />
         </View>
         <Text style={styles.class_name}> {class_name} </Text>
@@ -372,15 +375,21 @@ const styles = StyleSheet.create({
   navBar: {
     flex: 1,
     paddingTop: 30,
-    height: 50,
+    height: 64,
     backgroundColor: '#eae8e8',
   },
   header: {
     flex: 0,
     flexDirection: 'row',
+    justifyContent: 'center',
     borderBottomWidth:.5,
     borderColor:'#b2bab7',
     backgroundColor: '#eae8e8',
+  },
+  leftSwipe: {
+    position: 'absolute',
+    left: 15,
+    top: 7,
   },
   padding_header: {
     height: 20,
