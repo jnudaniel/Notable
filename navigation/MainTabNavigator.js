@@ -62,5 +62,16 @@ export default TabNavigator(
     tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false,
+    tabBarOptions: {
+    activeBackgroundColor: '#87CEFA',
+    style: {
+      backgroundColor: '#eafbff',
+    },
+    tabStyle: {
+   //borderRadius: 20,
+    },
+  },
+
+
   }
 );
