@@ -7,7 +7,7 @@ import Colors from '../constants/Colors';
 
 import NotesScreen from '../screens/NotesScreen';
 import CompareScreen from '../screens/CompareScreen';
-import DrawScreen from '../screens/DrawScreen';
+import AddClass from '../screens/AddClass';
 
 
 export default TabNavigator(
@@ -15,8 +15,8 @@ export default TabNavigator(
     Notes: {
       screen: NotesScreen,
     },
-    Draw: {
-      screen: DrawScreen,
+    Class: {
+      screen: AddClass,
     },
     Compare: {
       screen: CompareScreen,
@@ -35,7 +35,7 @@ export default TabNavigator(
                 ? `ios-text${focused ? '' : '-outline'}`
                 : 'md-text';
             break;
-            case 'Draw':
+            case 'Class':
               iconName =
                 Platform.OS === 'ios'
                   ? `ios-brush${focused ? '' : '-outline'}`

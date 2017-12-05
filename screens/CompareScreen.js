@@ -81,7 +81,7 @@ export default class NotableScreen extends Component {
       var x = combined_notes[i]
       class_notes.push(
         <View key={i+"hi"}>
-          <View key={i+"sup"} style={styles[i%4]}>
+          <View key={i+"sup"} style={styles.slideHeader}>
             <Text style={styles.text_format}> {x.slide_title} </Text>
           </View>
           <View key={i+"yo"} style={styles.card}>
@@ -112,8 +112,8 @@ export default class NotableScreen extends Component {
       <View style={styles.container}>
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
-          <Image style={styles.navBar} source={logo} resizeMode="contain" />  
-        </View> 
+          <Image style={styles.navBar} source={logo} resizeMode="contain" />
+        </View>
         <View style={styles.context}>
             <View style={[styles.box, styles.box2]}>
               <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     // borderColor:'#b2bab7',
     // borderWidth:1,
     // backgroundColor: '#f2f7f5',
-    width: 350,
+  //  width: 350,
     height: 30,
   },
   card: {
@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
     // borderColor:'#b2bab7',
     // borderWidth:1,
     backgroundColor: '#f4f7f6',
-    width: 350,
-    height: 400,
+  //  width: 350,
+    height: 300,
   },
   scrollContentContainer: {
     paddingTop: 30,
@@ -214,28 +214,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f4f7f6',
     // backgroundColor: '#eff2f1',
   },
-  0: {
-    backgroundColor: 'rgb(242, 74, 65)',
-    width: 350,
+  slideHeader: {
+    flex: 1,
+    backgroundColor: 'skyblue',
     height: 30,
-    alignSelf:'center',
-  },
-  1: {
-    backgroundColor: 'rgb(244, 153, 17)',
-    width: 350,
-    height: 30,
-    alignSelf:'center',
-  },
-  2: {
-    backgroundColor: 'rgb(15, 193, 39)',
-    width: 350,
-    height: 30,
-    alignSelf:'center',
-  },
-  3: {
-    backgroundColor: 'rgb(84, 94, 247)',
-    width: 350,
-    height: 30,
+    width: 700,
     alignSelf:'center',
   },
   text_format: {

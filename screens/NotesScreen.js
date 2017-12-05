@@ -10,15 +10,15 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   View,
+  Dimensions,
   AsyncStorage,
   Switch,
 } from 'react-native';
-import { Button } from 'react-native-elements'
+import { Button,Icon } from 'react-native-elements'
 import { WebBrowser, ImagePicker } from 'expo';
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
 import SwipeCards from 'react-native-swipe-cards';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Iconz from 'react-native-vector-icons/Ionicons';
 import { MonoText } from '../components/StyledText';
 import Swiper from 'react-native-swiper';
@@ -191,27 +191,52 @@ export default class NotesScreen extends React.Component {
           textView =  <ViewNotes key={i} text = {this.state[i]} toFormat = {this.viewFormat}/>
         }
       slide_notes.push(
+        <View key={i} style={{flex: 1, flexDirection: 'column'}}>
+        <View style ={{marginTop:20, flex: .2, flexDirection: 'row', justifyContent: 'center'}}>
+
+        <Button
+         title="#Section"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#00BFFF'
+         icon={{name: 'note-add'}}
+         buttonStyle={styles.buttonTags}
+        />
+
+        <Button
+         title="#Definition"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#7B68EE'
+         icon={{name: 'book'}}
+         buttonStyle={styles.buttonTags}
+        />
+
+        <Button
+         title="#Important"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#3CB371'
+         icon={{name: 'new-releases'}}
+         buttonStyle={styles.buttonTags}
+        />
+
+        <Button
+         title="Draw"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#FF6347'
+         icon={{name: 'edit'}}
+         buttonStyle={styles.buttonTags}
+        />
+
+        <Switch
+        onValueChange={(value) => this.setState({eventSwitchIsOn: value})}
+        style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
+        value={this.state.eventSwitchIsOn} />
+        <Text style={{fontSize: 20,padding: 10, color: 'black'}}>{this.state.eventSwitchIsOn ? 'Formatting Off' : 'Formatting On '}</Text>
+
+        </View>
         <View key={i} style={{flex: 1, flexDirection: 'row'}}>
 
               <View key={i} style={styles.note}>
-
-                    <View key={i+"sup"} style={styles.slideHeader}>
-                      <Text style={styles.text_format}> {x.slide_title}
-                          <Switch
-                          onValueChange={(value) => this.setState({eventSwitchIsOn: value})}
-                          style={{ transform: [{ scaleX: .7 }, { scaleY: .7 }] }}
-                          value={this.state.eventSwitchIsOn} />
-                     </Text>
-
-                        <Text style={{fontSize: 12, color: 'black',textAlign: 'center'}}>{this.state.eventSwitchIsOn ? 'Formatted Off' : 'Formatted On '}</Text>
-                    </View>
-
                     {textView}
-
-                    <TouchableHighlight onPress={(e)=>{this.pickImage(e, i)}}>
-                    <Image source={{ uri: `${drawing}` }} resizeMode="contain" style ={{ position: 'absolute', width:100, height:100, top:200, left: 50}} />
-                   </TouchableHighlight>
-
              </View>
 
 
@@ -219,69 +244,38 @@ export default class NotesScreen extends React.Component {
              <View style ={styles.slide}>
 
 
-             <Swiper style={styles.wrapper} onIndexChanged={onSwipe = (index) => {
-                console.log('index changed', index);}} showsButtons={true}>
+             <Swiper style={styles.wrapper}  onIndexChanged={onSwipe = (index) => {
+                console.log('index changed', index);}} showsButtons={true}  >
 
                <View style={styles.slide1}>
-               <Image style={{resizeMode: 'contain',width: 300, height: 300}} source={image1}/>
-               </View>
-               <View style={styles.slide2}>
-               <Image style={{resizeMode: 'contain',width: 300, height: 300}} source={image2}/>
-               </View>
-               <View style={styles.slide3}>
-               <Image style={{resizeMode: 'contain',width: 300, height: 300}} source={image3}/>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[0].slide_title} </Text> } source={image1}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[0].slide_title} </Text>
                </View>
                <View style={styles.slide1}>
-               <Image style={{resizeMode: 'contain',width: 300, height: 300}} source={image4}/>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[1].slide_title} </Text> } source={image2}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[1].slide_title} </Text>
                </View>
-               <View style={styles.slide2}>
-               <Image style={{resizeMode: 'contain',width: 300, height: 300}} source={image5}/>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[2].slide_title} </Text> } source={image3}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[2].slide_title} </Text>
+               </View>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[3].slide_title} </Text> } source={image4}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[3].slide_title} </Text>
+               </View>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[4].slide_title} </Text> } source={image5}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[4].slide_title} </Text>
                </View>
 
              </Swiper>
 
 
-             <View style ={{ marginTop:10, flex: .2, flexDirection: 'row', overflow: 'scroll'}}>
-             <Button
-              title="#Section"
-              onPress={this._handleButtonPress}
-              backgroundColor = '#00BFFF'
 
-            />
-            <Button
-              title="#Definition"
-              onPress={this._handleButtonPress}
-              backgroundColor = '#7B68EE'
-            />
-            </View>
+      </View>
 
-            <View style ={{flex: .2, flexDirection: 'row', overflow: 'scroll'}}>
+      </View>
 
-            <Button
-              title="#Important"
-              onPress={this._handleButtonPress}
-              backgroundColor = '#3CB371'
-            />
-            <Button
-              title="#Exam"
-              onPress={this._handleButtonPress}
-              backgroundColor = '#FF6347'
-            />
-            </View>
-
-            <View style ={{flex: .2, flexDirection: 'row', overflow: 'scroll'}}>
-
-            <Button
-              title="Draw"
-              onPress={this._handleButtonPress}
-              backgroundColor = '#FFD700'
-              icon={{name: 'paint-brush', type: 'font-awesome'}}
-            />
-            </View>
-
-
-
-            </View>
       </View>
 
 
@@ -304,6 +298,7 @@ export default class NotesScreen extends React.Component {
         </ScrollView>
 
       </View>
+
     );
   }
 
@@ -403,7 +398,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
-    textAlign: 'center',
+    textAlign: 'right',
   },
   definitionText: {
     fontWeight: 'bold',
@@ -477,31 +472,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     alignSelf:'center',
-    borderWidth:2,
-    borderColor:'#b2bab7',
-    backgroundColor: '#f4f7f6',
-    width: 350,
+    width:  350,
     height: 420,
   },
     wrapper: {
+
   },
   slide1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
+    backgroundColor: 'transparent'
+
   },
   text: {
     color: '#fff',
@@ -512,10 +494,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     alignSelf:'center',
-    borderWidth:2,
-    borderColor:'#b2bab7',
-    backgroundColor: '#f4f7f6',
-    width: 350,
+    width:  350,
     height: 420,
+  },
+  buttonTags:{
+    padding: 10,
   }
 });
+
+
+//
+// <TouchableHighlight onPress={(e)=>{this.pickImage(e, i)}}>
+// <Image source={{ uri: `${drawing}` }} resizeMode="contain" style ={{ position: 'absolute', width:100, height:100, top:200, left: 50}} />
+// </TouchableHighlight>
