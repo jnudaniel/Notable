@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, Alert, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Accordion from 'react-native-collapsible/Accordion';
+import { Button } from 'react-native-elements'
 
 
 const SECTIONS = [
@@ -33,28 +34,37 @@ export default class MenuSide extends React.Component {
       </View>
     );
   }
+  _handleButtonPress = () => {
+     Alert.alert(
+       'Button pressed!',
+       'You did it!',
+     );};
 
   _renderContent(section) {
     return (
       <View style={styles.content}>
         <Text style={styles.contentItem}>{section.content[0]}</Text>
         <Text style={styles.contentItem}>{section.content[1]}</Text>
-        <Text style={styles.contentItem}>{section.content[2]}</Text>
       </View>
     );
   }
 
   render() {
     return (
-    	<View>
+    	<View >
     		<Text style={styles.menuHeader}>My Classes</Text>
 	    	<View style={styles.accordion}>
 		      <Accordion
 		        sections={SECTIONS}
 		        renderHeader={this._renderHeader}
 		        renderContent={this._renderContent}
-		        underlayColor='#40AD0D'
+		        underlayColor='#E0FFFF'
 		      />
+          <Button
+            title="New Class"
+            onPress={this._handleButtonPress}
+            backgroundColor = '#008080'
+          />
 		    </View>
 		</View>
     );
@@ -65,26 +75,26 @@ const styles = StyleSheet.create({
   menuHeader: {
   	fontWeight: 'bold',
   	fontSize: 30,
-  	padding: 40,
-  	paddingLeft: 30,
-  	backgroundColor: '#4AC90F',
+  	padding: 20,
+  	paddingLeft: 15,
+    paddingRight: 0,
+  	backgroundColor: '#AFEEEE',
   },
   accordion: {
-  	padding: 30,
-  	backgroundColor: '#40AD0D',
+  	padding: 15,
+  	backgroundColor: '#E0FFFF',
   },
   header: {
-  	paddingTop: 30,
-  	paddingBottom: 30,
+  	paddingTop: 15,
+  	paddingBottom: 15,
   },
   headerText: {
   	fontWeight: 'bold',
-  }, 
+  },
   content: {
-
   },
   contentItem: {
-  	paddingTop: 10,
-  	paddingBottom: 10,
+  	paddingTop: 5,
+  	paddingBottom: 5,
   }
 });

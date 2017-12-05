@@ -5,20 +5,23 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  Button,
+  Alert,
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
   View,
+  Dimensions,
   AsyncStorage,
   Switch,
 } from 'react-native';
+import { Button,Icon } from 'react-native-elements'
 import { WebBrowser, ImagePicker } from 'expo';
+import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
 import SwipeCards from 'react-native-swipe-cards';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Iconz from 'react-native-vector-icons/Ionicons';
 import { MonoText } from '../components/StyledText';
+import Swiper from 'react-native-swiper';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 // import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
 import { FontAwesome } from '@expo/vector-icons';
@@ -160,11 +163,15 @@ export default class NotesScreen extends React.Component {
 
   }
 
-
+  _handleButtonPress = () => {
+     Alert.alert(
+       'Button pressed!',
+       'You did it!',
+     );};
 
   render() {
     var slide_notes = [];
-    for (let i = 0; i < number_slides; i++) {
+    let i = 0;
       var image  = drawing;
       var x = Cards[i]
       var value = 'drawings' + i
@@ -186,52 +193,115 @@ export default class NotesScreen extends React.Component {
           textView =  <ViewNotes key={i} text = {this.state[i]} toFormat = {this.viewFormat}/>
         }
       slide_notes.push(
-        <View key={i} style={styles.card}>
-          <View key={i+"sup"} style={styles[i%4]}>
-            <Text style={styles.text_format}> {x.slide_title} </Text>
-          </View>
-          <Switch
-            onValueChange={(value) => this.setState({eventSwitchIsOn: value})}
-            style={{marginBottom: 10}}
-            value={this.state.eventSwitchIsOn} />
-            <Text>{this.state.eventSwitchIsOn ? 'Formatted Off' : 'Formatted On'}</Text>
-          {textView}
-            <Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
-                        {
-                            style: {
-                                width: 350,
-                                height: 500,
-                            },
-                            resizeMode: 'contain'
-                        }
-                    }>
-              <Image source={x.image} resizeMode="contain" style ={{width:100, height:100}} />
-           </Lightbox>
+        <View key={i} style={{flex: 1, flexDirection: 'column'}}>
+        <View style ={{marginTop:20, flex: .2, flexDirection: 'row', justifyContent: 'center'}}>
 
+        <Button
+         title="#Section"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#00BFFF'
+         icon={{name: 'note-add'}}
+         buttonStyle={styles.buttonTags}
+        />
 
-      <TouchableHighlight onPress={(e)=>{this.pickImage(e, i)}}>
-      <Image source={{ uri: `${drawing}` }} resizeMode="contain" style ={{ width:100, height:100, bottom:10, right: 0}} />
-     </TouchableHighlight>
+        <Button
+         title="#Definition"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#7B68EE'
+         icon={{name: 'book'}}
+         buttonStyle={styles.buttonTags}
+        />
 
+        <Button
+         title="#Important"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#3CB371'
+         icon={{name: 'new-releases'}}
+         buttonStyle={styles.buttonTags}
+        />
+
+        <Button
+         title="Draw"
+         onPress={this._handleButtonPress}
+         backgroundColor = '#FF6347'
+         icon={{name: 'edit'}}
+         buttonStyle={styles.buttonTags}
+        />
+
+        <Switch
+        onValueChange={(value) => this.setState({eventSwitchIsOn: value})}
+        style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
+        value={this.state.eventSwitchIsOn} />
+        <Text style={{fontSize: 20,padding: 10, color: 'black'}}>{this.state.eventSwitchIsOn ? 'Formatting Off' : 'Formatting On '}</Text>
 
         </View>
+        <View key={i} style={{flex: 1, flexDirection: 'row'}}>
+
+              <View key={i} style={styles.note}>
+                    {textView}
+             </View>
+
+
+
+             <View style ={styles.slide}>
+
+
+             <Swiper style={styles.wrapper}  onIndexChanged={onSwipe = (index) => {
+                console.log('index changed', index);}} showsButtons={true}  >
+
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[0].slide_title} </Text> } source={image1}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[0].slide_title} </Text>
+               </View>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[1].slide_title} </Text> } source={image2}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[1].slide_title} </Text>
+               </View>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[2].slide_title} </Text> } source={image3}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[2].slide_title} </Text>
+               </View>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[3].slide_title} </Text> } source={image4}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[3].slide_title} </Text>
+               </View>
+               <View style={styles.slide1}>
+               <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[4].slide_title} </Text> } source={image5}/>
+               <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[4].slide_title} </Text>
+               </View>
+
+             </Swiper>
+
+
+
+      </View>
+
+      </View>
+
+      </View>
+
+
         )
-    }
+
     // console.log("render was called in notes screen!")
     return (
       <View style={styles.container}>
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
           <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
-          <Image style={styles.navBar} source={logo} resizeMode="contain" />
+          <Text style={styles.navBar}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#4682B4' }} /> T  A  B  L  E </Text>
         </View>
+        <View style={{backgroundColor: '#FCFCFC'}}>
         <Text style={styles.class_name}> {class_name} </Text>
         <Text style={styles.notes_name}> {notes_name} </Text>
+        </View>
+
         <ScrollView style={styles.container} contentContainerStyle={styles.scrollContentContainer}>
           {slide_notes}
         </ScrollView>
 
       </View>
+
     );
   }
 
@@ -247,6 +317,12 @@ export default class NotesScreen extends React.Component {
     this.setState({['drawings' + i]: result.uri});
   }
 };
+
+onSwipe = (index) => {
+   console.log('index changed', index);
+  // this.setState({[index]: text}) }}
+
+ }
 
   saveNotes = async (e, i) => {
     console.log('attempting to save notes');
@@ -266,7 +342,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   scrollContentContainer: {
-    paddingTop: 30,
+    paddingTop: 0,
   },
   noteInputContainer: {
     alignItems: 'center',
@@ -312,18 +388,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
+    paddingTop: 0,
   },
   notes_name: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
+    padding: 0,
   },
   slide_title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
-    textAlign: 'center',
+    textAlign: 'right',
   },
   definitionText: {
     fontWeight: 'bold',
@@ -367,17 +445,18 @@ const styles = StyleSheet.create({
   },
   navBar: {
     flex: 1,
-    paddingTop: 30,
-    height: 64,
-    backgroundColor: '#eae8e8',
+    height: 50,
+    paddingTop: 10,
+    backgroundColor: '#FCFCFC',
+    textAlign: 'center',
+    justifyContent:'center',
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: 'black',
   },
   header: {
     flex: 0,
     flexDirection: 'row',
-    justifyContent: 'center',
-    borderBottomWidth:.5,
-    borderColor:'#b2bab7',
-    backgroundColor: '#eae8e8',
   },
   leftSwipe: {
     position: 'absolute',
@@ -389,39 +468,49 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#eae8e8',
   },
-  0: {
-    backgroundColor: 'rgb(242, 74, 65)',
-    width: 350,
-    height: 30,
+
+  slideHeader: {
+    backgroundColor: 'skyblue',
+    width: 328,
+    height: 45,
     alignSelf:'center',
   },
-  1: {
-    backgroundColor: 'rgb(244, 153, 17)',
-    width: 350,
-    height: 30,
-    alignSelf:'center',
-  },
-  2: {
-    backgroundColor: 'rgb(15, 193, 39)',
-    width: 350,
-    height: 30,
-    alignSelf:'center',
-  },
-  3: {
-    backgroundColor: 'rgb(84, 94, 247)',
-    width: 350,
-    height: 30,
-    alignSelf:'center',
-  },
-   card: {
+   note: {
     flex: 1,
     alignItems: 'center',
     alignSelf:'center',
-    borderWidth:2,
-    borderColor:'#b2bab7',
-    borderWidth:1,
-    backgroundColor: '#f4f7f6',
-    width: 350,
+    width:  350,
     height: 420,
+  },
+    wrapper: {
+
+  },
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent'
+
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  slide: {
+    flex: 1,
+    alignItems: 'center',
+    alignSelf:'center',
+    width:  350,
+    height: 420,
+  },
+  buttonTags:{
+    padding: 10,
   }
 });
+
+
+//
+// <TouchableHighlight onPress={(e)=>{this.pickImage(e, i)}}>
+// <Image source={{ uri: `${drawing}` }} resizeMode="contain" style ={{ position: 'absolute', width:100, height:100, top:200, left: 50}} />
+// </TouchableHighlight>
