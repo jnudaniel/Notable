@@ -1,25 +1,26 @@
 import React from 'react';
 import { Text, View, Alert, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import { Button } from 'react-native-elements'
 
 
 const SECTIONS = [
   {
-    title: 'CS 147',
-    content: ['Lecture 1: Design', 'Lecture 2: User Interviews', 'Lecture 3: More Interviews', 'Lecture 4: Exam Review'],
+    title: 'CS 147  ',
+    content: ['Lecture 1: Design', 'Lecture 2: User Interviews', 'Lecture 3: Exam Review'],
   },
   {
-    title: 'HUMBIO 155H',
+    title: 'HUMBIO 155H  ',
     content: ['Lecture 1: Polyomavirus', 'Lecture 2: Zika Virus', 'Lecture 3: Innoculation'],
   },
   {
-    title: 'CS 109',
+    title: 'CS 109  ',
     content: ['Lecture 1: Counting', 'Lecture 2: Combinatorics', 'Lecture 3: Sampling'],
   },
   {
-    title: 'INTNLREL 140A',
-    content: ['Lecture 1: America', 'Lecture 2: Russia', 'Lecture 3: Proxy Wars','Lecture 4: Net Neutrality' ],
+    title: 'INTNLREL 140A  ',
+    content: ['Lecture 1: America', 'Lecture 2: Russia', 'Lecture 3: Proxy Wars'],
   },
 ];
 
@@ -27,7 +28,9 @@ export default class MenuSide extends React.Component {
   _renderHeader(section) {
     return (
       <View style={styles.header}>
-        <Text style={styles.headerText}>{section.title}</Text>
+        <Text style={styles.headerText}>{section.title}
+        <Ionicons name="ios-arrow-down" size={20} />
+        </Text>
       </View>
     );
   }

@@ -24,6 +24,8 @@ import { MonoText } from '../components/StyledText';
 import Swiper from 'react-native-swiper';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 // import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 var image1 = require('../images/image1.jpeg')
 var image2 = require('../images/image2.jpeg')
@@ -286,6 +288,7 @@ export default class NotesScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
+          <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
           <Text style={styles.navBar}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#4682B4' }} /> T  A  B  L  E </Text>
         </View>
         <View style={{backgroundColor: '#FCFCFC'}}>
@@ -450,11 +453,15 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     color: 'black',
-
   },
   header: {
     flex: 0,
     flexDirection: 'row',
+  },
+  leftSwipe: {
+    position: 'absolute',
+    left: 15,
+    top: 7,
   },
   padding_header: {
     height: 20,

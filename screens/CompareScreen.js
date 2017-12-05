@@ -12,6 +12,8 @@ import {
   Dimensions,
   Button
 } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 var number_slides = 5;
 var logo = require('../images/puzzle_piece.png')
@@ -20,23 +22,23 @@ var constructed = 0
 const combined_notes = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "notes": "hall of shame"
+  "notes": ["hall of shame", "by Sony"]
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "notes": "used by IDEO"
+  "notes": ["used by IDEO", "what CS147 is all about", "d.school"]
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "notes": "middle step"
+  "notes": ["middle step", "after needfinding", "before prototyping"]
 }, {
   "id": 4,
   "slide_title": "Test",
-  "notes": "user studies"
+  "notes": ["user studies", "there's no right answer", "just make sure it works"]
 }, {
   "id": 5,
   "slide_title": "Point of View",
-  "notes": "use open-ended questions"
+  "notes": ["use open-ended questions", "people always make sense to themselves"]
 }]
 
 export default class NotableScreen extends Component {
@@ -49,6 +51,7 @@ export default class NotableScreen extends Component {
     // console.log("done in compare constructor")
   }
 
+  // loads personal notes from database
   _loadStoredText = async () => {
     try {
       for (let i = 0; i < number_slides; i++) {
@@ -57,7 +60,7 @@ export default class NotableScreen extends Component {
         if (storedText != null && storedText != undefined) {
           this.setState({[i]: storedText});
         } else {
-          this.setState({[i]: " "});
+          this.setState({[i]: []});
         }
       }
     } catch (error) {
@@ -74,15 +77,83 @@ export default class NotableScreen extends Component {
     }
   }
 
+  one_slide_array_of_buttons = (slide_index) => {
+    var combined_slide_notes = combined_notes[slide_index]
+    var buttons_array = []
+    for (let i = 0; i < combined_slide_notes.notes.length; i++) {
+      buttons_array.push(
+        <Button
+          key={(slide_index) * 100 + i}
+          onPress={
+            () => {
+              var curr_notes = this.state[slide_index] + "\n" + combined_slide_notes.notes[i];
+              this.setState(
+                { [slide_index]: curr_notes },
+                () => {
+                  try {
+                    var value = i.toString();
+                    AsyncStorage.setItem(value, this.state[slide_index]);
+                  } catch (error) {
+                    alert('AsyncStorage error: ' + error.message);
+                  }
+                }
+              );
+            }
+          }
+          title={combined_slide_notes.notes[i]}
+          color="#841584"
+        />
+      );
+    }
+    return (buttons_array);
+  }
+
+  one_slide_of_class_notes = (slide_index) => {
+    var combined_slide_notes = combined_notes[slide_index]
+    return (
+
+      <View key={slide_index+" outer"}>
+          <View key={slide_index+" title"} style={styles[slide_index%4]}>
+            <Text style={styles.text_format}> {combined_slide_notes.slide_title} </Text>
+          </View>
+          <View key={slide_index+" all notes"} style={styles.card}>
+            <View style={[styles.box, styles.box1]}>
+              <Text style={styles.notes_text}> {this.state[slide_index]} </Text>
+            </View>
+            <View style={[styles.box, styles.box2]}>
+              { this.one_slide_array_of_buttons(slide_index) }
+            </View>
+          </View>
+        </View>
+    );
+
+
+      /*(<View key={slide_index} style={styles.card}>
+          <Text> {combined_slide_notes.slide_title} </Text>
+          { this.one_slide_array_of_buttons(slide_index) }
+        </View> )*/
+  }
+
+  // adds buttons for each
+  // TODO: turn class notes into array & make buttons for each
   render() {
     var personal_notes = [];
     var class_notes = [];
     for (let i = 0; i < number_slides; i++) {
-      var x = combined_notes[i]
+      var combined_slide_notes = combined_notes[i]
+      class_notes.push(this.one_slide_of_class_notes(i));
+      /*personal_notes.push( // iterate through state and create divs each time
+        <View key={i} style={styles.card}>
+          <Text> {combined_slide_notes.slide_title} </Text>
+          <Text style={styles.notes_text}> {this.state[i]} </Text>
+        </View>
+        )*/
+
+      /*
       class_notes.push(
         <View key={i+"hi"}>
           <View key={i+"sup"} style={styles.slideHeader}>
-            <Text style={styles.text_format}> {x.slide_title} </Text>
+            <Text style={styles.text_format}> {combined_slide_notes.slide_title} </Text>
           </View>
           <View key={i+"yo"} style={styles.card}>
             <View style={[styles.box, styles.box1]}>
@@ -106,12 +177,14 @@ export default class NotableScreen extends Component {
           </View>
         </View>
         )
+        */
     }
     // console.log("render was called in compare!")
     return (
       <View style={styles.container}>
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
+          <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
           <Image style={styles.navBar} source={logo} resizeMode="contain" />
         </View>
         <View style={styles.context}>
@@ -150,12 +223,13 @@ const styles = StyleSheet.create({
   navBar: {
     flex: 1,
     paddingTop: 30,
-    height: 50,
+    height: 64,
     backgroundColor: '#eae8e8',
   },
   header: {
     flex: 0,
     flexDirection: 'row',
+    justifyContent: 'center',
     borderBottomWidth:.5,
     borderColor:'#b2bab7',
     backgroundColor: '#eae8e8',
@@ -191,6 +265,22 @@ const styles = StyleSheet.create({
   },
   scrollContentContainer: {
     paddingTop: 30,
+  },
+  navBarButton: {
+    color: '#FFFFFF',
+    textAlign:'center',
+    width: 64
+  },
+  navBarHeader: {
+    flex: 1,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  leftSwipe: {
+    position: 'absolute',
+    left: 15,
+    top: 7,
   },
   context: {
     flex: 1,
