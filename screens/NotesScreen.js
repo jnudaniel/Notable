@@ -24,7 +24,6 @@ import { MonoText } from '../components/StyledText';
 import Swiper from 'react-native-swiper';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 // import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
-import { FontAwesome } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 var image1 = require('../images/image1.jpeg')
