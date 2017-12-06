@@ -58,12 +58,12 @@ export default class MenuSide extends React.Component {
 		        sections={SECTIONS}
 		        renderHeader={this._renderHeader}
 		        renderContent={this._renderContent}
-		        underlayColor='#E0FFFF'
+		        underlayColor='#DBEDFF'
 		      />
           <Button
             title="New Class"
             onPress={this._handleButtonPress}
-            backgroundColor = '#008080'
+            backgroundColor = '#637898'
           />
 		    </View>
 		</View>
@@ -78,11 +78,11 @@ const styles = StyleSheet.create({
   	padding: 20,
   	paddingLeft: 15,
     paddingRight: 0,
-  	backgroundColor: '#AFEEEE',
+  	backgroundColor: '#4682B4',
   },
   accordion: {
   	padding: 15,
-  	backgroundColor: '#E0FFFF',
+  	backgroundColor: '#DBEDFF',
   },
   header: {
   	paddingTop: 15,

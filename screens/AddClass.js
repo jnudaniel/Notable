@@ -34,7 +34,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#4682B4' }} /> T  A  B  L  E </Text>
+      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
 
       <Text style={styles.text}> Enter your university </Text>
         <TextInput
@@ -49,7 +49,7 @@ export default class App extends Component {
 
         <Button
           title="Submit"
-          backgroundColor = '#3CB371'
+          backgroundColor = '#637898'
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
 
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#F5A9C0',
+    backgroundColor: '#4682B4',
   },
   text :{
     paddingTop: 20,
