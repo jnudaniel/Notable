@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 import MenuSide from '../components/MenuSide';
 import SideMenu from 'react-native-side-menu';
@@ -18,16 +17,16 @@ import AddClass from '../screens/AddClass';
 
 
 const RootStackNavigator = StackNavigator(
-  {
-    Main: {
-      screen: MainTabNavigator,
-    },
+
+
     Notes: {
     screen: NotesScreen,
   },
-  Class: {
-  screen: AddClass,
-},
+  {
+    Class: {
+    screen: AddClass,
+  },
+
     Compare: {
       screen: CompareScreen,
     },
