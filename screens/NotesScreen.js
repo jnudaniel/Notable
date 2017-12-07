@@ -12,6 +12,7 @@ import {
   View,
   AsyncStorage,
   Switch,
+  Alert,
 } from 'react-native';
 import { WebBrowser, ImagePicker } from 'expo';
 import Nav from './global-widgets/nav'
@@ -20,7 +21,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Iconz from 'react-native-vector-icons/Ionicons';
 import { MonoText } from '../components/StyledText';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
-// import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
@@ -59,28 +59,41 @@ const Cards = [{
   "image": image2
 }]
 
+aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
+
+
 Format = (props) => {
-  const possTags = ["#def", "#section", "#important", "#exam"];
-  const means = ["definition", "Section", "Imp", "Exam"]
+  const possTags = ["#def", "#section", "#important", "#exam", "#what"];
+  const means = ["definition", "Section", "Imp", "Exam", "What"]
   const currLine = props.line;
-  const toFormat = currLine[0] == '#';
-  if(!toFormat) {  <Text> {props.line} </Text> }
+  // if it is a drawing
+  if (currLine.indexOf(".png") !== -1) {
+    return <Image source={{uri: currLine}} resizeMode="contain" style ={{width:100, height:100}} />
+  }
+    const toFormat = currLine[0] == '#';
+    // if it is not a hashtag, returns the text
+    if(!toFormat) {  <Text> {props.line} </Text> }
 
-  const tag = currLine.split(" ", 1)[0];
-  const content = currLine.substring(currLine.indexOf(" "));
+    const tag = currLine.split(" ", 1)[0];
+    const content = currLine.substring(currLine.indexOf(" "));
 
-  switch (possTags.indexOf(tag)) {
-    case 0: return <Text style={styles.definitionText}> {content}{'\n'}</Text>;
-    case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
-    case 2: return <Text style={styles.importantText}> {content}{'\n'}</Text>;
-    case 3: return <Text style={styles.examText}> {content}{'\n'}</Text>;
+    // if it is a hashtag, it styles the text
+    switch (possTags.indexOf(tag)) {
+      case 0: return <Text style={styles.definitionText}> {content}{'\n'}</Text>;
+      case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
+      case 2: return <Text style={styles.importantText}> {content}{'\n'}</Text>;
+      case 3: return <Text style={styles.examText}> {content}{'\n'}</Text>;
+      case 4: 
+        // #what case returns a random answer
+        var randomAnswer = aggregate_info[Math.floor(Math.random() * aggregate_info.length)];
+        return <Text style={styles.whatText}> {randomAnswer}{'\n'}</Text>;
 
   }
 
   return <Text> {props.line}{'\n'} </Text>;
 }
-key_val = 0
 
+key_val = 0
 ViewNotes = (props) => {
   if (props.toFormat) {
   const lines = String(props.text).split('\n');
@@ -116,18 +129,39 @@ export default class NotesScreen extends React.Component {
     } catch (error) {
       console.log('Error fetching stored notes from AsyncStorage')
     }
+    this._loadStoredPressedDrawState();
+    this._loadDrawing();
   }
 
-  _loadStoredDrawings = async () => {
+  _loadDrawing = async () => {
     try {
-      for (let i = 0; i < number_slides; i++) {
-        var value = i.toString() + 'drawing';
-        var storedDrawing = await AsyncStorage.getItem(value);
-        if (storedDrawing != null && storedDrawing != undefined) {
-          this.setState({['drawings' + i]: storedDrawing});
-        } else {
-          this.setState({['drawings' + i]: drawing});
+      var storedDrawing = await AsyncStorage.getItem("drawing");
+      if (storedDrawing != null && storedDrawing != undefined) {
+        this.setState({drawing: storedDrawing})
+        index = this.state.pressed_draw;
+        // this only adds the drawing to the notes if it has not already been added
+        // this prevents the error of reading the same drawing again and again upon app restart
+        if (this.state[index] == undefined || this.state[index] == null) {
+          this.setState({[index]: storedDrawing});
+          this.saveNotes(index);
+          return;
         }
+        if (this.state[index].indexOf(storedDrawing) == -1) {
+          result_text = this.state[index] + '\n' + storedDrawing;
+          this.setState({[index]: result_text});
+          this.saveNotes(index);
+        }
+      }
+    } catch (error) {
+      console.log('Error fetching stored drawings from AsyncStorage')
+    }
+  }
+
+  _loadStoredPressedDrawState = async () => {
+    try {
+      var index = await AsyncStorage.getItem("pressed_draw");
+      if (index != null && index != undefined) {
+        this.setState({pressed_draw: Number(index)});
       }
     } catch (error) {
       console.log('Error fetching stored drawings from AsyncStorage')
@@ -137,21 +171,17 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     for (var i = 0; i < number_slides; i++) {
-      this.state = {[i]: ' '};
-      this.state = {['drawings' + i]: drawing};
+        this.state = {[i]: ' '};
     }
     this._loadStoredText();
-    this._loadStoredDrawings();
-    // this.saveNotes = this.saveNotes.bind(this);
     this.viewFormat = true;
-    // console.log('done in notes constructor')
   }
 
 
-
+  // this is called anytime the notes screen is navigated to
   componentWillReceiveProps(newProps) {
     if (newProps.screenProps.route_index == 0) {
-      this._loadStoredText()
+      this._loadStoredText();
     }
   }
 
@@ -163,16 +193,15 @@ export default class NotesScreen extends React.Component {
 
 
   render() {
+
     const { navigate } = this.props.navigation;
     var slide_notes = [];
     for (let i = 0; i < number_slides; i++) {
-      var image  = drawing;
       var x = Cards[i]
-      var value = 'drawings' + i
-      var drawing = this.state[value]
       var textView = null;
       if(this.state.eventSwitchIsOn) {
-        textView = <TextInput
+        textView = <View>   
+        <TextInput
             style={styles.noteInput}
             ref={i}
             multiline={true}
@@ -181,14 +210,31 @@ export default class NotesScreen extends React.Component {
             onChangeText={ (text) => {
               this.setState({[i]: text}) }}
             value={this.state[i]}
-            onEndEditing={(e)=>{this.saveNotes(e, i)}}
+            onEndEditing={(e)=>{this.saveNotes(i)}}
           />
+          <Button key={i+"draw"}
+            title="Add drawing"
+            onPress={() => {
+              this.savePressedDrawState(i);
+              this.setState({pressed_draw: i});
+              navigate('Draw');
+            }
+            }
+          />
+          <Button key={i+"compare"}
+            title="Compare notes"
+            onPress={() => {
+              navigate('Compare');
+            }
+            }
+          />
+          </View>
         } else {
           textView =  <ViewNotes key={i} text = {this.state[i]} toFormat = {this.viewFormat}/>
         }
       slide_notes.push(
         <View key={i} style={styles.card}>
-          <View key={i+"sup"} style={styles[i%4]}>
+          <View key={i+"slide_title"} style={styles[i%4]}>
             <Text style={styles.text_format}> {x.slide_title} </Text>
           </View>
           <Switch
@@ -210,23 +256,11 @@ export default class NotesScreen extends React.Component {
            </Lightbox>
 
 
-      <TouchableHighlight onPress={(e)=>{this.pickImage(e, i)}}>
-      <Image source={{ uri: `${drawing}` }} resizeMode="contain" style ={{ width:100, height:100, bottom:10, right: 0}} />
-     </TouchableHighlight>
-
-
         </View>
         )
     }
-    // console.log("render was called in notes screen!")
     return (
       <View style={styles.container}>
-        <Button
-          title="Go to Jane's profile"
-          onPress={() =>
-            navigate('Draw')
-          }
-        />
         <View style={styles.padding_header}></View>
         <View style={styles.header}>
           <FontAwesome name="angle-right" size={45} color={Colors.noticeText} style={styles.leftSwipe}/>
@@ -242,28 +276,20 @@ export default class NotesScreen extends React.Component {
     );
   }
 
-  pickImage = async (e, i) => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    allowsEditing: true,
-    aspect: [4, 3],
-  });
-
-  console.log(result);
-
-  if (!result.cancelled) {
-    this.setState({['drawings' + i]: result.uri});
-  }
-};
-
-  saveNotes = async (e, i) => {
-    console.log('attempting to save notes');
+  saveNotes = async (i) => {
     try {
       await AsyncStorage.setItem(i.toString(), this.state[i]);
-      // this.refs[i].setNativeProps({text: ''})
     } catch (error) {
-      console.log('Unable to save notes to AsyncStorage')
+      console.log('Unable to save notes to AsyncStorage');
     }
-    console.log('succesful at saving notes')
+  };
+
+  savePressedDrawState = async (i) => {
+    try {
+      await AsyncStorage.setItem("pressed_draw", i.toString());
+    } catch (error) {
+      console.log('Unable to save pressed_draw to AsyncStorage')
+    }
   };
 }
 
@@ -347,6 +373,10 @@ const styles = StyleSheet.create({
   examText: {
     fontWeight: 'bold',
     color: 'rgb(84, 94, 247)',
+  },
+  whatText: {
+    fontWeight: 'bold',
+    color: 'green',
   },
   buttons:{
     width:80,

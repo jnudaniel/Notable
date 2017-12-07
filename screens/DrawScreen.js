@@ -6,11 +6,14 @@ import {
   Platform,
   Alert,
   Text,
+  Image,
   CameraRoll,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native'
- import { takeSnapshotAsync } from "expo";
-
+import { takeSnapshotAsync } from "expo";
+import { WebBrowser, ImagePicker } from 'expo';
+import Nav from './global-widgets/nav'
 import {Svg} from '../config'
 const {
   G,
@@ -72,19 +75,30 @@ export default class DrawScreen extends React.Component {
     })
     this.state.pen.clear()
   }
-    save = async () => {
+
+  // Saves the drawing to the storage.
+  // The notes screen will be able to get these drawings then from the storage.
+  saveDrawing = async (result) => {
+    try {
+      await AsyncStorage.setItem("drawing", result);
+    } catch (error) {
+      console.log('Unable to save drawing to AsyncStorage')
+      return;
+    }
+  };
+
+  save = async () => {
      let result = await takeSnapshotAsync(this._canvas, {
        format: 'png',
        quality: 1,
        result: 'file',
      });
-
-     let saveResult = await CameraRoll.saveToCameraRoll(result, 'photo');
-     Alert.alert(
-      'Saved to your photos!',
-      'Hooray!',
-    );
+    this.saveDrawing(result);
+    const { navigate } = this.props.navigation;
+    navigate('Notes');
    };
+
+
 
   onTouch(evt) {
     let x, y, timestamp
@@ -135,6 +149,7 @@ export default class DrawScreen extends React.Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
        <View
         onLayout={this._onLayoutContainer}
@@ -157,7 +172,6 @@ export default class DrawScreen extends React.Component {
               />
             </G>
           </Svg>
-
           {this.props.children}
         </View>
         <View style={styles.buttonContainer}>

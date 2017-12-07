@@ -15,12 +15,9 @@ export default TabNavigator(
     Notes: {
       screen: NotesScreen,
     },
-    Draw: {
-      screen: DrawScreen,
-    },
-    Compare: {
-      screen: CompareScreen,
-    },
+    // Compare: {
+    //   screen: CompareScreen,
+    // },
   },
   {
     navigationOptions: ({ navigation }) => ({

@@ -47,7 +47,6 @@ export default class RootNavigator extends React.Component {
   }
 
   _onNavigationStateChange = (prevState, newState) => {
-    console.log("NAVIGATION CHANGED");
     this.setState({...this.state, route_index: newState.index});
   }
 
