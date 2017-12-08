@@ -72,13 +72,12 @@ export default class App extends Component {
           backgroundColor = '#637898'
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
-          onPress={()=> {navigate('Notes');}}
-         />
+          onPress={()=> {this.addToStoreEmail();
+            navigate('Notes');}}         />
 
         <TouchableOpacity
-          style={styles.buttonTags}
           onPress={() => this.setState({login:false})} >
-          <Text>Or create an account</Text>
+          <Text style={{color: '#637898'}}>Or create an account</Text>
         </TouchableOpacity>
         </View>
       </View>
