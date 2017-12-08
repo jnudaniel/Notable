@@ -69,43 +69,43 @@ const entryBorderRadius = 8;
 
 const CS_Cards = [{
   "id": 1,
-  "slide_title": "Sony Google TV Remote",
+  "slide_title": "Training",
   "image": cs_slide1
 }, {
   "id": 2,
-  "slide_title": "Design Thinking",
+  "slide_title": "Naive Bayes",
   "image": cs_slide2
 }, {
   "id": 3,
-  "slide_title": "Ideate",
+  "slide_title": "Computing Probabilities from Data",
   "image": cs_slide3
 }]
 
 const Math_Cards = [{
   "id": 1,
-  "slide_title": "Sony Google TV Remote",
+  "slide_title": "Tree Diagam",
   "image": math_slide1
 }, {
   "id": 2,
-  "slide_title": "Design Thinking",
+  "slide_title": "Mean Value Theorem",
   "image": math_slide2
 }, {
   "id": 3,
-  "slide_title": "Ideate",
+  "slide_title": "Linear Regression",
   "image": math_slide3
 }]
 
 const Bio_Cards = [{
   "id": 1,
-  "slide_title": "Sony Google TV Remote",
+  "slide_title": "Monocot Leaf",
   "image": bio_slide1
 }, {
   "id": 2,
-  "slide_title": "Design Thinking",
+  "slide_title": "The heart",
   "image": bio_slide2
 }, {
   "id": 3,
-  "slide_title": "Ideate",
+  "slide_title": "he plasma membrane",
   "image": bio_slide3
 }]
 
@@ -113,8 +113,8 @@ cards = Math_Cards;
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
 Format = (props) => {
-    const possTags = ["#def", "#section", "#important", "#exam", "#what"];
-    const means = ["definition", "Section", "Imp", "Exam", "What"]
+    const possTags = ["#def", "#section", "#key", "#exam", "#what"];
+    const means = ["Def", "Section", "Key", "Exam", "What"]
     const currLine = props.line;
     const toFormat = currLine[0] == '#';
     // if it is not a hashtag, returns the text
@@ -399,57 +399,54 @@ export default class NotesScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.buttonsBar}>
-        <Button
-         title="#Section"
-         onPress={this._addSectionToInput}
-         backgroundColor = '#00BFFF'
-         icon={{name: 'note-add'}}
-         buttonStyle={styles.buttonTags}
-        />
+        <View style={styles.buttons}>
+            <Button
+             title="#Section"
+             onPress={this._addSectionToInput}
+             icon={{name: 'note-add'}}
+             buttonStyle={styles.buttonTags}
+            />
 
-        <Button
-         title="#Definition"
-         onPress={this._addDefinitionToInput}
-         backgroundColor = '#7B68EE'
-         icon={{name: 'book'}}
-         buttonStyle={styles.buttonTags}
-        />
+            <Button
+             title="#Def"
+             onPress={this._addDefinitionToInput}
+             icon={{name: 'book'}}
+             buttonStyle={styles.buttonTags}
+            />
 
-        <Button
-         title="#Important"
-         onPress={this._addImportantToInput}
-         backgroundColor = '#3CB371'
-         icon={{name: 'new-releases'}}
-         buttonStyle={styles.buttonTags}
-        />
-      
-         <Button
-         title="#Exam"
-         onPress={this._addExamToInput}
-         backgroundColor = '#3CB371'
-         icon={{name: 'new-releases'}}
-         buttonStyle={styles.buttonTags}
-        />
+            <Button
+             title="#Key"
+             onPress={this._addImportantToInput}
+             icon={{name: 'new-releases'}}
+             buttonStyle={styles.buttonTags}
+            />
+          </View>
+          <View style={styles.buttons}>
+             <Button
+             title="#Exam"
+             onPress={this._addExamToInput}
+             icon={{name: 'new-releases'}}
+             buttonStyle={styles.buttonTags}
+            />
 
-        <Button
-         title="Draw"
-         backgroundColor = '#FF6347'
-         icon={{name: 'edit'}}
-         buttonStyle={styles.buttonTags}
-         onPress={() => {
-          this.saveCurrentSlideState(this.state.current_slide);
-          this.setState({current_slide: this.state.current_slide});
-          navigate('Draw');
-          }
-          }
-        />
-        <Button key={"compare"}
-            title="Compare notes"
-            onPress={() => {
-              navigate('Compare');
-            }
-            }
-          />
+            <Button
+             title="Draw"
+             icon={{name: 'edit'}}
+             buttonStyle={styles.buttonTags}
+             onPress={() => {
+              this.saveCurrentSlideState(this.state.current_slide);
+              this.setState({current_slide: this.state.current_slide});
+              navigate('Draw');
+              }
+              }
+              />
+            <Button
+             title="#What"
+             onPress={this._addWhatToInput}
+             icon={{name: 'new-releases'}}
+             buttonStyle={styles.buttonTags}
+            />
+        </View>
       </View>
     )
   }
@@ -613,7 +610,7 @@ export default class NotesScreen extends React.Component {
   }
   _addImportantToInput = () => {
 
-        added_text = this.state[this.state.current_slide] + "\n" + "#important";
+        added_text = this.state[this.state.current_slide] + "\n" + "#key";
         this.setState({[this.state.current_slide]: added_text});
         this.saveNotes(this.state.current_slide);
   }
@@ -621,6 +618,13 @@ export default class NotesScreen extends React.Component {
     _addExamToInput = () => {
 
         added_text = this.state[this.state.current_slide] + "\n" + "#exam";
+        this.setState({[this.state.current_slide]: added_text});
+        this.saveNotes(this.state.current_slide);
+  }
+
+  _addWhatToInput = () => {
+
+        added_text = this.state[this.state.current_slide] + "\n" + "#what";
         this.setState({[this.state.current_slide]: added_text});
         this.saveNotes(this.state.current_slide);
   }
@@ -833,8 +837,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf:'center',
     width: '85%',
-    paddingTop: 10,
-    paddingBottom: 50,
+    paddingTop: 0,
+    paddingBottom: 5,
     //backgroundColor: 'blue'
     //height: 420,
   },
@@ -853,10 +857,13 @@ const styles = StyleSheet.create({
     // --------- BUTTONS BAR ---------
   buttonsBar: {
     marginTop:20,
-    flex: .25,
+    flex: .5,
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: 'red',
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   definitionText: {
     fontSize: 23,
@@ -890,16 +897,15 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   buttonTags: {
-    backgroundColor: yellow,
+    backgroundColor: medium_blue, // for some reason, the button isn't styling color
     overflow: 'hidden',
     borderRadius: 10,
-    padding: 10
   },
   // --------- NOTE INPUT AREA ---------
   noteInputContainer: {
-    flex: 1,
+    flex: 0.3,
     alignItems: 'center',
-    margin: 15,
+    margin: 5,
     marginBottom: 25,
     borderStyle: 'solid',
     borderWidth: 1,
