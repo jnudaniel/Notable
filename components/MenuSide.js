@@ -175,14 +175,17 @@ export default class MenuSide extends React.Component {
     return (
       <Modal isVisible={this.state.visibleModal} >
         <View style={styles.modalContent}>
-          <Text style={styles.text}> Enter your class </Text>
-            {this.render_class_autocomplete()}
-          <Button
-            title="Close"
+        <Button
+            title="X"
+            borderWidth={10}
+            backgroundColor='light_blue'
+            borderColor='medium_blue'
             onPress={() => this.closeModal()}
-            backgroundColor = '#FF6347'
             buttonStyle={styles.buttonTags}
           />
+          <Text style={styles.text}> Enter your class </Text>
+            {this.render_class_autocomplete()}
+          
           <Button
             title="Add"
             disabled={!(this.state.class_done)}
@@ -371,9 +374,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'left',
+  },
   modalContent:{
-    width:500,
-    height:500,
+    width:400,
     borderWidth:10,
     backgroundColor:light_blue,
     borderColor: medium_blue,
