@@ -324,6 +324,14 @@ export default class NotesScreen extends React.Component {
          icon={{name: 'new-releases'}}
          buttonStyle={styles.buttonTags}
         />
+      
+         <Button
+         title="#Exam"
+         onPress={this._addExamToInput}
+         backgroundColor = '#3CB371'
+         icon={{name: 'new-releases'}}
+         buttonStyle={styles.buttonTags}
+        />
 
         <Button
          title="Draw"
@@ -494,6 +502,12 @@ export default class NotesScreen extends React.Component {
   _addImportantToInput = () => {
 
         added_text = this.state[this.state.current_slide] + " " + "#Important";
+        this.setState({[this.state.current_slide]: added_text});
+  }
+  
+    _addExamToInput = () => {
+
+        added_text = this.state[this.state.current_slide] + " " + "#Exam";
         this.setState({[this.state.current_slide]: added_text});
   }
 
