@@ -12,14 +12,21 @@ import Nav from './global-widgets/nav'
 //   setCustomTouchableOpacity
 // } from 'react-native-global-props';
 
-var image2 = require('../images/image2.jpeg')
+// var image2 = require('../images/image2.jpeg')
 
 // const customTextProps = { 
 //   style: { 
 //     fontFamily: 'avenir',
 //   }
 // }
-export default class App extends Component {
+
+var darkest_blue = '#0C0F2A';
+var medium_blue = '#667797';
+var light_blue = '#C9DCED';
+var yellow = '#FAF57E';
+var white = '#FFFFFF';
+
+export default class App extends React.Component {
 
    //  async componentDidMount() {
    //   await Font.loadAsync({
@@ -31,11 +38,12 @@ export default class App extends Component {
 
    // }
 
+
   constructor(props) {
   super(props);
   this.state = {
     status: false,
-    login: false,
+    login: true,
     email: '',
     password: '',
     repeat: '',
@@ -64,16 +72,20 @@ export default class App extends Component {
 
     return (
       <View style={styles.container}>
-      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
-      <Text style={styles.text}> Email </Text>
-        <TextInput
+        <View style={styles.paddingAboveHeader}></View>
+        <View style={styles.card}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../images/logo-notable-med.png')} />
+          </View>
+      <Text style={styles.text}>Email</Text>
+        <TextInput style={styles.inputField}
           onChangeText={ (text) => {this.setState({email: text}) }}
-            style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+            
         />
            <Text style={styles.text}> Password </Text>
-        <TextInput
+        <TextInput secureTextEntry={true} style={styles.inputField}
           onChangeText={ (text) => {this.setState({password: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+          
         />
 
         <Button
@@ -87,10 +99,11 @@ export default class App extends Component {
          />
 
         <TouchableOpacity
-            onPress={() => this.setState({login:false})} >
-            <Text>Or create an account</Text>
-          </TouchableOpacity>
-
+          style={{padding: 20}}
+          onPress={() => this.setState({login:false})} >
+          <Text style={styles.toggleLabelOn}>Or create an account</Text>
+        </TouchableOpacity>
+        </View>
       </View>
     );
 
@@ -102,69 +115,133 @@ export default class App extends Component {
 
     return (
       <View style={styles.container}>
-      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
-      <Text style={styles.text}> Email </Text>
-        <TextInput
-          onChangeText={ (text) => {this.setState({username: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
-        />
-           <Text style={styles.text}> Password </Text>
-        <TextInput
-          onChangeText={ (text) => {this.setState({password: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
-        />
+        <View style={styles.paddingAboveHeader}></View>
+        <View style={styles.card}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../images/logo-notable-med.png')} />
+          </View>
 
-        <Text style={styles.text}> Repeat Password </Text>
-        <TextInput
-          onChangeText={ (text) => {this.setState({repeat: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
-        />
-        <Text> {this.state.email} </Text>
-        <Button
-          title="Join"
-          disable = {(this.state.email.length) == 0}
-          backgroundColor = '#637898'
-          buttonStyle={{padding: 10}}
-          containerViewStyle={{padding: 10, borderRadius: 10}}
+          <Text style={styles.text}>Email</Text>
+          <TextInput
+            onChangeText={ (text) => {this.setState({username: text}) }}
+            style={styles.inputField}
+          />
+             <Text style={styles.text}> Password </Text>
+          <TextInput
+            secureTextEntry={true} style={styles.inputField}
+            onChangeText={ (text) => {this.setState({password: text}) }}
+            
+          />
 
-          onPress={()=> {this.addToStoreEmail(); 
-            navigate('Notes');}}
-         />
+          <Text style={styles.text}> Repeat Password </Text>
+          <TextInput
+          secureTextEntry={true} style={styles.inputField}
+            onChangeText={ (text) => {this.setState({repeat: text}) }}
+            
+          />
+          <Text> {this.state.email} </Text>
+          <Button
+            title="Join"
+            disable = {(this.state.email.length) == 0}
+            backgroundColor = '#637898'
+            buttonStyle={{padding: 10}}
+            containerViewStyle={{padding: 10, borderRadius: 10}}
 
-        <TouchableOpacity
+            onPress={()=> {this.addToStoreEmail(); 
+              navigate('Notes');}}
+           />
+
+         <TouchableOpacity
+            style={{padding: 20}}
             onPress={() => this.setState({login:true})} >
-            <Text>Sign in with an existing account</Text>
-          </TouchableOpacity>
-
+              <Text style={styles.toggleLabelOn}>Sign in with an existing account</Text>
+            </TouchableOpacity>
+        </View>
       </View>
     );
     
    }
-
-
-  render() {
-    if(this.state.login) {
-      return (this.render_login());
-    } else {
-      return (this.render_signup())
-    }
-  }
 }
-
+///
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  toggleButtonOff: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#4682B4',
+    borderRadius: 2,
+    backgroundColor: medium_blue,
+    borderColor: medium_blue,
+    borderWidth: 3,
+    width: 180,
+    marginRight: 0,
+    paddingVertical: 8,
   },
-  text :{
+  toggleButtonOn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 2,
+    backgroundColor: white,
+    borderColor: medium_blue,
+    borderWidth: 3,
+    width: 180,
+    marginRight: 0,
+    paddingVertical: 8,
+  },
+  toggleLabelOff: {
+    fontWeight: 'bold',
+    color: white,
+  },
+  toggleLabelOn: {
+    fontWeight: 'bold',
+    color: medium_blue,
+  },
+  paddingAboveHeader: {
+    height: 20,
+    backgroundColor: '#eae8e8',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    //paddingTop: Constants.statusBarHeight,
+    backgroundColor: light_blue,
+  },
+  card: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: white,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    width: '100%',
+    margin: 30,
+  },
+  logoContainer: {
+    width: 550,
+    height: 200,
+    //flex: 0.15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    marginTop: 50,
+  },
+  text: {
     paddingTop: 20,
     paddingBottom: 10,
     color: 'black',
   },
-    header :{
+  inputField: {
+    alignSelf: 'center',
+    width: 250,
+    height: 45,
+    padding: 8,
+    borderWidth: 3,
+    borderColor: medium_blue,
+    borderRadius: 7,
+  },
+  header :{
     fontSize: 50,
     color: 'black',
   },

@@ -10,7 +10,7 @@ import {
   CameraRoll,
   AsyncStorage
 } from 'react-native'
-import { takeSnapshotAsync } from "expo";
+import { takeSnapshotAsync, Font } from "expo";
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, ImagePicker } from 'expo';
 import Nav from './global-widgets/nav'

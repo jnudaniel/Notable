@@ -6,7 +6,7 @@ import { Button } from 'react-native-elements'
 import Modal from 'react-native-modal'; // 2.4.0
 import Autocomplete from 'react-native-autocomplete-input';
 import Nav from '../screens/global-widgets/nav'
-import NotesScreen from '../screens/NotesScreen.js'
+import { NotesScreen } from '../screens/NotesScreen.js'
 import {
   setCustomView,
   setCustomTextInput,
@@ -99,7 +99,7 @@ export default class MenuSide extends React.Component {
 
   chooseLecture = async (slide_index) => {
     // const { navigate } = this.props.navigation;
-    console.log("Saving slide deck number.")
+    console.log("Saving slide deck number:")
     console.log(slide_index);
     try {
       await AsyncStorage.setItem("slide_deck", slide_index.toString());
@@ -107,6 +107,9 @@ export default class MenuSide extends React.Component {
       console.log('Unable to save slide_deck to AsyncStorage')
       return;
     }
+    NotesScreen.forceUpdateHandler().catch(function(error) {
+      console.log(error.message);
+    });
   };
 
   setClass(title, content) {
@@ -175,14 +178,17 @@ export default class MenuSide extends React.Component {
     return (
       <Modal isVisible={this.state.visibleModal} >
         <View style={styles.modalContent}>
-          <Text style={styles.text}> Enter your class </Text>
-            {this.render_class_autocomplete()}
-          <Button
-            title="Close"
+        <Button
+            title="X"
+            borderWidth={10}
+            backgroundColor='light_blue'
+            borderColor='medium_blue'
             onPress={() => this.closeModal()}
-            backgroundColor = '#FF6347'
             buttonStyle={styles.buttonTags}
           />
+          <Text style={styles.text}> Enter your class </Text>
+            {this.render_class_autocomplete()}
+          
           <Button
             title="Add"
             disabled={!(this.state.class_done)}
@@ -371,9 +377,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'left',
+  },
   modalContent:{
-    width:500,
-    height:500,
+    width:400,
     borderWidth:10,
     backgroundColor:light_blue,
     borderColor: medium_blue,

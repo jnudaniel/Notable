@@ -15,13 +15,7 @@ import {
   Switch,
 } from 'react-native';
 
-import {
-  setCustomView,
-  setCustomTextInput,
-  setCustomText,
-  setCustomImage,
-  setCustomTouchableOpacity
-} from 'react-native-global-props';
+
 
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, Font, ImagePicker } from 'expo';
@@ -33,6 +27,8 @@ import Lightbox from 'react-native-lightbox'; // 0.6.0
 import Swiper from 'react-native-swiper';
 import Colors from '../constants/Colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import MenuSide from '../components/MenuSide';
+import SideMenu from 'react-native-side-menu';
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -59,11 +55,7 @@ var number_slides = 3
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 
-const customTextProps = { 
-  style: { 
-    fontFamily: 'avenir',
-  }
-}
+
 
 dimensionRounded = (percentage, dimension) => {
   let rounded = 0;
@@ -211,24 +203,16 @@ Format = (props) => {
 export default class NotesScreen extends React.Component {
 
   ViewCompareNotes = (props) => {
-    return (<View style={styles.compare_notes_panel}>
+    // return (<View style={styles.compare_notes_panel}>
+    return (<ScrollView>
       { this.one_slide_array_of_buttons(props.current_slide) }
-    </View>)
+    </ScrollView>)
   }
 
   one_slide_array_of_buttons = (slide_index) => {
-    if(slide_index == 'undefined') {
-      console.log("NOONONOOOOOONOOOOO");
-    } else {
-      console.log(slide_index);
-    }
-    //console.log(slide_index)
-    //console.log(combined_notes);
-    //console.log("YOOOOOO2");
     var combined_slide_notes = combined_notes[slide_index] // IDKKKKKK
     var buttons_array = []
-    //console.log(combined_slide_notes);
-    //console.log("YOOOOOO");
+
     for (let i = 0; i < combined_slide_notes.notes.length; i++) {
       buttons_array.push(
         <Button
@@ -251,7 +235,8 @@ export default class NotesScreen extends React.Component {
             }
           }
           title={combined_slide_notes.notes[i]}
-          color="white"
+          color={darkest_blue}
+          backgroundColor='white'
         />
       );
     }
@@ -263,15 +248,7 @@ export default class NotesScreen extends React.Component {
     header: null,
   };
 
-    async componentDidMount() {
-     await Font.loadAsync({
-       'avenir': require('../fonts/avenir-next-regular.ttf'),
-     });
-
-     this.setState({ fontLoaded: true });
-      //this.setCustomText(customTextProps);
-
-   }
+    
 
   
   _loadStoredText = async () => {
@@ -385,7 +362,14 @@ export default class NotesScreen extends React.Component {
     // this is called anytime the notes screen is navigated to
     console.log('done in notes constructor. state is', this.state)
     this._renderItem = this._renderItem.bind(this)
+
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
   }
+
+  forceUpdateHandler = () => {
+    console.log("in forceupdatehandler!!")
+    this.forceUpdate();
+  };
 
   componentWillReceiveProps(newProps) {
     if (newProps.screenProps.route_index == 0) {
@@ -439,14 +423,15 @@ export default class NotesScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={this._handleToggleNotesButton}
-            style={this.toggleNotesStyleButton()}>
-            <Text style={this.toggleNotesStyleText()}>Compare</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this._handleToggleNotesButton}
             style={this.toggleCompareStyleButton()}>
             <Text style={this.toggleCompareStyleText()}>Take Notes</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this._handleToggleNotesButton}
+            style={this.toggleNotesStyleButton()}>
+            <Text style={this.toggleNotesStyleText()}>Compare</Text>
+          </TouchableOpacity>
+          <View style={{height: 2, width: 50}}></View>
         </View>
       </View>
     )
@@ -716,32 +701,30 @@ export default class NotesScreen extends React.Component {
 
 
   render() {
+    const menuContents = <MenuSide />
     return (
-      <View style={styles.app_container}>
-        {this.renderHeader()}
-        <View style={styles.cards_container}>
-          <Carousel
-            ref={(c) => { this._carousel = c; }}
-            data={cards}
-            firstItem = {this.state.current_slide}
-            renderItem={this._renderItem}
-            itemWidth={950}
-            sliderWidth={viewportWidth}
-            
-            style={styles.carousel}
-            onSnapToItem={(index) => this.setState({ current_slide: index }) }
-          />
+      <SideMenu menu={menuContents} openMenuOffset={320} edgeHitWidth={100}>
+        <View style={{flex: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.8, shadowRadius: 5,}}>
+          <View style={styles.app_container}>
+            {this.renderHeader()}
+            <View style={styles.cards_container}>
+              <Carousel
+                ref={(c) => { this._carousel = c; }}
+                data={cards}
+                firstItem = {this.state.current_slide}
+                renderItem={this._renderItem}
+                itemWidth={950}
+                sliderWidth={viewportWidth}
+                
+                style={styles.carousel}
+                onSnapToItem={(index) => this.setState({ current_slide: index }) }
+              />
+            </View>
+          </View>
         </View>
-      </View>
+      </SideMenu>
 
-// HOW TO USE AVENIR FONT
 
-  //   this.state.fontLoaded ? (
-  //     <Text style={{ fontFamily: 'avenir', fontSize: 56 }}>
-  //       Hello, world!
-  //     </Text>
-  //   ) : null
-  // }
 
 
     );
@@ -1001,10 +984,10 @@ const styles = StyleSheet.create({
     borderColor: '#C9DCED', // light blue
     borderRadius: 5,
     backgroundColor: 'transparent',
-    shadowColor: '#000',
+    /*shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
-    shadowRadius: 5,
+    shadowRadius: 5,*/
     overflow: 'hidden',
   },
   noteInput: {
@@ -1055,6 +1038,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 5,
+
   },
   viewclassnotes: {
     flex: 1,

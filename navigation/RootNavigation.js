@@ -20,12 +20,13 @@ import AddClass from '../screens/AddClass';
 const RootStackNavigator = StackNavigator(
   {
 
-    Notes: {
-      screen: NotesScreen,
-    },
     Login: {
       screen: AddClass,
     },
+    Notes: {
+      screen: NotesScreen,
+    },
+    
     Draw: {
       screen: DrawScreen,
     },
@@ -73,15 +74,12 @@ export default class RootNavigator extends React.Component {
  }
 
   render() {
-    const menuContents = <MenuSide />
+    
 
     return (
-      <SideMenu menu={menuContents} openMenuOffset={320} edgeHitWidth={100}>
-
-        <View style={{flex: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.8, shadowRadius: 5,}}>
+      
           <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange} screenProps={this.state}/>
-        </View>
-      </SideMenu>
+      
     );
   }
 
