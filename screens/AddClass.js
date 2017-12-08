@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, StyleSheet,Image, Text, TextInput } from 'react-native';
+import { View, StyleSheet,Image, Text, TextInput, AsyncStorage, TouchableOpacity } from 'react-native';
 import { Constants } from 'expo';
 import { Button,Icon } from 'react-native-elements'
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
+import Nav from './global-widgets/nav'
 import {
   setCustomView,
   setCustomTextInput,
@@ -34,19 +35,13 @@ export default class App extends Component {
   super(props);
   this.state = {
     status: false,
-    showModal: false,
-    colleges: ['Stanford University', 'University of Michigan', 'Arizona State University', 'University of California San Diego', 'University of California Berkeley'],
-    colleges_query: '',
-    classes: ['CS 110', 'CS 107', 'ARTHIST 101', 'FILM 45Q', 'MATH 101', 'MATH 120'],
-    class_query: '',
+    login: false,
+    email: '',
+    password: '',
+    repeat: '',
   }
 
   }
-
-
-  _handleTextChange = inputValue => {
-    this.setState({ inputValue });
-  };
 
   toggleStatus(){
      this.setState({
@@ -55,46 +50,138 @@ export default class App extends Component {
      console.log('toggle button handler: '+ this.state.status);
    }
 
+   render_login() {
+    const { navigate } = this.props.navigation;
 
-  render() {
     return (
       <View style={styles.container}>
       <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
-      <Text style={styles.text}> Enter your university </Text>
+      <Text style={styles.text}> Email </Text>
         <TextInput
-          onChangeText={this._handleTextChange}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+          onChangeText={ (text) => {this.setState({email: text}) }}
+            style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
         />
-           <Text style={styles.text}> Enter your class </Text>
+           <Text style={styles.text}> Password </Text>
         <TextInput
-          onChangeText={this._handleTextChange}
+          onChangeText={ (text) => {this.setState({password: text}) }}
           style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
         />
 
         <Button
           title="Submit"
+          disable = {this.state.email == ''}
           backgroundColor = '#637898'
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
 
-          onPress={()=>this.toggleStatus()}
+          onPress={()=> {navigate('Notes');}}
          />
 
-          { this.state.status &&
-            <View>
-            <Text style={{fontSize: 20, paddingBottom: 20}}>Here are lectures matching your selection: </Text>
-
-            <View style ={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-
-            <Text style={{fontSize: 15, paddingBottom: 20}}>Lecture 2: User Interviews </Text>
-            <Image style={{width: 300, height: 300}} source={image2}/>
-            </View>
-            </View>
-
-          }
+        <TouchableOpacity
+            onPress={() => this.setState({login:false})} >
+            <Text>Or create an account</Text>
+          </TouchableOpacity>
 
       </View>
     );
+
+   }
+
+  render_signup() {
+
+    const { navigate } = this.props.navigation;
+
+    return (
+      <View style={styles.container}>
+      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
+      <Text style={styles.text}> Email </Text>
+        <TextInput
+          onChangeText={ (text) => {this.setState({username: text}) }}
+          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+        />
+           <Text style={styles.text}> Password </Text>
+        <TextInput
+          onChangeText={ (text) => {this.setState({password: text}) }}
+          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+        />
+
+        <Text style={styles.text}> Repeat Password </Text>
+        <TextInput
+          onChangeText={ (text) => {this.setState({repeat: text}) }}
+          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+        />
+        <Text> {this.state.email} </Text>
+        <Button
+          title="Join"
+          disable = {(this.state.email.length) == 0}
+          backgroundColor = '#637898'
+          buttonStyle={{padding: 10}}
+          containerViewStyle={{padding: 10, borderRadius: 10}}
+
+          onPress={()=> {addToStoreEmail(): navigate('Notes');}}
+         />
+
+        <TouchableOpacity
+            onPress={() => this.setState({login:true})} >
+            <Text>Sign in with an existing account</Text>
+          </TouchableOpacity>
+
+      </View>
+    );
+    
+   }
+
+   addToStoreEmail = async () => {
+    console.log('attempting to save email');
+    try {
+      await AsyncStorage.setItem("email", this.state.email);
+    } catch (error) {
+      console.log('Unable to save email to AsyncStorage');
+    }
+  };
+
+  render() {
+    if(this.state.login) {
+      return (this.render_login());
+    } else {
+      return(
+      <View style={styles.container}>
+      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
+      <Text style={styles.text}> Email </Text>
+        <TextInput
+          onChangeText={ (text) => {this.setState({username: text}) }}
+          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+        />
+           <Text style={styles.text}> Password </Text>
+        <TextInput
+          onChangeText={ (text) => {this.setState({password: text}) }}
+          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+        />
+
+        <Text style={styles.text}> Repeat Password </Text>
+        <TextInput
+          onChangeText={ (text) => {this.setState({repeat: text}) }}
+          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+        />
+        <Text> {this.state.email} </Text>
+        <Button
+          title="Join"
+          disable = {(this.state.email.length) == 0}
+          backgroundColor = '#637898'
+          buttonStyle={{padding: 10}}
+          containerViewStyle={{padding: 10, borderRadius: 10}}
+
+          onPress={()=> {navigate('Notes');}}
+         />
+
+        <TouchableOpacity
+            onPress={() => this.setState({login:true})} >
+            <Text>Sign in with an existing account</Text>
+          </TouchableOpacity>
+
+      </View>
+      );
+    }
   }
 }
 

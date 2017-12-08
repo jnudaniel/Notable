@@ -92,6 +92,11 @@ export default class MenuSide extends React.Component {
     console.log(slide_index);
   }
 
+  componentWillReceiveProps(newProps) {
+    console.log("IN MENU");
+    console.log(newProps);
+  }
+
   chooseLecture = async (slide_index) => {
     // const { navigate } = this.props.navigation;
     console.log("Saving slide deck number.")
@@ -102,7 +107,6 @@ export default class MenuSide extends React.Component {
       console.log('Unable to save slide_deck to AsyncStorage')
       return;
     }
-    NotesScreen.render();
   };
 
   setClass(title, content) {
