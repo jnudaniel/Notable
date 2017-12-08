@@ -49,7 +49,7 @@ export default class App extends Component {
 
       <Text style={styles.text}> Log In </Text>
 
-      <Text style={styles.inputText}>Username:</Text>
+      <Text style={styles.inputText}>University Email:</Text>
         <TextInput
           onChangeText={(text) => this.setState({username:text})}
           style={{width: 200, height: 44, padding: 8, borderWidth: 3, borderRadius: 10, borderColor: '#667797' }}
