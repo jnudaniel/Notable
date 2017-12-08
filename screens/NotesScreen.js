@@ -14,7 +14,6 @@ import {
   AsyncStorage,
   Switch,
 } from 'react-native';
-
 import {
   setCustomView,
   setCustomTextInput,
@@ -35,6 +34,9 @@ import Colors from '../constants/Colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import MenuSide from '../components/MenuSide';
 import SideMenu from 'react-native-side-menu';
+import Accordion from 'react-native-collapsible/Accordion';
+import Modal from 'react-native-modal'; // 2.4.0
+import Autocomplete from 'react-native-autocomplete-input';
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -366,7 +368,51 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: true, current_slide: 0};
+    this.state = {
+      in_compare: true,
+      current_slide: 0,
+      showModal: false,
+       classes_chosen : [],
+       classes_unchosen :[
+        {
+          title: 'CS 107',
+          content: ['Lecture 1: Syllabus', 'Lecture 2: Binary Bomb', 'Lecture 3: Heap Allocator'],
+          slide_index: 1,
+        },
+         {
+          title: 'CS 109  ',
+          content: ['Lecture 1: Counting', 'Lecture 2: Combinatorics', 'Lecture 3: Sampling'],
+          slide_index: 1,
+        },
+        {
+          title: 'CS 110',
+          content: ['Lecture 1: Overview', 'Lecture 2: Systems', 'Lecture 3: Threading'],
+          slide_index: 1,
+        },
+        {
+          title: 'CS 147  ',
+          content: ['Lecture 1: Design', 'Lecture 2: User Interviews', 'Lecture 3: Exam Review'],
+          slide_index: 1,
+        },
+        {
+          title: 'HUMBIO 155H  ',
+          content: ['Lecture 1: Polyomavirus', 'Lecture 2: Zika Virus', 'Lecture 3: Innoculation'],
+          slide_index: 2,
+        },
+        {
+          title: 'MATH 101',
+          content: ['Lecture 1: Choosing a topic', 'Lecture 2: Direction', 'Lecture 3: Presentation Skills'],
+          slide_index: 3,
+        },
+        {
+          title: 'MATH 120',
+          content: ['Lecture 1: Groups', 'Lecture 2: Rings', 'Lecture 3: Coordinates'],
+          slide_index: 3,
+        },    
+      ],
+      classes_query: '',
+      class_done:false,
+    };
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -378,13 +424,8 @@ export default class NotesScreen extends React.Component {
     console.log('done in notes constructor. state is', this.state)
     this._renderItem = this._renderItem.bind(this)
 
-    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
+    this._renderContent = this._renderContent.bind(this);
   }
-
-  forceUpdateHandler = () => {
-    console.log("in forceupdatehandler!!")
-    this.forceUpdate();
-  };
 
   componentWillReceiveProps(newProps) {
     if (newProps.screenProps.route_index == 0) {
@@ -712,12 +753,191 @@ export default class NotesScreen extends React.Component {
         this.saveNotes(this.state.current_slide);
   }
 
+  /* ------------- ALL THIS IS SIDE MENU SHIT ---------------- */
+
+  chooseLecture(slide_index) {
+    console.log(slide_index);
+  }
+
+  chooseLecture = async (slide_index) => {
+    // const { navigate } = this.props.navigation;
+    console.log("Saving slide deck number:")
+    console.log(slide_index);
+    try {
+      await AsyncStorage.setItem("slide_deck", slide_index.toString());
+    } catch (error) {
+      console.log('Unable to save slide_deck to AsyncStorage')
+      return;
+    }
+    this.forceUpdate();
+  };
+
+  setClass(title, content) {
+    this.setState({ classes_query: title})
+    this.setState({class_done: true});
+  }
+  
+  // chooseLecture(slide_index) {
+  //   console.log(slide_index);
+  // }
 
 
-  render() {
-    const menuContents = <MenuSide />
+  findClass(query) {
+    if (query === '') {
+      return this.state.classes_unchosen;
+    }
+
+    const { classes_unchosen } = this.state;
+    var regexp_str = '(^' + query + '| ' + query + ')';
+    const regex = new RegExp(regexp_str, 'i');
+    return classes_unchosen.filter(_class => _class.title.search(regex) >= 0);
+  }
+
+  render_class_autocomplete() {
+    const { classes_query } = this.state;
+    const classes = this.findClass(classes_query);
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+    // look up autocomplete API, but if not wonderful it's fine
+    return (  
+      <Autocomplete
+        autoCapitalize="none"
+        autoCorrect={false}
+        data={classes.length === 1 && comp(classes_query, classes[0].title) ? [] : classes}
+        defaultValue={classes_query}
+        onChangeText={text => this.setState({ classes_query: text })}
+        placeholder="Enter the class wish to join"
+        renderItem={({title, content}) => (
+           <TouchableOpacity onPress={() => this.setClass(title, content)}>
+            <Text >
+              {title}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+    )
+  }
+
+  closeModal() {
+    this.setState({visibleModal: false});
+    this.setState({classes_query: ''});
+    this.setState({class_done: false});
+  }
+
+  addClassToList() {
+    this.setState({visibleModal: false});
+    this.setState({classes_query: ''});
+    this.setState({class_done: false});
+    var index = this.state.classes_unchosen.map(function(e) { return e.title; }).indexOf(this.state.classes_query);
+    var chosen = this.state.classes_chosen.slice()
+    chosen.push(this.state.classes_unchosen[index])
+    this.setState({ classes_chosen: chosen })
+    this.setState({ classes_unchosen: this.state.classes_unchosen.filter((_, i) => i !== index)});
+  }
+
+  render_modal() {
     return (
-      <SideMenu menu={menuContents} openMenuOffset={320} edgeHitWidth={100}>
+      <Modal isVisible={this.state.visibleModal} >
+        <View style={styles.modalContent}>
+          <Text style={styles.text}> Enter your class </Text>
+            {this.render_class_autocomplete()}
+          <Button
+            title="Close"
+            onPress={() => this.closeModal()}
+            backgroundColor = '#FF6347'
+            buttonStyle={styles.buttonTags}
+          />
+          <Button
+            title="Add"
+            disabled={!(this.state.class_done)}
+            onPress={() => this.addClassToList()}
+            backgroundColor = '#FF6347'
+            buttonStyle={styles.buttonTags}
+          />
+        </View>
+      </Modal>
+      )
+  }
+
+  _renderHeader(section) {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{"" + section.title + "  "}
+        <Ionicons name="ios-arrow-down" size={20} />
+        </Text>
+      </View>
+    );
+  }
+
+  _renderContent(section) {
+    return (
+      <View style={styles.content}>
+        <Button
+          title={section.content[0]}
+          onPress={() => this.chooseLecture(section.slide_index)}
+          backgroundColor={'#FAF8C6'}
+          color={darkest_blue}
+        />
+
+        <Button
+            title={section.content[1]}
+            onPress={() => this.chooseLecture(section.slide_index)}
+            backgroundColor={'#FAF8C6'}
+            color={darkest_blue}
+        />
+
+        <Button
+            title={section.content[2]}
+            onPress={() => this.chooseLecture(section.slide_index)}
+            backgroundColor={'#FAF8C6'}
+            color={darkest_blue}
+        />
+        
+      </View>
+    );
+  }
+
+  renderSideMenu = () => {
+    return (
+      <View >
+        <View style={styles.paddingAboveHeader}></View>
+        <View style={styles.sideMenuContents}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../images/logo-notable-small.png')} />
+          </View>
+          <View style={styles.sideMenuLowerSection}>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Join a Class"
+                onPress={() => this.setState({ visibleModal: true })}
+                backgroundColor={light_blue}
+                color={medium_blue} 
+              />
+            </View>
+            <View style={styles.accordion}>
+              <Accordion
+                sections={this.state.classes_chosen}
+                renderHeader={this._renderHeader}
+                renderContent={this._renderContent}
+                underlayColor='#DBEDFF'
+              />
+              {this.render_modal()}
+            </View>
+          </View>
+          <View style={styles.sideMenuLogout}>
+            <Text style={styles.email}>Email goes here</Text>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={styles.logoutButton}><Text style={styles.logoutText}>Log Out</Text></TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+ 
+  render() {
+    //const menuContents = <MenuSide />
+    return (
+      <SideMenu menu={this.renderSideMenu()} openMenuOffset={320} edgeHitWidth={100}>
         <View style={{flex: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.8, shadowRadius: 5,}}>
           <View style={styles.app_container}>
             {this.renderHeader()}
@@ -1064,6 +1284,105 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: white,
   },
+  // --------- SIDE MENU ---------
+  paddingAboveHeader: {
+    height: 20,
+    backgroundColor: '#eae8e8',
+  },
+  sideMenuContents: {
+    flexDirection: 'column',
+    backgroundColor: '#FAF8C6', // light yellow
+    height: '100%',
+  },
+  logoContainer: {
+    width: '100%',
+    flex: 0.15,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: light_blue,
+    //borderWidth: 3,
+    //borderColor: medium_blue,
+    //borderStyle: 'none solid solid none',
+  },
+  sideMenuLowerSection: {
+    flexDirection: 'column',
+    width: '100%',
+    flex: 0.9,
+    backgroundColor: '#FAF8C6', // light yellow
+    paddingVertical: 15,
+    //borderWidth: 3,
+    //borderColor: medium_blue,
+    //borderStyle: 'none',
+    //borderRight: 'solid',
+  },
+  sideMenuLogout: {
+    flexDirection: 'column',
+    flex: 0.35,
+    alignItems: 'center',
+  },
+  menuHeaderText: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    color: darkest_blue,
+    padding: 20,
+    paddingLeft: 15,
+    paddingRight: 0,
+    backgroundColor: medium_blue,
+  },
+  buttonContainer: {
+    borderRadius: 7,
+    padding: 0,
+    borderWidth: 3,
+    borderColor: medium_blue,
+    backgroundColor: light_blue,
+    width: '80%',
+    alignSelf: 'center',
+  },
+  accordion: {
+    padding: 15,
+    backgroundColor: '#FAF8C6', // light yellow
+  },
+  header: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    alignSelf: 'center',
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: darkest_blue,
+  },
+  contentItem: {
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  logoutButton: {
+    width: 80,
+    height: 30,
+    //backgroundColor: 'orange',//'#FAF8C6', // light yellow
+    marginTop: 10,
+    marginBottom: 30,
+    //alignSelf: 'flex-end',
+  },
+  email: {
+    fontSize: 18,
+    //alignSelf: 'flex-end',
+  },
+  logoutText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  modalContent:{
+    width:500,
+    height:500,
+    borderWidth:10,
+    backgroundColor:light_blue,
+    borderColor: medium_blue,
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:40
+  }
   /*
   // --------- SEEM NO LONGER IN USE ---------
   buttonSmall:{
