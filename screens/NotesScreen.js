@@ -290,10 +290,11 @@ export default class NotesScreen extends React.Component {
       <View style={styles.header_container}>
         <View style={styles.paddingAboveHeader}></View>
         <View style={styles.headerContent}>
-          <Text><FontAwesome name="angle-double-right" size={45} style={styles.leftMenuSwipe}/></Text>
-          <View style={{backgroundColor: '#FCFCFC'}}>
-            <Text style={styles.class_name}> {class_name} </Text>
-            <Text style={styles.notes_name}> {notes_name} </Text>
+          <View style={styles.leftMenuSwipe}><Text><FontAwesome name="angle-double-right" size={45} style={{color: darkest_blue}}/></Text></View>
+          <View style={styles.headerTitles}>
+            <Text style={styles.class_name}>
+              {class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: darkest_blue, marginLeft: 5, marginRight: 5}}/>  {notes_name}
+            </Text>
           </View>
         </View>
       </View>
@@ -587,20 +588,23 @@ const styles = StyleSheet.create({
   },
   paddingAboveHeader: {
     height: 20,
-    //flexDirection: 'column',
     backgroundColor: '#eae8e8',
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
-    backgroundColor: '#C9DCED', // light blue
+    backgroundColor: 'white',
   },
   leftMenuSwipe: {
-    position: 'absolute',
-    left: 45,
-    top: 7,
-    color: darkest_blue, // dark blue
+    alignSelf: 'flex-start',
+    marginRight: 'auto',
+    marginLeft: 10,
+  },
+  headerTitles: {
+    //alignSelf: 'stretch',
+    backgroundColor: 'orange',
   },
   class_name: {
     fontSize: 20,
@@ -608,13 +612,6 @@ const styles = StyleSheet.create({
     color: '#0C0F2A', // dark blue
     textAlign: 'center',
     paddingTop: 0,
-  },
-  notes_name: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#0C0F2A', // dark blue
-    textAlign: 'center',
-    padding: 0,
   },
   // --------- MAIN CARD CONTENTS ---------
   card_header: {
