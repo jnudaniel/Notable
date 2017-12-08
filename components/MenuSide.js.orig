@@ -15,6 +15,15 @@ import {
   setCustomTouchableOpacity
 } from 'react-native-global-props';
 
+<<<<<<< HEAD
+// const customTextProps = { 
+//   style: { 
+//     fontFamily: 'avenir',
+//   }
+// }
+=======
+
+>>>>>>> 1e285783f99de9713a16b1ba7b017b1a0b7c7da4
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -24,6 +33,20 @@ var yellow = '#FAF57E';
 var white = '#FFFFFF';
 
 export default class MenuSide extends React.Component {
+
+<<<<<<< HEAD
+   //  async componentDidMount() {
+   //   await Font.loadAsync({
+   //     'avenir': require('../fonts/avenir-next-regular.ttf'),
+   //   });
+
+   //   this.setState({ fontLoaded: true });
+   //    this.setCustomText(customTextProps);
+
+   // }
+=======
+
+>>>>>>> 1e285783f99de9713a16b1ba7b017b1a0b7c7da4
 
   constructor(props) {
     super(props);

@@ -130,7 +130,7 @@ const Bio_Cards = [{
   "image": bio_slide3
 }]
 
-cards = Math_Cards;
+cards = CS_Cards;
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
 Format = (props) => {
@@ -201,6 +201,7 @@ Format = (props) => {
 export default class NotesScreen extends React.Component {
 
   ViewCompareNotes = (props) => {
+    // return (<View style={styles.compare_notes_panel}>
     return (<ScrollView>
       { this.one_slide_array_of_buttons(props.current_slide) }
     </ScrollView>)
@@ -213,6 +214,7 @@ export default class NotesScreen extends React.Component {
     for (let i = 0; i < combined_slide_notes.notes.length; i++) {
       buttons_array.push(
         <Button
+          style={styles.buttonTags}
           key={(slide_index) * 100 + i}
           onPress={
             () => {
@@ -887,8 +889,12 @@ const styles = StyleSheet.create({
   aggregate_notes_panel: {
     flex: 1,
   },
-
-  // --------- SLIDE VIEW AREA ---------
+  compare_notes_panel: {
+    flex: 1,
+    backgroundColor: white,
+  },
+  
+  // --------- SLIDE VIEW AREA --------- 
   slideContainer: {
     flex: 1,
     alignItems: 'center',

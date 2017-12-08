@@ -72,12 +72,11 @@ export default class App extends Component {
           backgroundColor = '#637898'
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
-
           onPress={()=> {navigate('Notes');}}
          />
 
         <TouchableOpacity
-          style={{padding: 20}}
+          style={styles.buttonTags}
           onPress={() => this.setState({login:false})} >
           <Text>Or create an account</Text>
         </TouchableOpacity>
@@ -130,7 +129,7 @@ export default class App extends Component {
            />
 
           <TouchableOpacity
-            style={{padding: 20}}
+            style={styles.buttonTags}
             onPress={() => this.setState({login:true})} >
               <Text>Sign in with an existing account</Text>
             </TouchableOpacity>
@@ -175,6 +174,12 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     width: '100%',
     margin: 30,
+  },
+  buttonTags: {
+    backgroundColor: medium_blue, // for some reason, the button isn't styling color
+    overflow: 'hidden',
+    borderRadius: 2,
+    margin: 7,
   },
   logoContainer: {
     width: 550,
