@@ -140,7 +140,7 @@ const Bio_Cards = [{
   "image": bio_slide3
 }]
 
-cards = Math_Cards;
+cards = CS_Cards;
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
 Format = (props) => {
@@ -211,18 +211,28 @@ Format = (props) => {
 export default class NotesScreen extends React.Component {
 
   ViewCompareNotes = (props) => {
-    return (<View>
+    return (<View style={styles.compare_notes_panel}>
       { this.one_slide_array_of_buttons(props.current_slide) }
     </View>)
   }
 
   one_slide_array_of_buttons = (slide_index) => {
-    var combined_slide_notes = combined_notes[0] // IDKKKKKK
+    if(slide_index == 'undefined') {
+      console.log("NOONONOOOOOONOOOOO");
+    } else {
+      console.log(slide_index);
+    }
+    //console.log(slide_index)
+    //console.log(combined_notes);
+    //console.log("YOOOOOO2");
+    var combined_slide_notes = combined_notes[slide_index] // IDKKKKKK
     var buttons_array = []
-    console.log(combined_slide_notes);
+    //console.log(combined_slide_notes);
+    //console.log("YOOOOOO");
     for (let i = 0; i < combined_slide_notes.notes.length; i++) {
       buttons_array.push(
         <Button
+          style={styles.buttonTags}
           key={(slide_index) * 100 + i}
           onPress={
             () => {
@@ -241,7 +251,7 @@ export default class NotesScreen extends React.Component {
             }
           }
           title={combined_slide_notes.notes[i]}
-          color="#841584"
+          color="white"
         />
       );
     }
@@ -364,7 +374,7 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: true};
+    this.state = {in_compare: false, current_slide: 0};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -896,6 +906,10 @@ const styles = StyleSheet.create({
   },
   aggregate_notes_panel: {
     flex: 1,
+  },
+  compare_notes_panel: {
+    flex: 1,
+    backgroundColor: white,
   },
   
   // --------- SLIDE VIEW AREA --------- 
