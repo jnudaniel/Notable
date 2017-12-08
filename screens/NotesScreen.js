@@ -288,22 +288,24 @@ export default class NotesScreen extends React.Component {
         <View style={styles.headerContent}>
           <View style={styles.leftMenuSwipe}>
             <Text>
-              <FontAwesome name="angle-double-right" size={45} style={{color: darkest_blue}}/>
+              <FontAwesome name="angle-double-right" size={45} style={{color: medium_blue}}/>
             </Text>
           </View>
           <View style={styles.headerTitles}>
             <Text style={styles.class_name}>
-              {class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: darkest_blue, marginLeft: 5, marginRight: 5}}/>  {notes_name}
+              {class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: medium_blue, marginLeft: 5, marginRight: 5}}/>  {notes_name}
             </Text>
           </View>
-          <View style={styles.compareSwitchContainer}>
-            <Button
-              title="Compare Notes"
-              onPress={() => { Alert.alert('Button pressed!','You did it!',);}}
-              backgroundColor={medium_blue}
-              buttonStyle={styles.toggleButton}
-            />
-          </View>
+          <TouchableOpacity
+            onPress={() => { Alert.alert('Button pressed!','You did it!',);}}
+            style={styles.toggleButtonOff}>
+            <Text style={styles.toggleLabelOff}>Compare</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => { Alert.alert('Button pressed!','You did it!',);}}
+            style={styles.toggleButtonOn}>
+            <Text style={styles.toggleLabelOn}>Take Notes</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -656,15 +658,39 @@ const styles = StyleSheet.create({
   class_name: {
     fontSize: 17,
     fontWeight: 'bold',
-    color: '#0C0F2A', // dark blue
+    color: medium_blue,
     textAlign: 'center',
     paddingTop: 0,
   },
-  compareSwitchContainer: {
-    backgroundColor: 'yellow',
+  toggleButtonOff: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 7,
+    backgroundColor: medium_blue,
+    borderColor: medium_blue,
+    borderWidth: 3,
+    width: 180,
+    marginRight: 50,
+    paddingVertical: 8,
   },
-  toggleButton: {
-    //color: 'white',
+  toggleButtonOn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 7,
+    backgroundColor: white,
+    borderColor: medium_blue,
+    borderWidth: 3,
+    width: 180,
+    marginRight: 50,
+    paddingVertical: 8,
+  },
+  toggleLabelOff: {
+    fontWeight: 'bold',
+    color: white,
+  },
+  toggleLabelOn: {
+    fontWeight: 'bold',
+    color: medium_blue,
   },
   // --------- MAIN CARD CONTENTS ---------
   card_header: {
