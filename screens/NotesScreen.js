@@ -23,7 +23,7 @@ import { MonoText } from '../components/StyledText';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 import Swiper from 'react-native-swiper';
 import Colors from '../constants/Colors';
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -234,9 +234,9 @@ export default class NotesScreen extends React.Component {
     }
   }
 
-  NotesView = (isOn) => {
-    return <Text>{this.state.eventSwitchRegressionIsOn ? 'On' : 'Off'}</Text>
-  }
+  // NotesView = (isOn) => {
+  //   return <Text>{this.state.eventSwitchRegressionIsOn ? 'On' : 'Off'}</Text>
+  // }
 
   _handleButtonPress = () => {
     Alert.alert(
@@ -245,16 +245,16 @@ export default class NotesScreen extends React.Component {
      );
   }
 
-  pickImage = async (e, i) => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      this.setState({['drawings' + i]: result.uri});
-    }
-  }
+  // pickImage = async (e, i) => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //   });
+  //   console.log(result);
+  //   if (!result.cancelled) {
+  //     this.setState({['drawings' + i]: result.uri});
+  //   }
+  // }
 
   onSwipe = (index) => {
     console.log('index changed', index);
@@ -271,6 +271,7 @@ export default class NotesScreen extends React.Component {
     }
   };
 
+  // this keeps track of which slide the user clicked draw on
   savePressedDrawState = async (i) => {
     try {
       await AsyncStorage.setItem("pressed_draw", i.toString());
@@ -346,6 +347,7 @@ export default class NotesScreen extends React.Component {
     )
   }
 
+  // this returns all of the rendered slides
   renderSwiper = () => {
     return (
       <View style={styles.slideContainer}>
@@ -384,8 +386,8 @@ export default class NotesScreen extends React.Component {
     )
   }
 
+  // renders the class slide
   renderImage = (slide) => {
-
     return (
       <View style={styles.slideContainer_noswipe}>
         <Image source={slide.image} style={{flex:1, resizeMode: 'contain'}}/>
@@ -393,29 +395,32 @@ export default class NotesScreen extends React.Component {
     )
   }
 
-  renderNoteView = (index) => {
+  // renders the formatted notes
+  renderNoteView = () => {
     return (
-      <View key={index} style={styles.viewnotes_container}>
+      <View key={this.state.current_slide} style={styles.viewnotes_container}>
         <View style={styles.viewnotes}>
-          <ViewNotes key={index} text = {this.state[index]} toFormat = {this.viewFormat}/>
+          <ViewNotes key={this.state.current_slide} text = {this.state[this.state.current_slide]} toFormat = {this.viewFormat}/>
         </View>
       </View>
     )
   }
 
-  renderNoteEdit = (index) => {
+  // renders the tiny input box on the bottom left where the user enters their notes
+  renderNoteEdit = () => {
     return (
       <View style={styles.noteInputContainer}>
         <TextInput
           style={styles.noteInput}
-          ref={index}
+          ref={this.state.current_slide}
           multiline={true}
           autogrow={true}
           placeholder="Start taking notes..."
           onChangeText={ (text) => {
-            this.setState({[index]: text}) }}
-          value={this.state[index]}
-          onEndEditing={(e)=>{this.saveNotes(index)}}
+            console.log("In render note edit!", this.state.current_slide)
+            this.setState({[this.state.current_slide]: text}) }}
+          value={this.state[this.state.current_slide]}
+          onEndEditing={(e)=>{this.saveNotes(this.state.current_slide)}}
         />
       </View>
     )
@@ -453,7 +458,7 @@ export default class NotesScreen extends React.Component {
   }
 
   renderCurrentCard = (slide) => {
-    console.log('rendering current card. slide is', slide)
+    // console.log('rendering current card. slide is', slide)
     return (
       <View style={styles.main_card}>
         <View style={styles.card_header}>
