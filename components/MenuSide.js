@@ -5,13 +5,15 @@ import Accordion from 'react-native-collapsible/Accordion';
 import { Button } from 'react-native-elements'
 import Modal from 'react-native-modal'; // 2.4.0
 import Autocomplete from 'react-native-autocomplete-input';
+import Nav from '../screens/global-widgets/nav'
+import NotesScreen from '../screens/NotesScreen.js'
+
 
 export default class MenuSide extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
      showModal: false,
-
      classes_chosen : [],
      classes_unchosen :[
   {
@@ -57,14 +59,17 @@ export default class MenuSide extends React.Component {
     this._renderContent = this._renderContent.bind(this)
   }
 
-  saveNotesName = async (result) => {
+  chooseLecture = async (slide_index) => {
+    // const { navigate } = this.props.navigation;
     console.log("Saving slide deck number.")
+    console.log(slide_index);
     try {
-      await AsyncStorage.setItem("slide_deck", result);
+      await AsyncStorage.setItem("slide_deck", slide_index.toString());
     } catch (error) {
       console.log('Unable to save slide_deck to AsyncStorage')
       return;
     }
+    NotesScreen.render();
   };
 
   setClass(title, content) {
@@ -72,9 +77,9 @@ export default class MenuSide extends React.Component {
     this.setState({class_done: true});
   }
   
-  chooseLecture(slide_index) {
-    console.log(slide_index);
-  }
+  // chooseLecture(slide_index) {
+  //   console.log(slide_index);
+  // }
 
 
   findClass(query) {

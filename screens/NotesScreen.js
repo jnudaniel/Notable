@@ -36,21 +36,17 @@ var white = '#FFFFFF';
 //import SwipeCards from 'react-native-swipe-cards';
 //import {RichTextEditor, RichTextToolbar} from 'react-native-zss-rich-text-editor';
 
-var image1 = require('../images/image1.jpeg')
-var image2 = require('../images/image2.jpeg')
-var image3 = require('../images/image3.jpeg')
-var image4 = require('../images/image4.jpeg')
-var image5 = require('../images/image5.jpeg')
-var slide1 = require('../images/slide1.jpg')
-var slide2 = require('../images/slide2.jpg')
-var slide3 = require('../images/slide3.jpg')
-var slide4 = require('../images/slide4.jpg')
-var logo = require('../images/puzzle_piece.png')
-var empty_image = ' '
-var drawing = 'https://cdn2.iconfinder.com/data/icons/edit/100/edit-set-10-512.png'
-var number_slides = 5
-var class_name = "CS147"
-var notes_name = "Lecture 2: User Interviews"
+var cs_slide1 = require('../images/cs_slide1.jpg')
+var cs_slide2 = require('../images/cs_slide2.jpg')
+var cs_slide3 = require('../images/cs_slide3.jpg')
+var math_slide1 = require('../images/math_slide1.jpg')
+var math_slide2 = require('../images/math_slide2.gif')
+var math_slide3 = require('../images/math_slide3.png')
+var bio_slide1 = require('../images/bio_slide1.jpg')
+var bio_slide2 = require('../images/bio_slide2.jpg')
+var bio_slide3 = require('../images/bio_slide3.png')
+var number_slides = 3
+
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 dimensionRounded = (percentage, dimension) => {
@@ -71,24 +67,49 @@ const sliderWidth = viewportWidth;
 const itemWidth = slideWidth + itemHorizontalMargin * 2;
 const entryBorderRadius = 8;
 
-const Cards = [{
+const CS_Cards = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "image": slide1
+  "image": cs_slide1
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "image": slide2
+  "image": cs_slide2
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "image": slide3
-}, {
-  "id": 4,
-  "slide_title": "Test",
-  "image": slide4
+  "image": cs_slide3
 }]
 
+const Math_Cards = [{
+  "id": 1,
+  "slide_title": "Sony Google TV Remote",
+  "image": math_slide1
+}, {
+  "id": 2,
+  "slide_title": "Design Thinking",
+  "image": math_slide2
+}, {
+  "id": 3,
+  "slide_title": "Ideate",
+  "image": math_slide3
+}]
+
+const Bio_Cards = [{
+  "id": 1,
+  "slide_title": "Sony Google TV Remote",
+  "image": bio_slide1
+}, {
+  "id": 2,
+  "slide_title": "Design Thinking",
+  "image": bio_slide2
+}, {
+  "id": 3,
+  "slide_title": "Ideate",
+  "image": bio_slide3
+}]
+
+cards = Math_Cards;
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
 Format = (props) => {
@@ -182,11 +203,27 @@ export default class NotesScreen extends React.Component {
     console.log("Done with load stored text");
   }
 
+  _loadSlideDeck = async () => {
+    console.log("In load slide deck");
+    try {
+      var deck_num = await AsyncStorage.getItem("slide_deck");
+      if (deck_num != null && deck_num != undefined) {
+        this.setState({slide_deck: Number(deck_num)});
+      } else {
+        this.setState({slide_deck: 1});
+      }
+    } catch (error) {
+      console.log('Error fetching slide deck number from AsyncStorage')
+    }
+    console.log("Done with loading the slide deck.");
+  }
+
   _loadDrawing = async () => {
     console.log("In load drawing.");
     try {
       await this._loadStoredText();
       await this._loadCurrentSlideState();
+      await this._loadSlideDeck();
       var storedDrawing = await AsyncStorage.getItem("drawing");
       if (storedDrawing != null && storedDrawing != undefined) {
         this.setState({drawing: storedDrawing})
@@ -217,11 +254,31 @@ export default class NotesScreen extends React.Component {
         this.setState({current_slide: Number(index)});
       } else {
         this.setState({current_slide: 0});
+        index = 1;
+      }
+      console.log(index);
+      switch(index) {
+        case 1:
+          cards = CS_Cards;
+          this.state.class_name = "CS109";
+          this.state.lecture_name = "Lecture 5: Naive Bayes";
+          return;
+        case 2:
+          cards = Math_Cards;
+          this.state.class_name = "Math51";
+          this.state.lecture_name = "Lecture 7: Null Space";
+          return;
+        case 3:
+          cards = Bio_Cards;
+          this.state.class_name = "Biology";
+          this.state.lecture_name = "Lecture 10: Meiosis";
+          return;
       }
     } catch (error) {
       console.log('Error fetching stored drawings from AsyncStorage')
     }
     console.log("Done with load current slide state.");
+    console.log(cards);
   }
 
   // don't call setState from constructor; just initialize state to what it should be
@@ -248,17 +305,6 @@ export default class NotesScreen extends React.Component {
     }
   }
 
-  // NotesView = (isOn) => {
-  //   return <Text>{this.state.eventSwitchRegressionIsOn ? 'On' : 'Off'}</Text>
-  // }
-
-  _handleButtonPress = () => {
-    Alert.alert(
-       'Button pressed!',
-       'You did it!',
-     );
-  }
-
 // this toggles every time the user clicks the toggle notes button between compare notes and view notes
   _handleToggleNotesButton = () => {
     console.log("In handle toggle notes");
@@ -266,21 +312,6 @@ export default class NotesScreen extends React.Component {
     curr_status = this.state.in_compare;
     this.setState({in_compare: !curr_status});
   }
-
-  // pickImage = async (e, i) => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //   });
-  //   console.log(result);
-  //   if (!result.cancelled) {
-  //     this.setState({['drawings' + i]: result.uri});
-  //   }
-  // }
-
-  // onSwipe = (this.state.current_slide) => {
-  //   console.log('index changed', this.state.current_slide);
-  // }
 
   saveNotes = async (i) => {
     console.log('attempting to save notes');
@@ -314,22 +345,54 @@ export default class NotesScreen extends React.Component {
           </View>
           <View style={styles.headerTitles}>
             <Text style={styles.class_name}>
-              {class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: medium_blue, marginLeft: 5, marginRight: 5}}/>  {notes_name}
+              {this.state.class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: medium_blue, marginLeft: 5, marginRight: 5}}/>  {this.state.lecture_name}
             </Text>
           </View>
           <TouchableOpacity
             onPress={this._handleToggleNotesButton}
-            style={styles.toggleButtonOff}>
-            <Text style={styles.toggleLabelOff}>Compare</Text>
+            style={this.toggleNotesStyleButton()}>
+            <Text style={this.toggleNotesStyleText()}>Compare</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this._handleToggleNotesButton}
-            style={styles.toggleButtonOn}>
-            <Text style={styles.toggleLabelOn}>Take Notes</Text>
+            style={this.toggleCompareStyleButton()}>
+            <Text style={this.toggleCompareStyleText()}>Take Notes</Text>
           </TouchableOpacity>
         </View>
       </View>
     )
+  }
+
+  toggleNotesStyleButton = () => {
+    if(this.state.in_compare) {
+      return styles.toggleButtonOff;
+    } else {
+      return styles.toggleButtonOn;
+    }
+  }
+
+  toggleCompareStyleButton = () => {
+    if(this.state.in_compare) {
+      return styles.toggleButtonOn;
+    } else {
+      return styles.toggleButtonOff;
+    }
+  }
+
+  toggleNotesStyleText = () => {
+    if(this.state.in_compare) {
+      return styles.toggleLabelOff;
+    } else {
+      return styles.toggleLabelOn;
+    }
+  }
+
+  toggleCompareStyleText = () => {
+    if(this.state.in_compare) {
+      return styles.toggleLabelOn;
+    } else {
+      return styles.toggleLabelOff;
+    }
   }
 
   renderButtons = () => {
@@ -403,27 +466,19 @@ export default class NotesScreen extends React.Component {
           <View style={styles.slide1}>
             <Image style={{resizeMode: 'contain'}} title={
               <Text style ={styles.slide_title} numberOfLines={1}>
-                {Cards[0].slide_title}
+                {cards[0].slide_title}
               </Text>
             }
             source={image1}/>
-            <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[0].slide_title} </Text>
+            <Text style ={styles.slide_title}  numberOfLines={1}>  {cards[0].slide_title} </Text>
           </View>
           <View style={styles.slide1}>
-            <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[1].slide_title} </Text> } source={image2}/>
-            <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[1].slide_title} </Text>
+            <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{cards[1].slide_title} </Text> } source={image2}/>
+            <Text style ={styles.slide_title}  numberOfLines={1}>  {cards[1].slide_title} </Text>
           </View>
           <View style={styles.slide1}>
-            <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[2].slide_title} </Text> } source={image3}/>
-            <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[2].slide_title} </Text>
-          </View>
-          <View style={styles.slide1}>
-            <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[3].slide_title} </Text> } source={image4}/>
-            <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[3].slide_title} </Text>
-          </View>
-          <View style={styles.slide1}>
-            <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{Cards[4].slide_title} </Text> } source={image5}/>
-            <Text style ={styles.slide_title}  numberOfLines={1}>  {Cards[4].slide_title} </Text>
+            <Image style={{resizeMode: 'contain'}} title={<Text style ={styles.slide_title} numberOfLines={1}>{cards[2].slide_title} </Text> } source={image3}/>
+            <Text style ={styles.slide_title}  numberOfLines={1}>  {cards[2].slide_title} </Text>
           </View>
         </Swiper>
       </View>
@@ -573,20 +628,13 @@ export default class NotesScreen extends React.Component {
 
 
   render() {
-    // let index = 0;
-    // var image  = drawing;
-    // var x = Cards[index]
-    // var value = 'drawings' + index
-    // var drawing = this.state[value]
-    // var textView = null;
-    // ///
     return (
       <View style={styles.app_container}>
         {this.renderHeader()}
         <View style={styles.cards_container}>
           <Carousel
             ref={(c) => { this._carousel = c; }}
-            data={Cards}
+            data={cards}
             firstItem = {this.state.current_slide}
             renderItem={this._renderItem}
             itemWidth={950}
@@ -597,6 +645,7 @@ export default class NotesScreen extends React.Component {
           />
         </View>
       </View>
+
 // HOW TO USE AVENIR FONT
 
   //   this.state.fontLoaded ? (
