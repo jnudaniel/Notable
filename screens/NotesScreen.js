@@ -33,6 +33,8 @@ import Lightbox from 'react-native-lightbox'; // 0.6.0
 import Swiper from 'react-native-swiper';
 import Colors from '../constants/Colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import MenuSide from '../components/MenuSide';
+import SideMenu from 'react-native-side-menu';
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -375,7 +377,14 @@ export default class NotesScreen extends React.Component {
     // this is called anytime the notes screen is navigated to
     console.log('done in notes constructor. state is', this.state)
     this._renderItem = this._renderItem.bind(this)
+
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
   }
+
+  forceUpdateHandler = () => {
+    console.log("in forceupdatehandler!!")
+    this.forceUpdate();
+  };
 
   componentWillReceiveProps(newProps) {
     if (newProps.screenProps.route_index == 0) {
@@ -706,23 +715,28 @@ export default class NotesScreen extends React.Component {
 
 
   render() {
+    const menuContents = <MenuSide />
     return (
-      <View style={styles.app_container}>
-        {this.renderHeader()}
-        <View style={styles.cards_container}>
-          <Carousel
-            ref={(c) => { this._carousel = c; }}
-            data={cards}
-            firstItem = {this.state.current_slide}
-            renderItem={this._renderItem}
-            itemWidth={950}
-            sliderWidth={viewportWidth}
-            
-            style={styles.carousel}
-            onSnapToItem={(index) => this.setState({ current_slide: index }) }
-          />
+      <SideMenu menu={menuContents} openMenuOffset={320} edgeHitWidth={100}>
+        <View style={{flex: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.8, shadowRadius: 5,}}>
+          <View style={styles.app_container}>
+            {this.renderHeader()}
+            <View style={styles.cards_container}>
+              <Carousel
+                ref={(c) => { this._carousel = c; }}
+                data={cards}
+                firstItem = {this.state.current_slide}
+                renderItem={this._renderItem}
+                itemWidth={950}
+                sliderWidth={viewportWidth}
+                
+                style={styles.carousel}
+                onSnapToItem={(index) => this.setState({ current_slide: index }) }
+              />
+            </View>
+          </View>
         </View>
-      </View>
+      </SideMenu>
 
 // HOW TO USE AVENIR FONT
 
