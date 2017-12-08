@@ -399,7 +399,7 @@ export default class NotesScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.buttonsBar}>
-        <View style={styles.buttons}>
+        <View>
             <Button
              title="#Section"
              onPress={this._addSectionToInput}
@@ -413,22 +413,23 @@ export default class NotesScreen extends React.Component {
              icon={{name: 'book'}}
              buttonStyle={styles.buttonTags}
             />
-
+          </View>
+          <View>
             <Button
              title="#Key"
              onPress={this._addImportantToInput}
              icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
-          </View>
-          <View style={styles.buttons}>
-             <Button
+            <Button
              title="#Exam"
              onPress={this._addExamToInput}
              icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
 
+          </View>
+          <View>
             <Button
              title="Draw"
              icon={{name: 'edit'}}
@@ -833,7 +834,7 @@ const styles = StyleSheet.create({
     //height: 420,
   },
   slideContainer_noswipe: {
-    flex: 1,
+    flex: .8,
     alignItems: 'center',
     alignSelf:'center',
     width: '85%',
@@ -900,10 +901,11 @@ const styles = StyleSheet.create({
     backgroundColor: medium_blue, // for some reason, the button isn't styling color
     overflow: 'hidden',
     borderRadius: 10,
+    margin: 4,
   },
   // --------- NOTE INPUT AREA ---------
   noteInputContainer: {
-    flex: 0.3,
+    flex: 0.75,
     alignItems: 'center',
     margin: 5,
     marginBottom: 25,
