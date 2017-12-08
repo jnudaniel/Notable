@@ -228,7 +228,7 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: true};
+    this.state = {in_compare: false};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -261,6 +261,8 @@ export default class NotesScreen extends React.Component {
 
 // this toggles every time the user clicks the toggle notes button between compare notes and view notes
   _handleToggleNotesButton = () => {
+    console.log("In handle toggle notes");
+    console.log(this.state.in_compare);
     curr_status = this.state.in_compare;
     this.setState({in_compare: !curr_status});
   }
@@ -316,12 +318,12 @@ export default class NotesScreen extends React.Component {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => { Alert.alert('Button pressed!','You did it!',);}}
+            onPress={this._handleToggleNotesButton}
             style={styles.toggleButtonOff}>
             <Text style={styles.toggleLabelOff}>Compare</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => { Alert.alert('Button pressed!','You did it!',);}}
+            onPress={this._handleToggleNotesButton}
             style={styles.toggleButtonOn}>
             <Text style={styles.toggleLabelOn}>Take Notes</Text>
           </TouchableOpacity>
@@ -544,24 +546,28 @@ export default class NotesScreen extends React.Component {
 
   _addDefinitionToInput = () => {
 
-        added_text = this.state[this.state.current_slide] + " " + "#Definition";
+        added_text = this.state[this.state.current_slide] + "\n" + "#def";
         this.setState({[this.state.current_slide]: added_text});
+        this.saveNotes(this.state.current_slide);
   }
   _addSectionToInput = () => {
 
-        added_text = this.state[this.state.current_slide] + " " + "#Section";
+        added_text = this.state[this.state.current_slide] + "\n" + "#section";
         this.setState({[this.state.current_slide]: added_text});
+        this.saveNotes(this.state.current_slide);
   }
   _addImportantToInput = () => {
 
-        added_text = this.state[this.state.current_slide] + " " + "#Important";
+        added_text = this.state[this.state.current_slide] + "\n" + "#important";
         this.setState({[this.state.current_slide]: added_text});
+        this.saveNotes(this.state.current_slide);
   }
   
     _addExamToInput = () => {
 
-        added_text = this.state[this.state.current_slide] + " " + "#Exam";
+        added_text = this.state[this.state.current_slide] + "\n" + "#exam";
         this.setState({[this.state.current_slide]: added_text});
+        this.saveNotes(this.state.current_slide);
   }
 
 
