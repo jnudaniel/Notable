@@ -409,15 +409,16 @@ export default class NotesScreen extends React.Component {
       <View style={styles.header_container}>
         <View style={styles.paddingAboveHeader}></View>
         <View style={styles.headerContent}>
-          <View style={styles.leftMenuSwipe}>
+          {/*<View style={styles.leftMenuSwipe}<
             <Text>
               <FontAwesome name="angle-double-right" size={45} style={{color: medium_blue}}/>
             </Text>
-          </View>
+          </View>*/}
           <View style={styles.headerTitles}>
-            <Text style={styles.class_name}>
+            <Image source={require('../images/notable-swipe.png')} style={{flex: 1}} />
+            {/*<Text style={styles.class_name}>
               {this.state.class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: medium_blue, marginLeft: 5, marginRight: 5}}/>  {this.state.lecture_name}
-            </Text>
+            </Text>*/}
           </View>
           <TouchableOpacity
             onPress={this._handleToggleNotesButton}
@@ -823,7 +824,7 @@ const styles = StyleSheet.create({
   },
   headerTitles: {
     //alignSelf: 'flex-start',
-    marginLeft: 15,
+    marginLeft: 30,
     marginRight: 'auto',
     paddingTop: 2,
   },
