@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',
   },
   toggleButton: {
-    color: 'white',
+    //color: 'white',
   },
   // --------- MAIN CARD CONTENTS ---------
   card_header: {
