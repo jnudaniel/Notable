@@ -18,7 +18,8 @@
       "assetExts": ["ttf"]
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "edu.stanford.cs147.Notable"
     }
   }
 }
