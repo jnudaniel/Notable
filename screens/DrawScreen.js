@@ -10,7 +10,7 @@ import {
   CameraRoll,
   AsyncStorage
 } from 'react-native'
-import { takeSnapshotAsync } from "expo";
+import { takeSnapshotAsync, Font } from "expo";
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, ImagePicker } from 'expo';
 import Nav from './global-widgets/nav'
@@ -31,8 +31,8 @@ import {
 } from 'react-native-global-props';
 const {OS} = Platform
 // import Bezier from '../tools/bezier'
-const customTextProps = { 
-  style: { 
+const customTextProps = {
+  style: {
     fontFamily: 'avenir',
   }
 }
@@ -65,7 +65,7 @@ export default class DrawScreen extends React.Component {
       newStroke: [],
       pen: new Pen(),
     }
-    
+
 
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gs) => true,
@@ -185,8 +185,8 @@ export default class DrawScreen extends React.Component {
     return (
 
       <View style={styles.cards_container}>
-        <View style={styles.top_space}></View> 
-        <View 
+        <View style={styles.top_space}></View>
+        <View
         onLayout={this._onLayoutContainer}
         style={[
           styles.main_card,
