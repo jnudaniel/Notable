@@ -7,7 +7,19 @@ import Modal from 'react-native-modal'; // 2.4.0
 import Autocomplete from 'react-native-autocomplete-input';
 import Nav from '../screens/global-widgets/nav'
 import NotesScreen from '../screens/NotesScreen.js'
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
 
+const customTextProps = { 
+  style: { 
+    fontFamily: 'avenir',
+  }
+}
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -17,6 +29,17 @@ var yellow = '#FAF57E';
 var white = '#FFFFFF';
 
 export default class MenuSide extends React.Component {
+
+      async componentDidMount() {
+     await Font.loadAsync({
+       'avenir': require('../fonts/avenir-next-regular.ttf'),
+     });
+
+     this.setState({ fontLoaded: true });
+      this.setCustomText(customTextProps);
+
+   }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -244,6 +267,14 @@ export default class MenuSide extends React.Component {
     );
   }
 }
+
+  //   this.state.fontLoaded ? (
+  //     <Text style={{ fontFamily: 'avenir', fontSize: 56 }}>
+  //       Hello, world!
+  //     </Text>
+  //   ) : null
+  // }
+
 ///
 const styles = StyleSheet.create({
   paddingAboveHeader: {
@@ -340,10 +371,10 @@ const styles = StyleSheet.create({
     width:500,
     height:500,
     borderWidth:10,
-    borderColor: white,
+    backgroundColor:light_blue,
+    borderColor: medium_blue,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor: light_blue,
     borderRadius:40
   }
 });

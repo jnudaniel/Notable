@@ -14,6 +14,15 @@ import {
   AsyncStorage,
   Switch,
 } from 'react-native';
+
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
+
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, Font, ImagePicker } from 'expo';
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
@@ -48,6 +57,13 @@ var bio_slide3 = require('../images/bio_slide3.png')
 var number_slides = 3
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+
+
+const customTextProps = { 
+  style: { 
+    fontFamily: 'avenir',
+  }
+}
 
 dimensionRounded = (percentage, dimension) => {
   let rounded = 0;
@@ -182,6 +198,8 @@ export default class NotesScreen extends React.Component {
      });
 
      this.setState({ fontLoaded: true });
+      //this.setCustomText(customTextProps);
+
    }
 
   
@@ -403,14 +421,12 @@ export default class NotesScreen extends React.Component {
             <Button
              title="#Section"
              onPress={this._addSectionToInput}
-             icon={{name: 'note-add'}}
              buttonStyle={styles.buttonTags}
             />
 
             <Button
              title="#Def"
              onPress={this._addDefinitionToInput}
-             icon={{name: 'book'}}
              buttonStyle={styles.buttonTags}
             />
           </View>
@@ -418,13 +434,11 @@ export default class NotesScreen extends React.Component {
             <Button
              title="#Key"
              onPress={this._addImportantToInput}
-             icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
             <Button
              title="#Exam"
              onPress={this._addExamToInput}
-             icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
 
@@ -432,7 +446,6 @@ export default class NotesScreen extends React.Component {
           <View>
             <Button
              title="Draw"
-             icon={{name: 'edit'}}
              buttonStyle={styles.buttonTags}
              onPress={() => {
               this.saveCurrentSlideState(this.state.current_slide);
@@ -444,7 +457,6 @@ export default class NotesScreen extends React.Component {
             <Button
              title="#What"
              onPress={this._addWhatToInput}
-             icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
         </View>
