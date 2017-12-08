@@ -173,11 +173,11 @@ export default class NotesScreen extends React.Component {
     console.log("In load drawing.");
     try {
       await this._loadStoredText();
-      await this._loadStoredPressedDrawState();
+      await this._loadCurrentSlideState();
       var storedDrawing = await AsyncStorage.getItem("drawing");
       if (storedDrawing != null && storedDrawing != undefined) {
         this.setState({drawing: storedDrawing})
-        index = this.state.pressed_draw;
+        index = this.state.current_slide;
         // this only adds the drawing to the notes if it has not already been added
         // this prevents the error of reading the same drawing again and again upon app restart
         if (this.state[index] == undefined || this.state[index] == null) {
@@ -196,25 +196,26 @@ export default class NotesScreen extends React.Component {
     }
   }
 
-  _loadStoredPressedDrawState = async () => {
-    console.log("In pressed draw state.");
-    this.setState({pressed_draw: 0});
+  _loadCurrentSlideState = async () => {
+    console.log("In load current slide state.");
     try {
-      var index = await AsyncStorage.getItem("pressed_draw");
+      var index = await AsyncStorage.getItem("current_slide");
       if (index != null && index != undefined) {
-        this.setState({pressed_draw: Number(index)});
+        this.setState({current_slide: Number(index)});
+      } else {
+        this.setState({current_slide: 0});
       }
     } catch (error) {
       console.log('Error fetching stored drawings from AsyncStorage')
     }
-    console.log("Done with load stored pressed draw state.");
+    console.log("Done with load current slide state.");
   }
 
   // don't call setState from constructor; just initialize state to what it should be
   constructor(props) {
     super(props);
     this.state = {};
-    this.state = {current_slide: 0};
+    // this.state = {current_slide: 0};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -256,10 +257,9 @@ export default class NotesScreen extends React.Component {
   //   }
   // }
 
-  onSwipe = (index) => {
-    console.log('index changed', index);
-    // this.setState({[index]: text}) }}
-  }
+  // onSwipe = (this.state.current_slide) => {
+  //   console.log('index changed', this.state.current_slide);
+  // }
 
   saveNotes = async (i) => {
     console.log('attempting to save notes');
@@ -272,11 +272,11 @@ export default class NotesScreen extends React.Component {
   };
 
   // this keeps track of which slide the user clicked draw on
-  savePressedDrawState = async (i) => {
+  saveCurrentSlideState = async (i) => {
     try {
-      await AsyncStorage.setItem("pressed_draw", i.toString());
+      await AsyncStorage.setItem("current_slide", i.toString());
     } catch (error) {
-      console.log('Unable to save pressed_draw to AsyncStorage')
+      console.log('Unable to save current_slide to AsyncStorage')
     }
     console.log('succesful at saving notes')
   }
@@ -331,8 +331,8 @@ export default class NotesScreen extends React.Component {
          icon={{name: 'edit'}}
          buttonStyle={styles.buttonTags}
          onPress={() => {
-          this.savePressedDrawState(this.state.current_slide);
-          this.setState({pressed_draw: this.state.current_slide});
+          this.saveCurrentSlideState(this.state.current_slide);
+          this.setState({current_slide: this.state.current_slide});
           navigate('Draw');
           }
           }
@@ -353,9 +353,9 @@ export default class NotesScreen extends React.Component {
     return (
       <View style={styles.slideContainer}>
         <Swiper
-          onIndexChanged={onSwipe = (index) => {
-            console.log('index changed', index);
-          }}
+          // onIndexChanged={onSwipe = (index) => {
+          //   console.log('index changed', this.state.current_slide);
+          // }}
           showsButtons={true}>
           <View style={styles.slide1}>
             <Image style={{resizeMode: 'contain'}} title={
@@ -427,11 +427,11 @@ export default class NotesScreen extends React.Component {
     )
   }
 
-  renderCompareView = (index) => {
+  renderCompareView = () => {
     return (
       <TextInput
         style={styles.compareView}
-        ref={index}
+        ref={this.state.current_slide}
         multiline={true}
         autogrow={true}
         placeholder="THIS WILL HAVE THE CLASS NOTES"
@@ -483,13 +483,13 @@ export default class NotesScreen extends React.Component {
 
 
   render() {
-    let index = 0;
-    var image  = drawing;
-    var x = Cards[index]
-    var value = 'drawings' + index
-    var drawing = this.state[value]
-    var textView = null;
-    ///
+    // let index = 0;
+    // var image  = drawing;
+    // var x = Cards[index]
+    // var value = 'drawings' + index
+    // var drawing = this.state[value]
+    // var textView = null;
+    // ///
     return (
       <View style={styles.app_container}>
         {this.renderHeader()}
@@ -497,6 +497,7 @@ export default class NotesScreen extends React.Component {
           <Carousel
             ref={(c) => { this._carousel = c; }}
             data={Cards}
+            firstItem = {this.state.current_slide}
             renderItem={this._renderItem}
             itemWidth={1000}
             sliderWidth={viewportWidth}
