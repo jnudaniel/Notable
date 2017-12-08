@@ -76,15 +76,15 @@ const entryBorderRadius = 8;
 const combined_notes = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "notes": ["#Definition Energy All living things take materials from their surroundings such as food, water, and gases. They use these materials to get energy. #Key This energy is needed to carry out all of the life functions.", "#Definition Cellular respiration is the process in which the chemical bonds of energy rich molecules (like glucose) are converted into a form of energy that cells can use. #Exam remember : In eukaryotic (including animal and plant) cells, cellular respiration takes place in the mitochondria."]
+  "notes": ["#def Energy All living things take materials from their surroundings such as food, water, and gases. They use these materials to get energy. #key This energy is needed to carry out all of the life functions.", "#def Cellular respiration is the process in which the chemical bonds of energy rich molecules (like glucose) are converted into a form of energy that cells can use. #exam remember : In eukaryotic (including animal and plant) cells, cellular respiration takes place in the mitochondria."]
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "notes": ["#Definition Area- The size of a surface. The amount of space inside the boundary of a flat (2-dimensional) object such as a triangle or circle.", "#Definition Fraction Part of a whole. #key The top number (the numerator) says how many parts we have. The bottom number (the denominator) says how many parts the whole is divided into", "#Defintion Mean The mean is the average of the numbers: a calculated 'central' value of a set of numbers."]
+  "notes": ["#def Area- The size of a surface. The amount of space inside the boundary of a flat (2-dimensional) object such as a triangle or circle.", "#def Fraction Part of a whole. #key The top number (the numerator) says how many parts we have. The bottom number (the denominator) says how many parts the whole is divided into", "#def Mean The mean is the average of the numbers: a calculated 'central' value of a set of numbers."]
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "notes": ["#Definition Linear Equation: An equation that makes a straight line when it is graphed.", "#Key Often written in the form: y = mx+b", "#Exam there's a quiz on this on the 8th at 6:30!"]
+  "notes": ["#def Linear Equation: An equation that makes a straight line when it is graphed.", "#key Often written in the form: y = mx+b", "#exam there's a quiz on this on the 8th at 6:30!"]
 }]
 
 
