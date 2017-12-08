@@ -10,7 +10,7 @@ import {
   CameraRoll,
   AsyncStorage
 } from 'react-native'
-import { takeSnapshotAsync, Font } from "expo";
+import { takeSnapshotAsync } from "expo";
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, ImagePicker } from 'expo';
 import Nav from './global-widgets/nav'
@@ -31,11 +31,7 @@ import {
 } from 'react-native-global-props';
 const {OS} = Platform
 // import Bezier from '../tools/bezier'
-const customTextProps = {
-  style: {
-    fontFamily: 'avenir',
-  }
-}
+
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
 var medium_blue = '#667797';
@@ -46,15 +42,7 @@ var pale_yellow = "#FAF8C6";
 
 export default class DrawScreen extends React.Component {
 
-    async componentDidMount() {
-     await Font.loadAsync({
-       'avenir': require('../fonts/avenir-next-regular.ttf'),
-     });
 
-     this.setState({ fontLoaded: true });
-      this.setCustomText(customTextProps);
-
-   }
 
   constructor(props, context) {
     super(props, context);

@@ -15,11 +15,7 @@ import {
   setCustomTouchableOpacity
 } from 'react-native-global-props';
 
-const customTextProps = { 
-  style: { 
-    fontFamily: 'avenir',
-  }
-}
+
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -30,15 +26,7 @@ var white = '#FFFFFF';
 
 export default class MenuSide extends React.Component {
 
-      async componentDidMount() {
-     await Font.loadAsync({
-       'avenir': require('../fonts/avenir-next-regular.ttf'),
-     });
 
-     this.setState({ fontLoaded: true });
-      this.setCustomText(customTextProps);
-
-   }
 
   constructor(props) {
     super(props);
@@ -80,7 +68,7 @@ export default class MenuSide extends React.Component {
         title: 'MATH 120',
         content: ['Lecture 1: Groups', 'Lecture 2: Rings', 'Lecture 3: Coordinates'],
         slide_index: 3,
-      },    
+      },
     ],
     classes_query: '',
     class_done:false,
@@ -116,7 +104,7 @@ export default class MenuSide extends React.Component {
     this.setState({ classes_query: title})
     this.setState({class_done: true});
   }
-  
+
   // chooseLecture(slide_index) {
   //   console.log(slide_index);
   // }
@@ -138,7 +126,7 @@ export default class MenuSide extends React.Component {
     const classes = this.findClass(classes_query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     // look up autocomplete API, but if not wonderful it's fine
-    return (  
+    return (
       <Autocomplete
         autoCapitalize="none"
         autoCorrect={false}
@@ -188,7 +176,7 @@ export default class MenuSide extends React.Component {
           />
           <Text style={styles.text}> Enter your class </Text>
             {this.render_class_autocomplete()}
-          
+
           <Button
             title="Add"
             disabled={!(this.state.class_done)}
@@ -234,11 +222,11 @@ export default class MenuSide extends React.Component {
             backgroundColor={'#FAF8C6'}
             color={darkest_blue}
         />
-        
+
       </View>
     );
   }
-//style={{flex:1, resizeMode: 'contain'}} 
+//style={{flex:1, resizeMode: 'contain'}}
   render() {
     return (
     	<View >
@@ -253,7 +241,7 @@ export default class MenuSide extends React.Component {
                 title="Join a Class"
                 onPress={() => this.setState({ visibleModal: true })}
                 backgroundColor={light_blue}
-                color={medium_blue} 
+                color={medium_blue}
               />
             </View>
             <View style={styles.accordion}>
@@ -278,12 +266,6 @@ export default class MenuSide extends React.Component {
   }
 }
 
-  //   this.state.fontLoaded ? (
-  //     <Text style={{ fontFamily: 'avenir', fontSize: 56 }}>
-  //       Hello, world!
-  //     </Text>
-  //   ) : null
-  // }
 
 ///
 const styles = StyleSheet.create({

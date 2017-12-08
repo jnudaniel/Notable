@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet,Image, Text, TextInput, AsyncStorage, TouchableOpacity } from 'react-native';
-import { Constants,Font } from 'expo';
+import { Constants } from 'expo';
 import { Button,Icon } from 'react-native-elements'
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
