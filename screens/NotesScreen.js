@@ -32,7 +32,7 @@ import Lightbox from 'react-native-lightbox'; // 0.6.0
 import Swiper from 'react-native-swiper';
 import Colors from '../constants/Colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import MenuSide from '../components/MenuSide';
+//import MenuSide from '../components/MenuSide';
 import SideMenu from 'react-native-side-menu';
 import Accordion from 'react-native-collapsible/Accordion';
 import Modal from 'react-native-modal'; // 2.4.0
@@ -245,7 +245,8 @@ export default class NotesScreen extends React.Component {
             }
           }
           title={combined_slide_notes.notes[i]}
-          color="#841584"
+          color={darkest_blue}
+          backgroundColor="white"
         />
       );
     }
