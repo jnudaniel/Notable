@@ -905,7 +905,7 @@ const styles = StyleSheet.create({
   },
   // --------- NOTE INPUT AREA ---------
   noteInputContainer: {
-    flex: 0.75,
+    flex: 0.85,
     alignItems: 'center',
     margin: 5,
     marginBottom: 25,
