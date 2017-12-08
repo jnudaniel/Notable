@@ -217,12 +217,9 @@ export default class NotesScreen extends React.Component {
   }
 
   one_slide_array_of_buttons = (slide_index) => {
-    console.log(combined_notes);
-    console.log("YOOOOOO2");
     var combined_slide_notes = combined_notes[0] // IDKKKKKK
     var buttons_array = []
     console.log(combined_slide_notes);
-    console.log("YOOOOOO");
     for (let i = 0; i < combined_slide_notes.notes.length; i++) {
       buttons_array.push(
         <Button
