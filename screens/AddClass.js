@@ -1,24 +1,10 @@
 import React, { Component } from 'react';
 import { View, StyleSheet,Image, Text, TextInput, AsyncStorage, TouchableOpacity } from 'react-native';
-import { Constants, Font} from 'expo';
+import { Constants } from 'expo';
 import { Button,Icon } from 'react-native-elements'
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
-// import {
-//   setCustomView,
-//   setCustomTextInput,
-//   setCustomText,
-//   setCustomImage,
-//   setCustomTouchableOpacity
-// } from 'react-native-global-props';
 
-// var image2 = require('../images/image2.jpeg')
-
-// const customTextProps = { 
-//   style: { 
-//     fontFamily: 'avenir',
-//   }
-// }
 
 var darkest_blue = '#0C0F2A';
 var medium_blue = '#667797';
@@ -26,17 +12,9 @@ var light_blue = '#C9DCED';
 var yellow = '#FAF57E';
 var white = '#FFFFFF';
 
-export default class App extends React.Component {
 
-   //  async componentDidMount() {
-   //   await Font.loadAsync({
-   //     'avenir': require('../fonts/avenir-next-regular.ttf'),
-   //   });
+export default class App extends Component {
 
-   //   this.setState({ fontLoaded: true });
-   //    this.setCustomText(customTextProps);
-
-   // }
 
 
   constructor(props) {
@@ -80,12 +58,12 @@ export default class App extends React.Component {
       <Text style={styles.text}>Email</Text>
         <TextInput style={styles.inputField}
           onChangeText={ (text) => {this.setState({email: text}) }}
-            
+
         />
            <Text style={styles.text}> Password </Text>
         <TextInput secureTextEntry={true} style={styles.inputField}
           onChangeText={ (text) => {this.setState({password: text}) }}
-          
+
         />
 
         <Button
@@ -94,14 +72,13 @@ export default class App extends React.Component {
           backgroundColor = '#637898'
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
-
           onPress={()=> {navigate('Notes');}}
          />
 
         <TouchableOpacity
-          style={{padding: 20}}
+          style={styles.buttonTags}
           onPress={() => this.setState({login:false})} >
-          <Text style={styles.toggleLabelOn}>Or create an account</Text>
+          <Text>Or create an account</Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -130,14 +107,14 @@ export default class App extends React.Component {
           <TextInput
             secureTextEntry={true} style={styles.inputField}
             onChangeText={ (text) => {this.setState({password: text}) }}
-            
+
           />
 
           <Text style={styles.text}> Repeat Password </Text>
           <TextInput
           secureTextEntry={true} style={styles.inputField}
             onChangeText={ (text) => {this.setState({repeat: text}) }}
-            
+
           />
           <Text> {this.state.email} </Text>
           <Button
@@ -147,53 +124,33 @@ export default class App extends React.Component {
             buttonStyle={{padding: 10}}
             containerViewStyle={{padding: 10, borderRadius: 10}}
 
-            onPress={()=> {this.addToStoreEmail(); 
+            onPress={()=> {this.addToStoreEmail();
               navigate('Notes');}}
            />
 
-         <TouchableOpacity
-            style={{padding: 20}}
+          <TouchableOpacity
+            style={styles.buttonTags}
             onPress={() => this.setState({login:true})} >
-              <Text style={styles.toggleLabelOn}>Sign in with an existing account</Text>
+              <Text>Sign in with an existing account</Text>
             </TouchableOpacity>
+
         </View>
       </View>
     );
-    
+
    }
+
+
+  render() {
+    if(this.state.login) {
+      return (this.render_login());
+    } else {
+      return (this.render_signup())
+    }
+  }
 }
 ///
 const styles = StyleSheet.create({
-  toggleButtonOff: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 2,
-    backgroundColor: medium_blue,
-    borderColor: medium_blue,
-    borderWidth: 3,
-    width: 180,
-    marginRight: 0,
-    paddingVertical: 8,
-  },
-  toggleButtonOn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 2,
-    backgroundColor: white,
-    borderColor: medium_blue,
-    borderWidth: 3,
-    width: 180,
-    marginRight: 0,
-    paddingVertical: 8,
-  },
-  toggleLabelOff: {
-    fontWeight: 'bold',
-    color: white,
-  },
-  toggleLabelOn: {
-    fontWeight: 'bold',
-    color: medium_blue,
-  },
   paddingAboveHeader: {
     height: 20,
     backgroundColor: '#eae8e8',
@@ -217,6 +174,12 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     width: '100%',
     margin: 30,
+  },
+  buttonTags: {
+    backgroundColor: medium_blue, // for some reason, the button isn't styling color
+    overflow: 'hidden',
+    borderRadius: 2,
+    margin: 7,
   },
   logoContainer: {
     width: 550,
