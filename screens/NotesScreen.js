@@ -112,7 +112,6 @@ Format = (props) => {
         <Image source={{uri: currLine}} resizeMode="contain" style ={{width:100, height:100}} />
      </Lightbox>)
   }
-    const toFormat = currLine[0] == '#';
     // if it is not a hashtag, returns the text
     if(!toFormat) {  <Text> {props.line} </Text> }
 
