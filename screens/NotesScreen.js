@@ -133,8 +133,6 @@ Format = (props) => {
     return <Text style={styles.unformattedText}>{props.line}{'\n'}</Text>;
   }
 
-key_val = 0
-ViewNotes = (props) => {
   key_val = 0
   num_what = 0
   ViewNotes = (props) => {
