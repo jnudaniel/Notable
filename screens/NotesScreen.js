@@ -15,13 +15,7 @@ import {
   Switch,
 } from 'react-native';
 
-import {
-  setCustomView,
-  setCustomTextInput,
-  setCustomText,
-  setCustomImage,
-  setCustomTouchableOpacity
-} from 'react-native-global-props';
+
 
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, Font, ImagePicker } from 'expo';
@@ -61,11 +55,7 @@ var number_slides = 3
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 
-const customTextProps = { 
-  style: { 
-    fontFamily: 'avenir',
-  }
-}
+
 
 dimensionRounded = (percentage, dimension) => {
   let rounded = 0;
@@ -213,9 +203,9 @@ Format = (props) => {
 export default class NotesScreen extends React.Component {
 
   ViewCompareNotes = (props) => {
-    return (<View>
+    return (<ScrollView>
       { this.one_slide_array_of_buttons(props.current_slide) }
-    </View>)
+    </ScrollView>)
   }
 
   one_slide_array_of_buttons = (slide_index) => {
@@ -243,7 +233,8 @@ export default class NotesScreen extends React.Component {
             }
           }
           title={combined_slide_notes.notes[i]}
-          color="#841584"
+          color={darkest_blue}
+          backgroundColor='white'
         />
       );
     }
@@ -255,15 +246,7 @@ export default class NotesScreen extends React.Component {
     header: null,
   };
 
-    async componentDidMount() {
-     await Font.loadAsync({
-       'avenir': require('../fonts/avenir-next-regular.ttf'),
-     });
-
-     this.setState({ fontLoaded: true });
-      //this.setCustomText(customTextProps);
-
-   }
+    
 
   
   _loadStoredText = async () => {
@@ -366,7 +349,7 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: true, current_slide: 0};
+    this.state = {in_compare: false, current_slide: 0};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -438,14 +421,15 @@ export default class NotesScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={this._handleToggleNotesButton}
-            style={this.toggleNotesStyleButton()}>
-            <Text style={this.toggleNotesStyleText()}>Compare</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this._handleToggleNotesButton}
             style={this.toggleCompareStyleButton()}>
             <Text style={this.toggleCompareStyleText()}>Take Notes</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this._handleToggleNotesButton}
+            style={this.toggleNotesStyleButton()}>
+            <Text style={this.toggleNotesStyleText()}>Compare</Text>
+          </TouchableOpacity>
+          <View style={{height: 2, width: 50}}></View>
         </View>
       </View>
     )
@@ -738,14 +722,7 @@ export default class NotesScreen extends React.Component {
         </View>
       </SideMenu>
 
-// HOW TO USE AVENIR FONT
 
-  //   this.state.fontLoaded ? (
-  //     <Text style={{ fontFamily: 'avenir', fontSize: 56 }}>
-  //       Hello, world!
-  //     </Text>
-  //   ) : null
-  // }
 
 
     );
@@ -1001,10 +978,10 @@ const styles = StyleSheet.create({
     borderColor: '#C9DCED', // light blue
     borderRadius: 5,
     backgroundColor: 'transparent',
-    shadowColor: '#000',
+    /*shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
-    shadowRadius: 5,
+    shadowRadius: 5,*/
     overflow: 'hidden',
   },
   noteInput: {
@@ -1055,6 +1032,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 5,
+
   },
   viewclassnotes: {
     flex: 1,
