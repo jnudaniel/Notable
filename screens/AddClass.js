@@ -43,6 +43,15 @@ export default class App extends Component {
 
   }
 
+   addToStoreEmail = async () => {
+    console.log('attempting to save email');
+    try {
+      await AsyncStorage.setItem("email", this.state.email);
+    } catch (error) {
+      console.log('Unable to save email to AsyncStorage');
+    }
+  };
+
   toggleStatus(){
      this.setState({
        status:!this.state.status
@@ -118,7 +127,7 @@ export default class App extends Component {
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
 
-          onPress={()=> {addToStoreEmail(): navigate('Notes');}}
+          onPress={()=> {addToStoreEmail(); navigate('Notes');}}
          />
 
         <TouchableOpacity
@@ -131,56 +140,12 @@ export default class App extends Component {
     
    }
 
-   addToStoreEmail = async () => {
-    console.log('attempting to save email');
-    try {
-      await AsyncStorage.setItem("email", this.state.email);
-    } catch (error) {
-      console.log('Unable to save email to AsyncStorage');
-    }
-  };
 
   render() {
     if(this.state.login) {
       return (this.render_login());
     } else {
-      return(
-      <View style={styles.container}>
-      <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
-      <Text style={styles.text}> Email </Text>
-        <TextInput
-          onChangeText={ (text) => {this.setState({username: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
-        />
-           <Text style={styles.text}> Password </Text>
-        <TextInput
-          onChangeText={ (text) => {this.setState({password: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
-        />
-
-        <Text style={styles.text}> Repeat Password </Text>
-        <TextInput
-          onChangeText={ (text) => {this.setState({repeat: text}) }}
-          style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
-        />
-        <Text> {this.state.email} </Text>
-        <Button
-          title="Join"
-          disable = {(this.state.email.length) == 0}
-          backgroundColor = '#637898'
-          buttonStyle={{padding: 10}}
-          containerViewStyle={{padding: 10, borderRadius: 10}}
-
-          onPress={()=> {navigate('Notes');}}
-         />
-
-        <TouchableOpacity
-            onPress={() => this.setState({login:true})} >
-            <Text>Sign in with an existing account</Text>
-          </TouchableOpacity>
-
-      </View>
-      );
+      return (this.render_signup())
     }
   }
 }
