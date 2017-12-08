@@ -14,6 +14,15 @@ import {
   AsyncStorage,
   Switch,
 } from 'react-native';
+
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
+
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, Font, ImagePicker } from 'expo';
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
@@ -51,6 +60,13 @@ var number_slides = 3
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
+
+const customTextProps = { 
+  style: { 
+    fontFamily: 'avenir',
+  }
+}
+
 dimensionRounded = (percentage, dimension) => {
   let rounded = 0;
   if (dimension == "width") {
@@ -68,6 +84,21 @@ const itemHorizontalMargin = dimensionRounded(2, "width");
 const sliderWidth = viewportWidth;
 const itemWidth = slideWidth + itemHorizontalMargin * 2;
 const entryBorderRadius = 8;
+
+const combined_notes = [{
+  "id": 1,
+  "slide_title": "Sony Google TV Remote",
+  "notes": ["hall of shame", "by Sony"]
+}, {
+  "id": 2,
+  "slide_title": "Design Thinking",
+  "notes": ["used by IDEO", "what CS147 is all about", "d.school"]
+}, {
+  "id": 3,
+  "slide_title": "Ideate",
+  "notes": ["middle step", "after needfinding", "before prototyping"]
+}]
+
 
 const CS_Cards = [{
   "id": 1,
@@ -123,6 +154,9 @@ Format = (props) => {
     if(!toFormat) {  <Text>{props.line}</Text> }
     // if it is a drawing
     if (currLine.indexOf(".png") !== -1) {
+      if(props.compare) {
+        return null;
+      }
       return (<Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
                     {
                         style: {
@@ -158,13 +192,18 @@ Format = (props) => {
 
   key_val = 0
   num_what = 0
+  
+  addNote = (line) => {
+    console.log('here');
+  }
+
   ViewNotes = (props) => {
     key_val = 0
     num_what = 0
     const lines = String(props.text).split('\n');
     key_val = key_val + 1
     const listItems = lines.map((line) =>
-      <Format key={line + Math.random()} line = {line}> </Format>
+      <Format key={line + Math.random()} line = {line} compare = {false}> </Format>
     );
     return (
       <Text key={key_val}>{listItems}</Text>
@@ -172,6 +211,44 @@ Format = (props) => {
   }
 
 export default class NotesScreen extends React.Component {
+
+  ViewCompareNotes = (props) => {
+    return (<View>
+      { this.one_slide_array_of_buttons(props.current_slide) }
+    </View>)
+  }
+
+  one_slide_array_of_buttons = (slide_index) => {
+    var combined_slide_notes = combined_notes[slide_index] // IDKKKKKK
+    var buttons_array = []
+
+    for (let i = 0; i < combined_slide_notes.notes.length; i++) {
+      buttons_array.push(
+        <Button
+          key={(slide_index) * 100 + i}
+          onPress={
+            () => {
+              var curr_notes = this.state[slide_index] + "\n" + combined_slide_notes.notes[i];
+              this.setState(
+                { [slide_index]: curr_notes },
+                () => {
+                  try {
+                    var value = i.toString();
+                    AsyncStorage.setItem(value, this.state[slide_index]);
+                  } catch (error) {
+                    alert('AsyncStorage error: ' + error.message);
+                  }
+                }
+              );
+            }
+          }
+          title={combined_slide_notes.notes[i]}
+          color="#841584"
+        />
+      );
+    }
+    return (buttons_array);
+  }
 
   // makes header flush with top of screen
   static navigationOptions = {
@@ -184,6 +261,8 @@ export default class NotesScreen extends React.Component {
      });
 
      this.setState({ fontLoaded: true });
+      //this.setCustomText(customTextProps);
+
    }
 
   
@@ -213,6 +292,23 @@ export default class NotesScreen extends React.Component {
         this.setState({slide_deck: Number(deck_num)});
       } else {
         this.setState({slide_deck: 1});
+      }
+      switch(deck_num) {
+        case 1:
+          cards = CS_Cards;
+          this.state.class_name = "CS109";
+          this.state.lecture_name = "Lecture 5: Naive Bayes";
+          return;
+        case 2:
+          cards = Math_Cards;
+          this.state.class_name = "Math51";
+          this.state.lecture_name = "Lecture 7: Null Space";
+          return;
+        case 3:
+          cards = Bio_Cards;
+          this.state.class_name = "Biology";
+          this.state.lecture_name = "Lecture 10: Meiosis";
+          return;
       }
     } catch (error) {
       console.log('Error fetching slide deck number from AsyncStorage')
@@ -259,23 +355,6 @@ export default class NotesScreen extends React.Component {
         index = 1;
       }
       console.log(index);
-      switch(index) {
-        case 1:
-          cards = CS_Cards;
-          this.state.class_name = "CS109";
-          this.state.lecture_name = "Lecture 5: Naive Bayes";
-          return;
-        case 2:
-          cards = Math_Cards;
-          this.state.class_name = "Math51";
-          this.state.lecture_name = "Lecture 7: Null Space";
-          return;
-        case 3:
-          cards = Bio_Cards;
-          this.state.class_name = "Biology";
-          this.state.lecture_name = "Lecture 10: Meiosis";
-          return;
-      }
     } catch (error) {
       console.log('Error fetching stored drawings from AsyncStorage')
     }
@@ -287,7 +366,7 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: false};
+    this.state = {in_compare: true, current_slide: 0};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -412,14 +491,12 @@ export default class NotesScreen extends React.Component {
             <Button
              title="#Section"
              onPress={this._addSectionToInput}
-             icon={{name: 'note-add'}}
              buttonStyle={styles.buttonTags}
             />
 
             <Button
              title="#Def"
              onPress={this._addDefinitionToInput}
-             icon={{name: 'book'}}
              buttonStyle={styles.buttonTags}
             />
           </View>
@@ -427,13 +504,11 @@ export default class NotesScreen extends React.Component {
             <Button
              title="#Key"
              onPress={this._addImportantToInput}
-             icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
             <Button
              title="#Exam"
              onPress={this._addExamToInput}
-             icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
 
@@ -441,7 +516,6 @@ export default class NotesScreen extends React.Component {
           <View>
             <Button
              title="Draw"
-             icon={{name: 'edit'}}
              buttonStyle={styles.buttonTags}
              onPress={() => {
               this.saveCurrentSlideState(this.state.current_slide);
@@ -453,7 +527,6 @@ export default class NotesScreen extends React.Component {
             <Button
              title="#What"
              onPress={this._addWhatToInput}
-             icon={{name: 'new-releases'}}
              buttonStyle={styles.buttonTags}
             />
         </View>
@@ -506,7 +579,7 @@ export default class NotesScreen extends React.Component {
     return (
       <View key={this.state.current_slide} style={styles.viewnotes_container}>
         <View style={styles.viewclassnotes}>
-          <ViewNotes key={this.state.current_slide} current_slide = {this.state.current_slide} text = {this.state[this.state.current_slide]}/>
+          <this.ViewCompareNotes current_slide = {this.state.current_slide}/>
         </View>
       </View>
     )
@@ -919,7 +992,7 @@ const styles = StyleSheet.create({
   },
   // --------- NOTE INPUT AREA ---------
   noteInputContainer: {
-    flex: 0.75,
+    flex: 0.85,
     alignItems: 'center',
     margin: 5,
     marginBottom: 25,

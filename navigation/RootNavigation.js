@@ -19,10 +19,11 @@ import AddClass from '../screens/AddClass';
 
 const RootStackNavigator = StackNavigator(
   {
+
     Notes: {
       screen: NotesScreen,
     },
-    Class: {
+    Login: {
       screen: AddClass,
     },
     Draw: {

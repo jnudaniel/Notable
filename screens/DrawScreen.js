@@ -22,9 +22,20 @@ const {
 } = Svg
 import Pen from '../tools/pen'
 import Point from '../tools/point'
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
 const {OS} = Platform
 // import Bezier from '../tools/bezier'
-
+const customTextProps = { 
+  style: { 
+    fontFamily: 'avenir',
+  }
+}
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
 var medium_blue = '#667797';
@@ -35,6 +46,16 @@ var pale_yellow = "#FAF8C6";
 
 export default class DrawScreen extends React.Component {
 
+    async componentDidMount() {
+     await Font.loadAsync({
+       'avenir': require('../fonts/avenir-next-regular.ttf'),
+     });
+
+     this.setState({ fontLoaded: true });
+      this.setCustomText(customTextProps);
+
+   }
+
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -44,6 +65,7 @@ export default class DrawScreen extends React.Component {
       newStroke: [],
       pen: new Pen(),
     }
+    
 
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gs) => true,
