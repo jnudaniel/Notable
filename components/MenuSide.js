@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Alert, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import { Text, View, Alert, StyleSheet, TextInput, TouchableOpacity, AsyncStorage} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import { Button } from 'react-native-elements'
@@ -55,6 +55,16 @@ export default class MenuSide extends React.Component {
      class_done:false,
    }
   }
+
+  saveNotesName = async (result) => {
+    console.log("Saving slide deck number.")
+    try {
+      await AsyncStorage.setItem("slide_deck", result);
+    } catch (error) {
+      console.log('Unable to save slide_deck to AsyncStorage')
+      return;
+    }
+  };
 
   setClass(title, content) {
     this.setState({ classes_query: title})

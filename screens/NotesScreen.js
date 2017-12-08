@@ -91,49 +91,11 @@ const Cards = [{
 
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
-
-Format = (props) => {
-  const possTags = ["#def", "#section", "#important", "#exam", "#what"];
-  const means = ["definition", "Section", "Imp", "Exam", "What"]
-  const currLine = props.line;
-  const toFormat = currLine[0] == '#';
-  // if it is not a hashtag, returns the text
-  if(!toFormat) {  <Text>{props.line}</Text> }
-  // if it is a drawing
-  if (currLine.indexOf(".png") !== -1) {
-    return (<Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
-                  {
-                      style: {
-                          width: 350,
-                          height: 500,
-                      },
-                      resizeMode: 'contain'
-                  }
-              }>
-        <Image source={{uri: currLine}} resizeMode="contain" style ={{width:100, height:100}} />
-     </Lightbox>)
-  }
-    const tag = currLine.split(" ", 1)[0];
-    const content = currLine.substring(currLine.indexOf(" "));
-
-    // if it is a hashtag, it styles the text
-    switch (possTags.indexOf(tag)) {
-      case 0: return <Text style={styles.definitionText}>{content}{'\n'}</Text>;
-      case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
-      case 2: return <Text style={styles.importantText}>{content}{'\n'}</Text>;
-      case 3: return <Text style={styles.examText}>{content}{'\n'}</Text>;
-      case 4: 
-        // #what case returns a random answer
-        var randomAnswer = aggregate_info[Math.floor(Math.random() * aggregate_info.length)];
-        return <Text style={styles.whatText}> {randomAnswer}{'\n'}</Text>;
-  }
-  return <Text style={styles.unformattedText}>{props.line}{'\n'}</Text>;
-}
-
-key_val = 0
-ViewNotes = (props) => {
   key_val = 0
-  if (props.toFormat) {
+  num_what = 0
+  ViewNotes = (props) => {
+    key_val = 0
+    num_what = 0
     const lines = String(props.text).split('\n');
     key_val = key_val + 1
     const listItems = lines.map((line) =>
@@ -143,9 +105,51 @@ ViewNotes = (props) => {
       <Text key={key_val}>{listItems}</Text>
     );
   }
-}
+
+  Format = (props) => {
+    const possTags = ["#def", "#section", "#important", "#exam", "#what"];
+    const means = ["definition", "Section", "Imp", "Exam", "What"]
+    const currLine = props.line;
+    const toFormat = currLine[0] == '#';
+    // if it is not a hashtag, returns the text
+    if(!toFormat) {  <Text>{props.line}</Text> }
+    // if it is a drawing
+    if (currLine.indexOf(".png") !== -1) {
+      return (<Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
+                    {
+                        style: {
+                            width: 350,
+                            height: 500,
+                        },
+                        resizeMode: 'contain'
+                    }
+                }>
+          <Image source={{uri: currLine}} resizeMode="contain" style ={{width:100, height:100}} />
+       </Lightbox>)
+    }
+      const tag = currLine.split(" ", 1)[0];
+      const content = currLine.substring(currLine.indexOf(" "));
+
+      // if it is a hashtag, it styles the text
+      switch (possTags.indexOf(tag)) {
+        case 0: return <Text style={styles.definitionText}>{content}{'\n'}</Text>;
+        case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
+        case 2: return <Text style={styles.importantText}>{content}{'\n'}</Text>;
+        case 3: return <Text style={styles.examText}>{content}{'\n'}</Text>;
+        case 4:
+          // #what case returns a random answer
+          var randomAnswer = aggregate_info[num_what];
+          num_what = num_what + 1;
+          if (num_what == aggregate_info.length) {
+            num_what = 0;
+          }
+          return <Text style={styles.whatText}> {randomAnswer}{'\n'}</Text>;
+    }
+    return <Text style={styles.unformattedText}>{props.line}{'\n'}</Text>;
+  }
 
 export default class NotesScreen extends React.Component {
+
   // makes header flush with top of screen
   static navigationOptions = {
     header: null,
@@ -214,15 +218,15 @@ export default class NotesScreen extends React.Component {
   // don't call setState from constructor; just initialize state to what it should be
   constructor(props) {
     super(props);
-    this.state = {};
-    // this.state = {current_slide: 0};
+    // this.state = {};
+    this.state = {in_compare: true};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
     //   // this.state['drawings' + i] = drawing;
     // }
     this._loadDrawing();
-    this.viewFormat = true;
+    // this.viewFormat = true;
     // this is called anytime the notes screen is navigated to
     console.log('done in notes constructor. state is', this.state)
     this._renderItem = this._renderItem.bind(this)
@@ -244,6 +248,12 @@ export default class NotesScreen extends React.Component {
        'Button pressed!',
        'You did it!',
      );
+  }
+
+// this toggles every time the user clicks the toggle notes button between compare notes and view notes
+  _handleToggleNotesButton = () => {
+    curr_status = this.state.in_compare;
+    this.setState({in_compare: !curr_status});
   }
 
   // pickImage = async (e, i) => {
@@ -397,11 +407,22 @@ export default class NotesScreen extends React.Component {
   }
 
   // renders the formatted notes
+  renderCompareNoteView = () => {
+    return (
+      <View key={this.state.current_slide} style={styles.viewnotes_container}>
+        <View style={styles.viewclassnotes}>
+          <ViewNotes key={this.state.current_slide} current_slide = {this.state.current_slide} text = {this.state[this.state.current_slide]}/>
+        </View>
+      </View>
+    )
+  }
+
+  // renders the formatted notes
   renderNoteView = () => {
     return (
       <View key={this.state.current_slide} style={styles.viewnotes_container}>
         <View style={styles.viewnotes}>
-          <ViewNotes key={this.state.current_slide} text = {this.state[this.state.current_slide]} toFormat = {this.viewFormat}/>
+          <ViewNotes key={this.state.current_slide} current_slide = {this.state.current_slide} text = {this.state[this.state.current_slide]}/>
         </View>
       </View>
     )
@@ -440,14 +461,23 @@ export default class NotesScreen extends React.Component {
   }
 
   renderLeftPanel = (slide) => {
-    return (
+    if (this.state.in_compare) {
+      return (
+      <View style={styles.aggregate_notes_panel}>
+        {/*this.renderSwiper()*/}
+        {this.renderCompareNoteView()}
+      </View>
+      )
+    } else {
+      return (
       <View style={styles.left_content_panel}>
         {/*this.renderSwiper()*/}
         {this.renderImage(slide)}
         {this.renderButtons()}
         {this.renderNoteEdit()}
       </View>
-    )
+      )
+    }
   }
 
   renderRightPanel = () => {
@@ -636,6 +666,9 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingTop: 30,
   },
+  aggregate_notes_panel: {
+    flex: 1,
+  },
   
   // --------- SLIDE VIEW AREA --------- 
   slideContainer: {
@@ -795,6 +828,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 5,
+  },
+  viewclassnotes: {
+    flex: 1,
+    width: '93%',
+    //height: '92%',
+    margin: 25,
+    padding: 20,
+    backgroundColor: white,
   },
   /*
   // --------- SEEM NO LONGER IN USE ---------
