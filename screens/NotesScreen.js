@@ -99,10 +99,10 @@ Format = (props) => {
 
     // if it is a hashtag, it styles the text
     switch (possTags.indexOf(tag)) {
-      case 0: return <Text style={styles.definitionText}> {content}{'\n'}</Text>;
+      case 0: return <Text style={styles.definitionText}>{content}{'\n'}</Text>;
       case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
-      case 2: return <Text style={styles.importantText}> {content}{'\n'}</Text>;
-      case 3: return <Text style={styles.examText}> {content}{'\n'}</Text>;
+      case 2: return <Text style={styles.importantText}>{content}{'\n'}</Text>;
+      case 3: return <Text style={styles.examText}>{content}{'\n'}</Text>;
       case 4: 
         // #what case returns a random answer
         var randomAnswer = aggregate_info[Math.floor(Math.random() * aggregate_info.length)];
