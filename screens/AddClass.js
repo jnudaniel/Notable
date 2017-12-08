@@ -127,7 +127,8 @@ export default class App extends Component {
           buttonStyle={{padding: 10}}
           containerViewStyle={{padding: 10, borderRadius: 10}}
 
-          onPress={()=> {addToStoreEmail(); navigate('Notes');}}
+          onPress={()=> {this.addToStoreEmail(); 
+            navigate('Notes');}}
          />
 
         <TouchableOpacity
