@@ -15,10 +15,8 @@ import {
   Switch,
 } from 'react-native';
 
-
-
 import { Button, Icon } from 'react-native-elements'
-import { WebBrowser, Font, ImagePicker } from 'expo';
+import { WebBrowser, ImagePicker } from 'expo';
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
 import Iconz from 'react-native-vector-icons/Ionicons';
@@ -78,15 +76,15 @@ const entryBorderRadius = 8;
 const combined_notes = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "notes": ["hall of shame", "by Sony"]
+  "notes": ["#def Energy All living things take materials from their surroundings such as food, water, and gases. They use these materials to get energy. #key This energy is needed to carry out all of the life functions.", "#def Cellular respiration is the process in which the chemical bonds of energy rich molecules (like glucose) are converted into a form of energy that cells can use. #exam remember : In eukaryotic (including animal and plant) cells, cellular respiration takes place in the mitochondria."]
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "notes": ["used by IDEO", "what CS147 is all about", "d.school"]
+  "notes": ["#def Area- The size of a surface. The amount of space inside the boundary of a flat (2-dimensional) object such as a triangle or circle.", "#def Fraction Part of a whole. #key The top number (the numerator) says how many parts we have. The bottom number (the denominator) says how many parts the whole is divided into", "#def Mean The mean is the average of the numbers: a calculated 'central' value of a set of numbers."]
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "notes": ["middle step", "after needfinding", "before prototyping"]
+  "notes": ["#def Linear Equation: An equation that makes a straight line when it is graphed.", "#key Often written in the form: y = mx+b", "#exam there's a quiz on this on the 8th at 6:30!"]
 }]
 
 
@@ -182,7 +180,7 @@ Format = (props) => {
 
   key_val = 0
   num_what = 0
-  
+
   addNote = (line) => {
     console.log('here');
   }
@@ -246,9 +244,9 @@ export default class NotesScreen extends React.Component {
     header: null,
   };
 
-    
 
-  
+
+
   _loadStoredText = async () => {
     console.log("In load stored text.");
     try {
@@ -682,7 +680,7 @@ export default class NotesScreen extends React.Component {
         this.setState({[this.state.current_slide]: added_text});
         this.saveNotes(this.state.current_slide);
   }
-  
+
     _addExamToInput = () => {
 
         added_text = this.state[this.state.current_slide] + "\n" + "#exam";
@@ -714,7 +712,7 @@ export default class NotesScreen extends React.Component {
                 renderItem={this._renderItem}
                 itemWidth={950}
                 sliderWidth={viewportWidth}
-                
+
                 style={styles.carousel}
                 onSnapToItem={(index) => this.setState({ current_slide: index }) }
               />
@@ -729,7 +727,7 @@ export default class NotesScreen extends React.Component {
     );
   }
 }
-/*slideStyle={{ height: '95%', borderStyle: 'solid', borderColor: 'blue' }} 
+/*slideStyle={{ height: '95%', borderStyle: 'solid', borderColor: 'blue' }}
 
     <View style={styles.side_card_left}></View>
     {this.renderCurrentCard()}
@@ -889,8 +887,8 @@ const styles = StyleSheet.create({
   aggregate_notes_panel: {
     flex: 1,
   },
-  
-  // --------- SLIDE VIEW AREA --------- 
+
+  // --------- SLIDE VIEW AREA ---------
   slideContainer: {
     flex: 1,
     alignItems: 'center',

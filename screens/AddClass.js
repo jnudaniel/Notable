@@ -15,7 +15,7 @@ var white = '#FFFFFF';
 
 export default class App extends Component {
 
-    
+
 
   constructor(props) {
   super(props);
@@ -58,12 +58,12 @@ export default class App extends Component {
       <Text style={styles.text}>Email</Text>
         <TextInput style={styles.inputField}
           onChangeText={ (text) => {this.setState({email: text}) }}
-            
+
         />
            <Text style={styles.text}> Password </Text>
         <TextInput secureTextEntry={true} style={styles.inputField}
           onChangeText={ (text) => {this.setState({password: text}) }}
-          
+
         />
 
         <Button
@@ -108,14 +108,14 @@ export default class App extends Component {
           <TextInput
             secureTextEntry={true} style={styles.inputField}
             onChangeText={ (text) => {this.setState({password: text}) }}
-            
+
           />
 
           <Text style={styles.text}> Repeat Password </Text>
           <TextInput
           secureTextEntry={true} style={styles.inputField}
             onChangeText={ (text) => {this.setState({repeat: text}) }}
-            
+
           />
           <Text> {this.state.email} </Text>
           <Button
@@ -125,7 +125,7 @@ export default class App extends Component {
             buttonStyle={{padding: 10}}
             containerViewStyle={{padding: 10, borderRadius: 10}}
 
-            onPress={()=> {this.addToStoreEmail(); 
+            onPress={()=> {this.addToStoreEmail();
               navigate('Notes');}}
            />
 
@@ -138,7 +138,7 @@ export default class App extends Component {
         </View>
       </View>
     );
-    
+
    }
 
 

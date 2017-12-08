@@ -31,11 +31,7 @@ import {
 } from 'react-native-global-props';
 const {OS} = Platform
 // import Bezier from '../tools/bezier'
-const customTextProps = { 
-  style: { 
-    fontFamily: 'avenir',
-  }
-}
+
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
 var medium_blue = '#667797';
@@ -46,15 +42,7 @@ var pale_yellow = "#FAF8C6";
 
 export default class DrawScreen extends React.Component {
 
-    async componentDidMount() {
-     await Font.loadAsync({
-       'avenir': require('../fonts/avenir-next-regular.ttf'),
-     });
 
-     this.setState({ fontLoaded: true });
-      this.setCustomText(customTextProps);
-
-   }
 
   constructor(props, context) {
     super(props, context);
@@ -65,7 +53,7 @@ export default class DrawScreen extends React.Component {
       newStroke: [],
       pen: new Pen(),
     }
-    
+
 
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gs) => true,
@@ -185,8 +173,8 @@ export default class DrawScreen extends React.Component {
     return (
 
       <View style={styles.cards_container}>
-        <View style={styles.top_space}></View> 
-        <View 
+        <View style={styles.top_space}></View>
+        <View
         onLayout={this._onLayoutContainer}
         style={[
           styles.main_card,
