@@ -16,8 +16,6 @@ var light_blue = '#C9DCED';
 var yellow = '#FAF57E';
 var white = '#FFFFFF';
 
-var logo = require('../images/logo-notable.png');
-
 export default class MenuSide extends React.Component {
   constructor(props) {
     super(props);
