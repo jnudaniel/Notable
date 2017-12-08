@@ -15,7 +15,7 @@ import {
   Switch,
 } from 'react-native';
 import { Button, Icon } from 'react-native-elements'
-import { WebBrowser, ImagePicker } from 'expo';
+import { WebBrowser, Font, ImagePicker } from 'expo';
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
 import Iconz from 'react-native-vector-icons/Ionicons';
@@ -151,6 +151,15 @@ export default class NotesScreen extends React.Component {
     header: null,
   };
 
+    async componentDidMount() {
+     await Font.loadAsync({
+       'avenir': require('../fonts/avenir-next-regular.ttf'),
+     });
+
+     this.setState({ fontLoaded: true });
+   }
+
+  
   _loadStoredText = async () => {
     console.log("In load stored text.");
     try {
@@ -552,6 +561,15 @@ export default class NotesScreen extends React.Component {
           />
         </View>
       </View>
+// HOW TO USE AVENIR FONT
+
+  //   this.state.fontLoaded ? (
+  //     <Text style={{ fontFamily: 'avenir', fontSize: 56 }}>
+  //       Hello, world!
+  //     </Text>
+  //   ) : null
+  // }
+
 
     );
   }
