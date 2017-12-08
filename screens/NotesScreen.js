@@ -23,6 +23,7 @@ import { MonoText } from '../components/StyledText';
 import Lightbox from 'react-native-lightbox'; // 0.6.0
 import Swiper from 'react-native-swiper';
 import Colors from '../constants/Colors';
+import Carousel from 'react-native-snap-carousel';
 
 // Theme colors! (if you change these, you need to change them in all the screens)
 var darkest_blue = '#0C0F2A';
@@ -40,33 +41,52 @@ var image2 = require('../images/image2.jpeg')
 var image3 = require('../images/image3.jpeg')
 var image4 = require('../images/image4.jpeg')
 var image5 = require('../images/image5.jpeg')
+var slide1 = require('../images/slide1.jpg')
+var slide2 = require('../images/slide2.jpg')
+var slide3 = require('../images/slide3.jpg')
+var slide4 = require('../images/slide4.jpg')
 var logo = require('../images/puzzle_piece.png')
 var empty_image = ' '
 var drawing = 'https://cdn2.iconfinder.com/data/icons/edit/100/edit-set-10-512.png'
 var number_slides = 5
 var class_name = "CS147"
 var notes_name = "Lecture 2: User Interviews"
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+
+dimensionRounded = (percentage, dimension) => {
+  let rounded = 0;
+  if (dimension == "width") {
+    rounded = (percentage * viewportWidth) / 100;
+  }
+  else {
+    rounded = (percentage * viewportHeight) / 100;
+  }
+  return Math.round(rounded);
+}
+
+const slideHeight = viewportHeight * 0.7;
+const slideWidth = dimensionRounded(84, "width");
+const itemHorizontalMargin = dimensionRounded(2, "width");
+const sliderWidth = viewportWidth;
+const itemWidth = slideWidth + itemHorizontalMargin * 2;
+const entryBorderRadius = 8;
 
 const Cards = [{
   "id": 1,
   "slide_title": "Sony Google TV Remote",
-  "image": image1
+  "image": slide1
 }, {
   "id": 2,
   "slide_title": "Design Thinking",
-  "image": image3
+  "image": slide2
 }, {
   "id": 3,
   "slide_title": "Ideate",
-  "image": image4
+  "image": slide3
 }, {
   "id": 4,
   "slide_title": "Test",
-  "image": image5
-}, {
-  "id": 5,
-  "slide_title": "Point of View",
-  "image": image2
+  "image": slide4
 }]
 
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
@@ -76,6 +96,9 @@ Format = (props) => {
   const possTags = ["#def", "#section", "#important", "#exam", "#what"];
   const means = ["definition", "Section", "Imp", "Exam", "What"]
   const currLine = props.line;
+  const toFormat = currLine[0] == '#';
+  // if it is not a hashtag, returns the text
+  if(!toFormat) {  <Text>{props.line}</Text> }
   // if it is a drawing
   if (currLine.indexOf(".png") !== -1) {
     return (<Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
@@ -90,10 +113,6 @@ Format = (props) => {
         <Image source={{uri: currLine}} resizeMode="contain" style ={{width:100, height:100}} />
      </Lightbox>)
   }
-    const toFormat = currLine[0] == '#';
-    // if it is not a hashtag, returns the text
-    if(!toFormat) {  <Text> {props.line} </Text> }
-
     const tag = currLine.split(" ", 1)[0];
     const content = currLine.substring(currLine.indexOf(" "));
 
@@ -108,7 +127,7 @@ Format = (props) => {
         var randomAnswer = aggregate_info[Math.floor(Math.random() * aggregate_info.length)];
         return <Text style={styles.whatText}> {randomAnswer}{'\n'}</Text>;
   }
-  return <Text> {props.line}{'\n'} </Text>;
+  return <Text style={styles.unformattedText}>{props.line}{'\n'}</Text>;
 }
 
 key_val = 0
@@ -161,9 +180,6 @@ export default class NotesScreen extends React.Component {
         index = this.state.pressed_draw;
         // this only adds the drawing to the notes if it has not already been added
         // this prevents the error of reading the same drawing again and again upon app restart
-        console.log("In load drawing state");
-        console.log(this.state);
-        console.log(index);
         if (this.state[index] == undefined || this.state[index] == null) {
           this.setState({[index]: storedDrawing});
           this.saveNotes(index);
@@ -208,6 +224,7 @@ export default class NotesScreen extends React.Component {
     this.viewFormat = true;
     // this is called anytime the notes screen is navigated to
     console.log('done in notes constructor. state is', this.state)
+    this._renderItem = this._renderItem.bind(this)
   }
 
   componentWillReceiveProps(newProps) {
@@ -246,7 +263,6 @@ export default class NotesScreen extends React.Component {
 
   saveNotes = async (i) => {
     console.log('attempting to save notes');
-    console.log(this.state);
     console.log("Index is ", i);
     try {
       await AsyncStorage.setItem(i.toString(), this.state[i]);
@@ -267,15 +283,13 @@ export default class NotesScreen extends React.Component {
   renderHeader = () => {
     return(
       <View style={styles.header_container}>
-        <View style={styles.paddingAboveHeader}>
-        </View>
-        <Text><FontAwesome name="angle-right" size={45} style={styles.leftMenuSwipe}/></Text>
-        <View style={styles.header}>
-          <Text style={styles.app_name_title}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#4682B4' }} /> T  A  B  L  E </Text>
-        </View>
-        <View style={{backgroundColor: '#FCFCFC'}}>
-          <Text style={styles.class_name}> {class_name} </Text>
-          <Text style={styles.notes_name}> {notes_name} </Text>
+        <View style={styles.paddingAboveHeader}></View>
+        <View style={styles.headerContent}>
+          <Text><FontAwesome name="angle-double-right" size={45} style={styles.leftMenuSwipe}/></Text>
+          <View style={{backgroundColor: '#FCFCFC'}}>
+            <Text style={styles.class_name}> {class_name} </Text>
+            <Text style={styles.notes_name}> {notes_name} </Text>
+          </View>
         </View>
       </View>
     )
@@ -284,7 +298,7 @@ export default class NotesScreen extends React.Component {
   renderButtons = () => {
     const { navigate } = this.props.navigation;
     return (
-      <View style ={{marginTop:20, flex: .2, flexDirection: 'row', justifyContent: 'center'}}>
+      <View style={styles.buttonsBar}>
         <Button
          title="#Section"
          onPress={this._handleButtonPress}
@@ -370,6 +384,15 @@ export default class NotesScreen extends React.Component {
     )
   }
 
+  renderImage = (slide) => {
+
+    return (
+      <View style={styles.slideContainer_noswipe}>
+        <Image source={slide.image} style={{flex:1, resizeMode: 'contain'}}/>
+      </View>
+    )
+  }
+
   renderNoteView = (index) => {
     return (
       <View key={index} style={styles.viewnotes_container}>
@@ -382,17 +405,19 @@ export default class NotesScreen extends React.Component {
 
   renderNoteEdit = (index) => {
     return (
-      <TextInput
-        style={styles.noteInput}
-        ref={index}
-        multiline={true}
-        autogrow={true}
-        placeholder="Start taking notes..."
-        onChangeText={ (text) => {
-          this.setState({[index]: text}) }}
-        value={this.state[index]}
-        onEndEditing={(e)=>{this.saveNotes(index)}}
-      />
+      <View style={styles.noteInputContainer}>
+        <TextInput
+          style={styles.noteInput}
+          ref={index}
+          multiline={true}
+          autogrow={true}
+          placeholder="Start taking notes..."
+          onChangeText={ (text) => {
+            this.setState({[index]: text}) }}
+          value={this.state[index]}
+          onEndEditing={(e)=>{this.saveNotes(index)}}
+        />
+      </View>
     )
   }
 
@@ -408,6 +433,49 @@ export default class NotesScreen extends React.Component {
     )
   }
 
+  renderLeftPanel = (slide) => {
+    return (
+      <View style={styles.left_content_panel}>
+        {/*this.renderSwiper()*/}
+        {this.renderImage(slide)}
+        {this.renderButtons()}
+        {this.renderNoteEdit()}
+      </View>
+    )
+  }
+
+  renderRightPanel = () => {
+    return (
+      <View style={styles.right_content_panel}>
+        {this.renderNoteView()}
+      </View>
+    )
+  }
+
+  renderCurrentCard = (slide) => {
+    console.log('rendering current card. slide is', slide)
+    return (
+      <View style={styles.main_card}>
+        <View style={styles.card_header}>
+          <Text style={{fontSize: 35, margin: 20,}}>{slide.slide_title}</Text>
+        </View>
+        <View style={styles.card_contents}>
+          {this.renderLeftPanel(slide)}
+          {this.renderRightPanel()}
+        </View>
+      </View>
+    )
+  }
+
+  _renderItem({item, index}) {
+    return (
+      <View style={{width: 1000, height: '100%'}}>
+        {this.renderCurrentCard(item)}
+      </View>
+    )
+  }
+
+
   render() {
     let index = 0;
     var image  = drawing;
@@ -415,47 +483,99 @@ export default class NotesScreen extends React.Component {
     var value = 'drawings' + index
     var drawing = this.state[value]
     var textView = null;
-
-    // console.log("render was called in notes screen!")
+    ///
     return (
       <View style={styles.app_container}>
         {this.renderHeader()}
-        {this.renderButtons()}
-        <View style={styles.top_content_panel}>
-          {this.renderNoteView(index)}
-          {this.renderSwiper()}
+        <View style={styles.cards_container}>
+          <Carousel
+            ref={(c) => { this._carousel = c; }}
+            data={Cards}
+            renderItem={this._renderItem}
+            itemWidth={1000}
+            sliderWidth={viewportWidth}
+            slideStyle={{ height: '95%', borderStyle: 'solid', borderColor: 'blue' }}
+            style={styles.carousel}
+            onSnapToItem={(index) => this.setState({ current_slide: index }) }
+          />
         </View>
-        <View style={styles.bottom_content_panel}>
-          {this.renderNoteEdit(index)}
-          {this.renderCompareView(index)}
-        </View>
-
-        {/*/<ScrollView style={styles.scroll_container} contentContainerStyle={styles.scrollContentContainer}>*/}
-          {/*<View key={i} style={{flex: 1, flexDirection: 'column'}}>*/}
-            {/*<View key={i} style={styles.row_content_container}>
-              {this.renderLeftPanel(i)}
-              {this.renderSwiper()}*/}
-            {/*</View>
-          </View>
-        </ScrollView>*/}
       </View>
+      
     );
   }
 }
+/*
+
+    <View style={styles.side_card_left}></View>
+    {this.renderCurrentCard()}
+    <View style={styles.side_card_right}></View>
+
+
+
+          this.renderButtons()
+          <View style={styles.left_content_panel}>
+            {this.renderNoteView(index)}
+            {this.renderSwiper()}
+          </View>
+          <View style={styles.right_content_panel}>
+            {this.renderNoteEdit(index)}
+            {this.renderCompareView(index)}
+          </View> */
 
 // !!!!!! PLEASE PUT STYLES IN APPROPRIATE SECTION :) !!!!!!
 const styles = StyleSheet.create({
   // --------- MAJOR AREAS ---------
   app_container: {
     flex: 1,
-    backgroundColor: white,
+    backgroundColor: '#C9DCED', // light blue
   },
-  scroll_container: {
-    flex: 1,
-    backgroundColor: white,
+  cards_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#C9DCED', // light blue
   },
-  scrollContentContainer: {
-    paddingTop: 0,
+  carousel: {
+    alignSelf: 'center',
+  },
+  side_card_left: {
+    alignSelf: 'flex-start',
+    marginRight: 'auto',
+    backgroundColor: '#ffffff',
+    width: 20,
+    height: '90%',
+    marginTop: 'auto',
+    marginBottom: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+  },
+  side_card_right: {
+    alignSelf: 'flex-end',
+    marginLeft: 'auto',
+    backgroundColor: '#ffffff',
+    width: 20,
+    height: '90%',
+    marginTop: 'auto',
+    marginBottom: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+  },
+  main_card: {
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: '100%',
+    //marginBottom: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    flexDirection: 'column',
   },
   // --------- HEADER ---------
   header_container: {
@@ -463,12 +583,14 @@ const styles = StyleSheet.create({
   },
   paddingAboveHeader: {
     height: 20,
-    flexDirection: 'column',
+    //flexDirection: 'column',
     backgroundColor: '#eae8e8',
   },
-  header: {
-    flex: 0,
+  headerContent: {
     flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: '#C9DCED', // light blue
   },
   leftMenuSwipe: {
     position: 'absolute',
@@ -476,47 +598,106 @@ const styles = StyleSheet.create({
     top: 7,
     color: darkest_blue, // dark blue
   },
-  app_name_title: {
-    flex: 1,
-    height: 50,
-    paddingTop: 10,
-    backgroundColor: '#FCFCFC',
-    textAlign: 'center',
-    justifyContent:'center',
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: 'black',
-  },
   class_name: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: '#0C0F2A', // dark blue
     textAlign: 'center',
     paddingTop: 0,
   },
   notes_name: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: '#0C0F2A', // dark blue
     textAlign: 'center',
     padding: 0,
   },
-  // --------- BUTTONS BAR ---------
-  definitionText: {
+  // --------- MAIN CARD CONTENTS ---------
+  card_header: {
+    alignSelf: 'flex-start',
+    marginBottom: 'auto',
+    flex: 1,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  card_contents : {
+    flex: 12,
+    flexDirection: 'row',
+  },
+  // --------- WHOLE LEFT PANEL ---------
+  left_content_panel: {
+    flex: 1,
+    flexDirection: 'column',
+    height: '100%',
+    paddingTop: 30,
+  },
+  
+  // --------- SLIDE VIEW AREA --------- 
+  slideContainer: {
+    flex: 1,
+    alignItems: 'center',
+    alignSelf:'center',
+    //width:  350,
+    //height: 420,
+  },
+  slideContainer_noswipe: {
+    flex: 1,
+    alignItems: 'center',
+    alignSelf:'center',
+    width: '85%',
+    paddingTop: 10,
+    paddingBottom: 50,
+    //backgroundColor: 'blue'
+    //height: 420,
+  },
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  /*slide_title: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: 'rgb(242, 74, 65)',
+    color: 'black',
+    textAlign: 'right',
+  },*/
+    // --------- BUTTONS BAR ---------
+  buttonsBar: {
+    marginTop:20,
+    flex: .25,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: 'red',
+  },
+  definitionText: {
+    fontSize: 23,
+    color: '#667797', // med blue
+    fontStyle: 'italic',
+    textDecorationLine: 'underline',
   },
   sectionText: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: 'rgb(244, 153, 17)',
+    color: '#0C0F2A', // dark blue
+    textDecorationLine: 'underline',
   },
   importantText: {
+    fontSize: 23,
     fontWeight: 'bold',
-    color: 'rgb(15, 193, 39)',
+    color: '#0C0F2A', // dark blue
+    backgroundColor: '#FAF57E', // bright yellow
   },
   examText: {
+    fontSize: 23,
     fontWeight: 'bold',
-    color: 'rgb(84, 94, 247)',
+    color: '#667797', // med blue
+  },
+  unformattedText: {
+    fontSize: 23,
+    color: '#0C0F2A', // dark blue
   },
   whatText: {
     fontWeight: 'bold',
@@ -546,76 +727,35 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10
   },
-  // --------- WHOLE TOP PANEL ---------
-  top_content_panel: {
-    flex: 1,
-    flexDirection: 'row',
-    //backgroundColor: '#FAF57E', // yellow
-    height: '100%',
-  },
-  // --------- NOTE VIEW AREA ---------
-  viewnotes_container: {
-    flex: 1,
-    alignItems: 'flex-start',
-    alignSelf:'flex-start',
-    width:  '50%',
-    height: 420,
-    //backgroundColor: '#C9DCED', // light blue
-  },
-  viewnotes: {
-    flex: 1,
-    width: '92%',
-    //height: 
-    margin: 15,
-    padding: 10,
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: medium_blue, // med blue
-    borderRadius: 15,
-  },
-  // --------- SLIDE VIEW AREA --------- 
-  slideContainer: {
-    flex: 1,
-    alignItems: 'center',
-    alignSelf:'center',
-    width:  350,
-    //height: 420,
-  },
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  slide_title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
-    textAlign: 'right',
-  },
-  // --------- WHOLE BOTTOM PANEL ---------
-  bottom_content_panel: {
-    flex: 0.7,
-    flexDirection: 'row',
-  },
   // --------- NOTE INPUT AREA ---------
   noteInputContainer: {
     flex: 1,
     alignItems: 'center',
-    marginHorizontal: 10,
+    margin: 15,
+    marginBottom: 25,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#C9DCED', // light blue
+    borderRadius: 5,
+    backgroundColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    overflow: 'hidden',
   },
   noteInput: {
-    width: '46%',//350,
-    margin: 15,
+    flex: 1,
+    width: '95%',
+    height: '95%',
+    marginTop: 10,
+    padding: 10,
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
     textAlign: 'left',
-    padding: 10,
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: medium_blue, // med blue
-    borderRadius: 15,
+    shadowOpacity: 0,
+    backgroundColor: 'transparent',
   },
   compareView: {
     flex: 1,
@@ -626,6 +766,32 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: medium_blue, // med blue
     borderRadius: 15,
+  },
+  // --------- WHOLE RIGHT PANEL ---------
+  right_content_panel: {
+    flex: 1,
+    //flexDirection: 'column',
+  },
+  // --------- NOTE VIEW AREA ---------
+  viewnotes_container: {
+    flex: 1,
+    alignItems: 'center',
+    alignSelf:'flex-start',
+    width:  '100%',
+    height: '100%',
+    maxWidth: '100%',
+  },
+  viewnotes: {
+    flex: 1,
+    width: '93%',
+    //height: '92%',
+    margin: 25,
+    padding: 20,
+    backgroundColor: '#FAF8C6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
   },
   /*
   // --------- SEEM NO LONGER IN USE ---------
