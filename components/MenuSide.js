@@ -6,7 +6,7 @@ import { Button } from 'react-native-elements'
 import Modal from 'react-native-modal'; // 2.4.0
 import Autocomplete from 'react-native-autocomplete-input';
 import Nav from '../screens/global-widgets/nav'
-import NotesScreen from '../screens/NotesScreen.js'
+import { NotesScreen } from '../screens/NotesScreen'
 
 
 // Theme colors! (if you change these, you need to change them in all the screens)
@@ -71,7 +71,7 @@ export default class MenuSide extends React.Component {
 
   chooseLecture = async (slide_index) => {
     // const { navigate } = this.props.navigation;
-    console.log("Saving slide deck number.")
+    console.log("Saving slide deck number:")
     console.log(slide_index);
     try {
       await AsyncStorage.setItem("slide_deck", slide_index.toString());
@@ -79,7 +79,9 @@ export default class MenuSide extends React.Component {
       console.log('Unable to save slide_deck to AsyncStorage')
       return;
     }
-    NotesScreen.render();
+    NotesScreen.forceUpdateHandler().catch(function(error) {
+      console.log(error.message);
+    });
   };
 
   setClass(title, content) {
