@@ -121,6 +121,9 @@ Format = (props) => {
     if(!toFormat) {  <Text>{props.line}</Text> }
     // if it is a drawing
     if (currLine.indexOf(".png") !== -1) {
+      if(props.compare) {
+        return null;
+      }
       return (<Lightbox backgroundColor='white' underlayColor='white' style={{position: 'absolute', width:100, height:100, top:10, right:0}} activeProps={
                     {
                         style: {
@@ -156,16 +159,36 @@ Format = (props) => {
 
   key_val = 0
   num_what = 0
+  
+  addNote = (line) => {
+    console.log('here');
+  }
+
   ViewNotes = (props) => {
     key_val = 0
     num_what = 0
     const lines = String(props.text).split('\n');
     key_val = key_val + 1
     const listItems = lines.map((line) =>
-      <Format key={line + Math.random()} line = {line}> </Format>
+      <Format key={line + Math.random()} line = {line} compare = {false}> </Format>
     );
     return (
       <Text key={key_val}>{listItems}</Text>
+    );
+  }
+
+  ViewCompareNotes = (props) => {
+    key_val = 0
+    num_what = 0
+    const lines = String(props.text).split('\n');
+    key_val = key_val + 1
+    const listItems = lines.map((line) =>
+      <TouchableOpacity onClick={this.addNote(line)}>
+      <Format key={line + Math.random()} line = {line} compare = {true}> </Format>
+      </TouchableOpacity> 
+    );
+    return (
+      <View key={key_val}>{listItems}</View>
     );
   }
 
@@ -497,7 +520,7 @@ export default class NotesScreen extends React.Component {
     return (
       <View key={this.state.current_slide} style={styles.viewnotes_container}>
         <View style={styles.viewclassnotes}>
-          <ViewNotes key={this.state.current_slide} current_slide = {this.state.current_slide} text = {this.state[this.state.current_slide]}/>
+          <ViewCompareNotes key={this.state.current_slide} current_slide = {this.state.current_slide} text = {this.state[this.state.current_slide]}/>
         </View>
       </View>
     )
