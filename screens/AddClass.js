@@ -4,12 +4,33 @@ import { Constants } from 'expo';
 import { Button,Icon } from 'react-native-elements'
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
 import Nav from './global-widgets/nav'
-
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
 
 var image2 = require('../images/image2.jpeg')
 
-
+const customTextProps = { 
+  style: { 
+    fontFamily: 'avenir',
+  }
+}
 export default class App extends Component {
+
+    async componentDidMount() {
+     await Font.loadAsync({
+       'avenir': require('../fonts/avenir-next-regular.ttf'),
+     });
+
+     this.setState({ fontLoaded: true });
+      this.setCustomText(customTextProps);
+
+   }
+
   constructor(props) {
   super(props);
   this.state = {

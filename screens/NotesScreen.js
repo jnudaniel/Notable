@@ -14,6 +14,15 @@ import {
   AsyncStorage,
   Switch,
 } from 'react-native';
+
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
+
 import { Button, Icon } from 'react-native-elements'
 import { WebBrowser, Font, ImagePicker } from 'expo';
 import { Ionicons, FontAwesome} from '@expo/vector-icons';
@@ -49,6 +58,13 @@ var number_slides = 3
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
+
+const customTextProps = { 
+  style: { 
+    fontFamily: 'avenir',
+  }
+}
+
 dimensionRounded = (percentage, dimension) => {
   let rounded = 0;
   if (dimension == "width") {
@@ -69,43 +85,43 @@ const entryBorderRadius = 8;
 
 const CS_Cards = [{
   "id": 1,
-  "slide_title": "Sony Google TV Remote",
+  "slide_title": "Training",
   "image": cs_slide1
 }, {
   "id": 2,
-  "slide_title": "Design Thinking",
+  "slide_title": "Naive Bayes",
   "image": cs_slide2
 }, {
   "id": 3,
-  "slide_title": "Ideate",
+  "slide_title": "Computing Probabilities from Data",
   "image": cs_slide3
 }]
 
 const Math_Cards = [{
   "id": 1,
-  "slide_title": "Sony Google TV Remote",
+  "slide_title": "Tree Diagam",
   "image": math_slide1
 }, {
   "id": 2,
-  "slide_title": "Design Thinking",
+  "slide_title": "Mean Value Theorem",
   "image": math_slide2
 }, {
   "id": 3,
-  "slide_title": "Ideate",
+  "slide_title": "Linear Regression",
   "image": math_slide3
 }]
 
 const Bio_Cards = [{
   "id": 1,
-  "slide_title": "Sony Google TV Remote",
+  "slide_title": "Monocot Leaf",
   "image": bio_slide1
 }, {
   "id": 2,
-  "slide_title": "Design Thinking",
+  "slide_title": "The heart",
   "image": bio_slide2
 }, {
   "id": 3,
-  "slide_title": "Ideate",
+  "slide_title": "he plasma membrane",
   "image": bio_slide3
 }]
 
@@ -113,8 +129,8 @@ cards = Math_Cards;
 aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
 Format = (props) => {
-    const possTags = ["#def", "#section", "#important", "#exam", "#what"];
-    const means = ["definition", "Section", "Imp", "Exam", "What"]
+    const possTags = ["#def", "#section", "#key", "#exam", "#what"];
+    const means = ["Def", "Section", "Key", "Exam", "What"]
     const currLine = props.line;
     const toFormat = currLine[0] == '#';
     // if it is not a hashtag, returns the text
@@ -182,6 +198,8 @@ export default class NotesScreen extends React.Component {
      });
 
      this.setState({ fontLoaded: true });
+      //this.setCustomText(customTextProps);
+
    }
 
   
@@ -211,6 +229,23 @@ export default class NotesScreen extends React.Component {
         this.setState({slide_deck: Number(deck_num)});
       } else {
         this.setState({slide_deck: 1});
+      }
+      switch(deck_num) {
+        case 1:
+          cards = CS_Cards;
+          this.state.class_name = "CS109";
+          this.state.lecture_name = "Lecture 5: Naive Bayes";
+          return;
+        case 2:
+          cards = Math_Cards;
+          this.state.class_name = "Math51";
+          this.state.lecture_name = "Lecture 7: Null Space";
+          return;
+        case 3:
+          cards = Bio_Cards;
+          this.state.class_name = "Biology";
+          this.state.lecture_name = "Lecture 10: Meiosis";
+          return;
       }
     } catch (error) {
       console.log('Error fetching slide deck number from AsyncStorage')
@@ -257,23 +292,6 @@ export default class NotesScreen extends React.Component {
         index = 1;
       }
       console.log(index);
-      switch(index) {
-        case 1:
-          cards = CS_Cards;
-          this.state.class_name = "CS109";
-          this.state.lecture_name = "Lecture 5: Naive Bayes";
-          return;
-        case 2:
-          cards = Math_Cards;
-          this.state.class_name = "Math51";
-          this.state.lecture_name = "Lecture 7: Null Space";
-          return;
-        case 3:
-          cards = Bio_Cards;
-          this.state.class_name = "Biology";
-          this.state.lecture_name = "Lecture 10: Meiosis";
-          return;
-      }
     } catch (error) {
       console.log('Error fetching stored drawings from AsyncStorage')
     }
@@ -399,57 +417,49 @@ export default class NotesScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.buttonsBar}>
-        <Button
-         title="#Section"
-         onPress={this._addSectionToInput}
-         backgroundColor = '#00BFFF'
-         icon={{name: 'note-add'}}
-         buttonStyle={styles.buttonTags}
-        />
+        <View>
+            <Button
+             title="#Section"
+             onPress={this._addSectionToInput}
+             buttonStyle={styles.buttonTags}
+            />
 
-        <Button
-         title="#Definition"
-         onPress={this._addDefinitionToInput}
-         backgroundColor = '#7B68EE'
-         icon={{name: 'book'}}
-         buttonStyle={styles.buttonTags}
-        />
+            <Button
+             title="#Def"
+             onPress={this._addDefinitionToInput}
+             buttonStyle={styles.buttonTags}
+            />
+          </View>
+          <View>
+            <Button
+             title="#Key"
+             onPress={this._addImportantToInput}
+             buttonStyle={styles.buttonTags}
+            />
+            <Button
+             title="#Exam"
+             onPress={this._addExamToInput}
+             buttonStyle={styles.buttonTags}
+            />
 
-        <Button
-         title="#Important"
-         onPress={this._addImportantToInput}
-         backgroundColor = '#3CB371'
-         icon={{name: 'new-releases'}}
-         buttonStyle={styles.buttonTags}
-        />
-      
-         <Button
-         title="#Exam"
-         onPress={this._addExamToInput}
-         backgroundColor = '#3CB371'
-         icon={{name: 'new-releases'}}
-         buttonStyle={styles.buttonTags}
-        />
-
-        <Button
-         title="Draw"
-         backgroundColor = '#FF6347'
-         icon={{name: 'edit'}}
-         buttonStyle={styles.buttonTags}
-         onPress={() => {
-          this.saveCurrentSlideState(this.state.current_slide);
-          this.setState({current_slide: this.state.current_slide});
-          navigate('Draw');
-          }
-          }
-        />
-        <Button key={"compare"}
-            title="Compare notes"
-            onPress={() => {
-              navigate('Compare');
-            }
-            }
-          />
+          </View>
+          <View>
+            <Button
+             title="Draw"
+             buttonStyle={styles.buttonTags}
+             onPress={() => {
+              this.saveCurrentSlideState(this.state.current_slide);
+              this.setState({current_slide: this.state.current_slide});
+              navigate('Draw');
+              }
+              }
+              />
+            <Button
+             title="#What"
+             onPress={this._addWhatToInput}
+             buttonStyle={styles.buttonTags}
+            />
+        </View>
       </View>
     )
   }
@@ -613,7 +623,7 @@ export default class NotesScreen extends React.Component {
   }
   _addImportantToInput = () => {
 
-        added_text = this.state[this.state.current_slide] + "\n" + "#important";
+        added_text = this.state[this.state.current_slide] + "\n" + "#key";
         this.setState({[this.state.current_slide]: added_text});
         this.saveNotes(this.state.current_slide);
   }
@@ -621,6 +631,13 @@ export default class NotesScreen extends React.Component {
     _addExamToInput = () => {
 
         added_text = this.state[this.state.current_slide] + "\n" + "#exam";
+        this.setState({[this.state.current_slide]: added_text});
+        this.saveNotes(this.state.current_slide);
+  }
+
+  _addWhatToInput = () => {
+
+        added_text = this.state[this.state.current_slide] + "\n" + "#what";
         this.setState({[this.state.current_slide]: added_text});
         this.saveNotes(this.state.current_slide);
   }
@@ -768,23 +785,23 @@ const styles = StyleSheet.create({
   toggleButtonOff: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 7,
+    borderRadius: 2,
     backgroundColor: medium_blue,
     borderColor: medium_blue,
     borderWidth: 3,
     width: 180,
-    marginRight: 50,
+    marginRight: 0,
     paddingVertical: 8,
   },
   toggleButtonOn: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 7,
+    borderRadius: 2,
     backgroundColor: white,
     borderColor: medium_blue,
     borderWidth: 3,
     width: 180,
-    marginRight: 50,
+    marginRight: 0,
     paddingVertical: 8,
   },
   toggleLabelOff: {
@@ -829,12 +846,12 @@ const styles = StyleSheet.create({
     //height: 420,
   },
   slideContainer_noswipe: {
-    flex: 1,
+    flex: .8,
     alignItems: 'center',
     alignSelf:'center',
     width: '85%',
-    paddingTop: 10,
-    paddingBottom: 50,
+    paddingTop: 0,
+    paddingBottom: 5,
     //backgroundColor: 'blue'
     //height: 420,
   },
@@ -853,10 +870,13 @@ const styles = StyleSheet.create({
     // --------- BUTTONS BAR ---------
   buttonsBar: {
     marginTop:20,
-    flex: .25,
+    flex: .5,
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: 'red',
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   definitionText: {
     fontSize: 23,
@@ -890,16 +910,16 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   buttonTags: {
-    backgroundColor: yellow,
+    backgroundColor: medium_blue, // for some reason, the button isn't styling color
     overflow: 'hidden',
     borderRadius: 10,
-    padding: 10
+    margin: 4,
   },
   // --------- NOTE INPUT AREA ---------
   noteInputContainer: {
-    flex: 1,
+    flex: 0.75,
     alignItems: 'center',
-    margin: 15,
+    margin: 5,
     marginBottom: 25,
     borderStyle: 'solid',
     borderWidth: 1,
@@ -955,7 +975,7 @@ const styles = StyleSheet.create({
     //height: '92%',
     margin: 25,
     padding: 20,
-    backgroundColor: '#FAF8C6',
+    backgroundColor: '#FAF8C6', // light yellow
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,

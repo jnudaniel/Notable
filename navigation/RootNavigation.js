@@ -75,19 +75,13 @@ export default class RootNavigator extends React.Component {
     const menuContents = <MenuSide />
 
     return (
-      <SideMenu menu={menuContents}>
-       <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange} screenProps={this.state}/>
-       </SideMenu>
+      <SideMenu menu={menuContents} openMenuOffset={320} edgeHitWidth={100}>
 
-       // <TouchableOpacity
-       //   onPress={this.toggle}
-       // >
-       //   <Image
-       //     source={{uri: 'https://cdn4.iconfinder.com/data/icons/tupix-1/30/list-512.png'}}
-       //     style={{ width: 32, height: 32 }}
-       //   />
-       // </TouchableOpacity>
-      );
+        <View style={{flex: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.8, shadowRadius: 5,}}>
+          <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange} screenProps={this.state}/>
+        </View>
+      </SideMenu>
+    );
   }
 
   _registerForPushNotifications() {
