@@ -217,12 +217,18 @@ export default class NotesScreen extends React.Component {
   }
 
   one_slide_array_of_buttons = (slide_index) => {
-    console.log(combined_notes);
-    console.log("YOOOOOO2");
-    var combined_slide_notes = combined_notes[0] // IDKKKKKK
+    if(slide_index == 'undefined') {
+      console.log("NOONONOOOOOONOOOOO");
+    } else {
+      console.log(slide_index);
+    }
+    //console.log(slide_index)
+    //console.log(combined_notes);
+    //console.log("YOOOOOO2");
+    var combined_slide_notes = combined_notes[slide_index] // IDKKKKKK
     var buttons_array = []
-    console.log(combined_slide_notes);
-    console.log("YOOOOOO");
+    //console.log(combined_slide_notes);
+    //console.log("YOOOOOO");
     for (let i = 0; i < combined_slide_notes.notes.length; i++) {
       buttons_array.push(
         <Button
@@ -367,7 +373,7 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: true};
+    this.state = {in_compare: true, current_slide: 0};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
