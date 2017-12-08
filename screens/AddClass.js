@@ -13,6 +13,11 @@ export default class App extends Component {
   super(props);
   this.state = {
     status: false,
+    showModal: false,
+    colleges: ['Stanford University', 'University of Michigan', 'Arizona State University', 'University of California San Diego', 'University of California Berkeley'],
+    colleges_query: '',
+    classes: ['CS 110', 'CS 107', 'ARTHIST 101', 'FILM 45Q', 'MATH 101', 'MATH 120'],
+    class_query: '',
   }
 
   }
@@ -30,12 +35,37 @@ export default class App extends Component {
    }
 
 
+  render_modal = () => {
+    return (
+      <Modal isVisible={this.state.visibleModal} >
+        <View style={styles.modalContent}>
+          <Text style={styles.text}> Enter your university </Text>
+          <TextInput
+            onChangeText={this._handleTextChange}
+            style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+          />
+          <Text style={styles.text}> Enter your class </Text>
+          <TextInput
+            onChangeText={this._handleTextChange}
+            style={{ alignSelf: 'center', width: 200, height: 44, padding: 8, borderWidth: 1, borderColor: 'black' }}
+          />
+          <Button
+            title="Close"
+            onPress={() => this.setState({ visibleModal: false })}
+            backgroundColor = '#FF6347'
+            icon={{name: 'edit'}}
+            buttonStyle={styles.buttonTags}
+          />
+        </View>
+      </Modal>
+      )
+  }
 
   render() {
     return (
       <View style={styles.container}>
       <Text style={styles.header}>N  <FontAwesome name="puzzle-piece" size={40} style={{ color: '#FBF272' }} /> T  A  B  L  E </Text>
-
+      {this.render_modal()}
       <Text style={styles.text}> Enter your university </Text>
         <TextInput
           onChangeText={this._handleTextChange}
@@ -90,5 +120,15 @@ const styles = StyleSheet.create({
     header :{
     fontSize: 50,
     color: 'black',
+  },
+   modalContent:{
+    width:500,
+    height:500,
+    borderWidth:10,
+    color: '#f0f',
+    borderColor:'#e7e7e7',
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:40
   },
 });
