@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Alert, StyleSheet, TextInput, TouchableOpacity, AsyncStorage} from 'react-native';
+import { Text, View, Alert, StyleSheet, TextInput, TouchableOpacity, AsyncStorage, Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Accordion from 'react-native-collapsible/Accordion';
 import { Button } from 'react-native-elements'
@@ -9,6 +9,15 @@ import Nav from '../screens/global-widgets/nav'
 import NotesScreen from '../screens/NotesScreen.js'
 
 
+// Theme colors! (if you change these, you need to change them in all the screens)
+var darkest_blue = '#0C0F2A';
+var medium_blue = '#667797';
+var light_blue = '#C9DCED';
+var yellow = '#FAF57E';
+var white = '#FFFFFF';
+
+var logo = require('../images/logo-notable.png');
+
 export default class MenuSide extends React.Component {
   constructor(props) {
     super(props);
@@ -16,47 +25,50 @@ export default class MenuSide extends React.Component {
      showModal: false,
      classes_chosen : [],
      classes_unchosen :[
-  {
-    title: 'CS 107',
-    content: ['Lecture 1: Syllabus', 'Lecture 2: Binary Bomb', 'Lecture 3: Heap Allocator'],
-    slide_index: 1,
-  },
-   {
-    title: 'CS 109  ',
-    content: ['Lecture 1: Counting', 'Lecture 2: Combinatorics', 'Lecture 3: Sampling'],
-    slide_index: 1,
-  },
-  {
-    title: 'CS 110',
-    content: ['Lecture 1: Overview', 'Lecture 2: Systems', 'Lecture 3: Threading'],
-    slide_index: 1,
-  },
-  {
-    title: 'CS 147  ',
-    content: ['Lecture 1: Design', 'Lecture 2: User Interviews', 'Lecture 3: Exam Review'],
-    slide_index: 1,
-  },
-  {
-    title: 'HUMBIO 155H  ',
-    content: ['Lecture 1: Polyomavirus', 'Lecture 2: Zika Virus', 'Lecture 3: Innoculation'],
-    slide_index: 2,
-  },
-  {
-    title: 'MATH 101',
-    content: ['Lecture 1: Choosing a topic', 'Lecture 2: Direction', 'Lecture 3: Presentation Skills'],
-    slide_index: 3,
-  },
-  {
-    title: 'MATH 120',
-    content: ['Lecture 1: Groups', 'Lecture 2: Rings', 'Lecture 3: Coordinates'],
-    slide_index: 3,
-  },
- 
-],
-     classes_query: '',
-     class_done:false,
+      {
+        title: 'CS 107',
+        content: ['Lecture 1: Syllabus', 'Lecture 2: Binary Bomb', 'Lecture 3: Heap Allocator'],
+        slide_index: 1,
+      },
+       {
+        title: 'CS 109  ',
+        content: ['Lecture 1: Counting', 'Lecture 2: Combinatorics', 'Lecture 3: Sampling'],
+        slide_index: 1,
+      },
+      {
+        title: 'CS 110',
+        content: ['Lecture 1: Overview', 'Lecture 2: Systems', 'Lecture 3: Threading'],
+        slide_index: 1,
+      },
+      {
+        title: 'CS 147  ',
+        content: ['Lecture 1: Design', 'Lecture 2: User Interviews', 'Lecture 3: Exam Review'],
+        slide_index: 1,
+      },
+      {
+        title: 'HUMBIO 155H  ',
+        content: ['Lecture 1: Polyomavirus', 'Lecture 2: Zika Virus', 'Lecture 3: Innoculation'],
+        slide_index: 2,
+      },
+      {
+        title: 'MATH 101',
+        content: ['Lecture 1: Choosing a topic', 'Lecture 2: Direction', 'Lecture 3: Presentation Skills'],
+        slide_index: 3,
+      },
+      {
+        title: 'MATH 120',
+        content: ['Lecture 1: Groups', 'Lecture 2: Rings', 'Lecture 3: Coordinates'],
+        slide_index: 3,
+      },    
+    ],
+    classes_query: '',
+    class_done:false,
    }
-    this._renderContent = this._renderContent.bind(this)
+   this._renderContent = this._renderContent.bind(this)
+  }
+
+  chooseLecture(slide_index) {
+    console.log(slide_index);
   }
 
   chooseLecture = async (slide_index) => {
@@ -96,7 +108,8 @@ export default class MenuSide extends React.Component {
   render_class_autocomplete() {
     const { classes_query } = this.state;
     const classes = this.findClass(classes_query);
-    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();  
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+    // look up autocomplete API, but if not wonderful it's fine
     return (  
       <Autocomplete
         autoCapitalize="none"
@@ -160,7 +173,7 @@ export default class MenuSide extends React.Component {
   _renderHeader(section) {
     return (
       <View style={styles.header}>
-        <Text style={styles.headerText}>{section.title}
+        <Text style={styles.headerText}>{"" + section.title + "  "}
         <Ionicons name="ios-arrow-down" size={20} />
         </Text>
       </View>
@@ -169,69 +182,139 @@ export default class MenuSide extends React.Component {
 
   _renderContent(section) {
     return (
-        <View style={styles.content}>
-
+      <View style={styles.content}>
         <Button
-            title={section.content[0]}
-            onPress={() => this.chooseLecture(section.slide_index)}
+          title={section.content[0]}
+          onPress={() => this.chooseLecture(section.slide_index)}
+          backgroundColor={'#FAF8C6'}
+          color={darkest_blue}
         />
 
         <Button
             title={section.content[1]}
             onPress={() => this.chooseLecture(section.slide_index)}
+            backgroundColor={'#FAF8C6'}
+            color={darkest_blue}
         />
 
         <Button
             title={section.content[2]}
             onPress={() => this.chooseLecture(section.slide_index)}
+            backgroundColor={'#FAF8C6'}
+            color={darkest_blue}
         />
         
-        </View>
+      </View>
     );
   }
-
+//style={{flex:1, resizeMode: 'contain'}} 
   render() {
     return (
     	<View >
-    		<Text style={styles.menuHeader}>My Classes</Text>
-	    	<View style={styles.accordion}>
-		      <Accordion
-		        sections={this.state.classes_chosen}
-		        renderHeader={this._renderHeader}
-		        renderContent={this._renderContent}
-		        underlayColor='#DBEDFF'
-		      />
-          {this.render_modal()}
-          <Button
-            title="New Class"
-            onPress={() => this.setState({ visibleModal: true })}
-            backgroundColor = '#0C0F2A'
-          />
-		    </View>
-		</View>
+        <View style={styles.paddingAboveHeader}></View>
+        <View style={styles.sideMenuContents}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../images/logo-notable-small.png')} />
+          </View>
+          <View style={styles.sideMenuLowerSection}>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Join a Class"
+                onPress={() => this.setState({ visibleModal: true })}
+                backgroundColor={light_blue}
+                color={medium_blue} 
+              />
+            </View>
+            <View style={styles.accordion}>
+              <Accordion
+                sections={this.state.classes_chosen}
+                renderHeader={this._renderHeader}
+                renderContent={this._renderContent}
+                underlayColor='#DBEDFF'
+              />
+              {this.render_modal()}
+            </View>
+          </View>
+          <View style={styles.sideMenuLogout}>
+            <Text style={styles.email}>Email goes here</Text>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={styles.logoutButton}><Text style={styles.logoutText}>Log Out</Text></TouchableOpacity>
+          </View>
+        </View>
+		  </View>
     );
   }
 }
-
+///
 const styles = StyleSheet.create({
-  menuHeader: {
+  paddingAboveHeader: {
+    height: 20,
+    backgroundColor: '#eae8e8',
+  },
+  sideMenuContents: {
+    flexDirection: 'column',
+    backgroundColor: '#FAF8C6', // light yellow
+    height: '100%',
+  },
+  logoContainer: {
+    width: '100%',
+    flex: 0.15,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: light_blue,
+    //borderWidth: 3,
+    //borderColor: medium_blue,
+    //borderStyle: 'none solid solid none',
+  },
+  sideMenuLowerSection: {
+    flexDirection: 'column',
+    width: '100%',
+    flex: 0.9,
+    backgroundColor: '#FAF8C6', // light yellow
+    paddingVertical: 15,
+    //borderWidth: 3,
+    //borderColor: medium_blue,
+    //borderStyle: 'none',
+    //borderRight: 'solid',
+  },
+  sideMenuLogout: {
+    flexDirection: 'column',
+    flex: 0.35,
+    alignItems: 'center',
+  },
+  menuHeaderText: {
   	fontWeight: 'bold',
   	fontSize: 30,
+    color: darkest_blue,
   	padding: 20,
   	paddingLeft: 15,
     paddingRight: 0,
-  	backgroundColor: '#4682B4',
+  	backgroundColor: medium_blue,
+  },
+  buttonContainer: {
+    borderRadius: 7,
+    padding: 0,
+    borderWidth: 3,
+    borderColor: medium_blue,
+    backgroundColor: light_blue,
+    width: '80%',
+    alignSelf: 'center',
   },
   accordion: {
   	padding: 15,
-  	backgroundColor: '#DBEDFF',
+  	backgroundColor: '#FAF8C6', // light yellow
   },
   header: {
   	paddingTop: 15,
   	paddingBottom: 15,
+    alignSelf: 'center',
   },
   headerText: {
   	fontWeight: 'bold',
+    fontSize: 20,
+    color: darkest_blue,
   },
   content: {
   },
@@ -239,14 +322,30 @@ const styles = StyleSheet.create({
   	paddingTop: 5,
   	paddingBottom: 5,
   },
-     modalContent:{
+  logoutButton: {
+    width: 80,
+    height: 30,
+    //backgroundColor: 'orange',//'#FAF8C6', // light yellow
+    marginTop: 10,
+    marginBottom: 30,
+    //alignSelf: 'flex-end',
+  },
+  email: {
+    fontSize: 18,
+    //alignSelf: 'flex-end',
+  },
+  logoutText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  modalContent:{
     width:500,
     height:500,
     borderWidth:10,
-    borderColor:'#e7e7e7',
+    borderColor: white,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'#C9DCED',
+    backgroundColor: light_blue,
     borderRadius:40
   }
 });
