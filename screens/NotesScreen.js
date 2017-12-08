@@ -286,11 +286,23 @@ export default class NotesScreen extends React.Component {
       <View style={styles.header_container}>
         <View style={styles.paddingAboveHeader}></View>
         <View style={styles.headerContent}>
-          <View style={styles.leftMenuSwipe}><Text><FontAwesome name="angle-double-right" size={45} style={{color: darkest_blue}}/></Text></View>
+          <View style={styles.leftMenuSwipe}>
+            <Text>
+              <FontAwesome name="angle-double-right" size={45} style={{color: darkest_blue}}/>
+            </Text>
+          </View>
           <View style={styles.headerTitles}>
             <Text style={styles.class_name}>
               {class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: darkest_blue, marginLeft: 5, marginRight: 5}}/>  {notes_name}
             </Text>
+          </View>
+          <View style={styles.compareSwitchContainer}>
+            <Button
+              title="Compare Notes"
+              onPress={() => { Alert.alert('Button pressed!','You did it!',);}}
+              backgroundColor={medium_blue}
+              buttonStyle={styles.toggleButton}
+            />
           </View>
         </View>
       </View>
@@ -475,7 +487,7 @@ export default class NotesScreen extends React.Component {
 
   _renderItem({item, index}) {
     return (
-      <View style={{width: 1000, height: '100%'}}>
+      <View style={{width: 950, height: '96%'}}>
         {this.renderCurrentCard(item)}
       </View>
     )
@@ -499,9 +511,9 @@ export default class NotesScreen extends React.Component {
             data={Cards}
             firstItem = {this.state.current_slide}
             renderItem={this._renderItem}
-            itemWidth={1000}
+            itemWidth={950}
             sliderWidth={viewportWidth}
-            slideStyle={{ height: '95%', borderStyle: 'solid', borderColor: 'blue' }}
+            
             style={styles.carousel}
             onSnapToItem={(index) => this.setState({ current_slide: index }) }
           />
@@ -511,7 +523,7 @@ export default class NotesScreen extends React.Component {
     );
   }
 }
-/*
+/*slideStyle={{ height: '95%', borderStyle: 'solid', borderColor: 'blue' }} 
 
     <View style={styles.side_card_left}></View>
     {this.renderCurrentCard()}
@@ -538,7 +550,7 @@ const styles = StyleSheet.create({
   },
   cards_container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     width: '100%',
     height: '100%',
@@ -594,26 +606,34 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'center', // centers vertically
+    justifyContent: 'flex-start', // aligns left horizontally
     width: '100%',
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
   },
   leftMenuSwipe: {
     alignSelf: 'flex-start',
-    marginRight: 'auto',
+    //marginRight: 'auto',
     marginLeft: 10,
   },
   headerTitles: {
-    //alignSelf: 'stretch',
-    backgroundColor: 'orange',
+    //alignSelf: 'flex-start',
+    marginLeft: 15,
+    marginRight: 'auto',
+    paddingTop: 2,
   },
   class_name: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#0C0F2A', // dark blue
     textAlign: 'center',
     paddingTop: 0,
+  },
+  compareSwitchContainer: {
+    backgroundColor: 'yellow',
+  },
+  toggleButton: {
+    color: 'white',
   },
   // --------- MAIN CARD CONTENTS ---------
   card_header: {
@@ -706,24 +726,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
   },
-  buttons:{
-    width:80,
-    height:80,
-    borderWidth:10,
-    borderColor:'#e7e7e7',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:40
-  },
-  buttonSmall:{
-    width:50,
-    height:50,
-    borderWidth:10,
-    borderColor:'#e7e7e7',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:25
-  },
   buttonTags: {
     backgroundColor: yellow,
     overflow: 'hidden',
@@ -798,6 +800,24 @@ const styles = StyleSheet.create({
   },
   /*
   // --------- SEEM NO LONGER IN USE ---------
+  buttonSmall:{
+    width:50,
+    height:50,
+    borderWidth:10,
+    borderColor:'#e7e7e7',
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:25
+  },
+  buttons:{
+    width:80,
+    height:80,
+    borderWidth:10,
+    borderColor:'#e7e7e7',
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:40
+  },
   text: {
     color: '#fff',
     fontSize: 30,
