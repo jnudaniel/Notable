@@ -9,3 +9,11 @@ TODOS:
 - fix buggy draw thing
 - fix slide dimensions
 - get all prefilled notes data in
+
+
+- link classes to changing slides
+- button styling
+- populate class notes & what notes
+
+
+export app

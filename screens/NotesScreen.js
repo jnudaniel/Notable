@@ -961,7 +961,7 @@ const styles = StyleSheet.create({
     //height: '92%',
     margin: 25,
     padding: 20,
-    backgroundColor: '#FAF8C6',
+    backgroundColor: '#FAF8C6', // light yellow
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
