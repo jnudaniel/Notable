@@ -67,6 +67,21 @@ const sliderWidth = viewportWidth;
 const itemWidth = slideWidth + itemHorizontalMargin * 2;
 const entryBorderRadius = 8;
 
+const combined_notes = [{
+  "id": 1,
+  "slide_title": "Sony Google TV Remote",
+  "notes": ["hall of shame", "by Sony"]
+}, {
+  "id": 2,
+  "slide_title": "Design Thinking",
+  "notes": ["used by IDEO", "what CS147 is all about", "d.school"]
+}, {
+  "id": 3,
+  "slide_title": "Ideate",
+  "notes": ["middle step", "after needfinding", "before prototyping"]
+}]
+
+
 const CS_Cards = [{
   "id": 1,
   "slide_title": "Training",
@@ -177,22 +192,48 @@ Format = (props) => {
     );
   }
 
+export default class NotesScreen extends React.Component {
+
   ViewCompareNotes = (props) => {
-    key_val = 0
-    num_what = 0
-    const lines = String(props.text).split('\n');
-    key_val = key_val + 1
-    const listItems = lines.map((line) =>
-      <TouchableOpacity onClick={this.addNote(line)}>
-      <Format key={line + Math.random()} line = {line} compare = {true}> </Format>
-      </TouchableOpacity> 
-    );
-    return (
-      <View key={key_val}>{listItems}</View>
-    );
+    return (<View>
+      { this.one_slide_array_of_buttons(props.current_slide) }
+    </View>)
   }
 
-export default class NotesScreen extends React.Component {
+  one_slide_array_of_buttons = (slide_index) => {
+    console.log(combined_notes);
+    console.log("YOOOOOO2");
+    var combined_slide_notes = combined_notes[slide_index]
+    var buttons_array = []
+    console.log(combined_slide_notes);
+    console.log("YOOOOOO");
+    for (let i = 0; i < combined_slide_notes.notes.length; i++) {
+      buttons_array.push(
+        <Button
+          key={(slide_index) * 100 + i}
+          onPress={
+            () => {
+              var curr_notes = this.state[slide_index] + "\n" + combined_slide_notes.notes[i];
+              this.setState(
+                { [slide_index]: curr_notes },
+                () => {
+                  try {
+                    var value = i.toString();
+                    AsyncStorage.setItem(value, this.state[slide_index]);
+                  } catch (error) {
+                    alert('AsyncStorage error: ' + error.message);
+                  }
+                }
+              );
+            }
+          }
+          title={combined_slide_notes.notes[i]}
+          color="#841584"
+        />
+      );
+    }
+    return (buttons_array);
+  }
 
   // makes header flush with top of screen
   static navigationOptions = {
@@ -308,7 +349,7 @@ export default class NotesScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.state = {};
-    this.state = {in_compare: false};
+    this.state = {in_compare: true};
     // for (var i = 0; i < number_slides; i++) {
     //     this.state = {[i]: ''};
 
@@ -520,7 +561,7 @@ export default class NotesScreen extends React.Component {
     return (
       <View key={this.state.current_slide} style={styles.viewnotes_container}>
         <View style={styles.viewclassnotes}>
-          <ViewCompareNotes key={this.state.current_slide} current_slide = {this.state.current_slide} text = {this.state[this.state.current_slide]}/>
+          <this.ViewCompareNotes current_slide = {this.state.current_slide}/>
         </View>
       </View>
     )
