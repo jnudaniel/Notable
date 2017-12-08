@@ -54,6 +54,7 @@ export default class MenuSide extends React.Component {
      classes_query: '',
      class_done:false,
    }
+    this._renderContent = this._renderContent.bind(this)
   }
 
   saveNotesName = async (result) => {
@@ -71,6 +72,10 @@ export default class MenuSide extends React.Component {
     this.setState({class_done: true});
   }
   
+  chooseLecture(slide_index) {
+    console.log(slide_index);
+  }
+
 
   findClass(query) {
     if (query === '') {
@@ -156,16 +161,27 @@ export default class MenuSide extends React.Component {
       </View>
     );
   }
-  _handleButtonPress = () => {
-    
-  };
 
   _renderContent(section) {
     return (
-      <View style={styles.content}>
-        <Text style={styles.contentItem}>{section.content[0]}</Text>
-        <Text style={styles.contentItem}>{section.content[1]}</Text>
-      </View>
+        <View style={styles.content}>
+
+        <Button
+            title={section.content[0]}
+            onPress={() => this.chooseLecture(section.slide_index)}
+        />
+
+        <Button
+            title={section.content[1]}
+            onPress={() => this.chooseLecture(section.slide_index)}
+        />
+
+        <Button
+            title={section.content[2]}
+            onPress={() => this.chooseLecture(section.slide_index)}
+        />
+        
+        </View>
     );
   }
 
