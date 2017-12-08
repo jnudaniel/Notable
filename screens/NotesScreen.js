@@ -230,6 +230,23 @@ export default class NotesScreen extends React.Component {
       } else {
         this.setState({slide_deck: 1});
       }
+      switch(deck_num) {
+        case 1:
+          cards = CS_Cards;
+          this.state.class_name = "CS109";
+          this.state.lecture_name = "Lecture 5: Naive Bayes";
+          return;
+        case 2:
+          cards = Math_Cards;
+          this.state.class_name = "Math51";
+          this.state.lecture_name = "Lecture 7: Null Space";
+          return;
+        case 3:
+          cards = Bio_Cards;
+          this.state.class_name = "Biology";
+          this.state.lecture_name = "Lecture 10: Meiosis";
+          return;
+      }
     } catch (error) {
       console.log('Error fetching slide deck number from AsyncStorage')
     }
@@ -275,23 +292,6 @@ export default class NotesScreen extends React.Component {
         index = 1;
       }
       console.log(index);
-      switch(index) {
-        case 1:
-          cards = CS_Cards;
-          this.state.class_name = "CS109";
-          this.state.lecture_name = "Lecture 5: Naive Bayes";
-          return;
-        case 2:
-          cards = Math_Cards;
-          this.state.class_name = "Math51";
-          this.state.lecture_name = "Lecture 7: Null Space";
-          return;
-        case 3:
-          cards = Bio_Cards;
-          this.state.class_name = "Biology";
-          this.state.lecture_name = "Lecture 10: Meiosis";
-          return;
-      }
     } catch (error) {
       console.log('Error fetching stored drawings from AsyncStorage')
     }
