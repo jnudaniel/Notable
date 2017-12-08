@@ -17,16 +17,13 @@ import AddClass from '../screens/AddClass';
 
 
 const RootStackNavigator = StackNavigator(
-
-
-
-  {
-          Notes: {
+ {
+    Notes: {
     screen: NotesScreen,
   },
-    Class: {
-    screen: AddClass,
-  },
+  Draw: {
+  screen: DrawScreen,
+},
     Compare: {
       screen: CompareScreen,
     },
@@ -39,6 +36,7 @@ const RootStackNavigator = StackNavigator(
     }),
   }
 );
+
 
 export default class RootNavigator extends React.Component {
   constructor(props) {
