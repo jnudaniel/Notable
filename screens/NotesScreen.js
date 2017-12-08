@@ -122,7 +122,7 @@ Format = (props) => {
       case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
       case 2: return <Text style={styles.importantText}>{content}{'\n'}</Text>;
       case 3: return <Text style={styles.examText}>{content}{'\n'}</Text>;
-      case 4: 
+      case 4:
         // #what case returns a random answer
         var randomAnswer = aggregate_info[Math.floor(Math.random() * aggregate_info.length)];
         return <Text style={styles.whatText}> {randomAnswer}{'\n'}</Text>;
@@ -303,7 +303,7 @@ export default class NotesScreen extends React.Component {
       <View style={styles.buttonsBar}>
         <Button
          title="#Section"
-         onPress={this._handleButtonPress}
+         onPress={this._addSectionToInput}
          backgroundColor = '#00BFFF'
          icon={{name: 'note-add'}}
          buttonStyle={styles.buttonTags}
@@ -311,7 +311,7 @@ export default class NotesScreen extends React.Component {
 
         <Button
          title="#Definition"
-         onPress={this._handleButtonPress}
+         onPress={this._addDefinitionToInput}
          backgroundColor = '#7B68EE'
          icon={{name: 'book'}}
          buttonStyle={styles.buttonTags}
@@ -319,7 +319,7 @@ export default class NotesScreen extends React.Component {
 
         <Button
          title="#Important"
-         onPress={this._handleButtonPress}
+         onPress={this._addImportantToInput}
          backgroundColor = '#3CB371'
          icon={{name: 'new-releases'}}
          buttonStyle={styles.buttonTags}
@@ -481,6 +481,23 @@ export default class NotesScreen extends React.Component {
     )
   }
 
+  _addDefinitionToInput = () => {
+
+        added_text = this.state[this.state.current_slide] + " " + "#Definition";
+        this.setState({[this.state.current_slide]: added_text});
+  }
+  _addSectionToInput = () => {
+
+        added_text = this.state[this.state.current_slide] + " " + "#Section";
+        this.setState({[this.state.current_slide]: added_text});
+  }
+  _addImportantToInput = () => {
+
+        added_text = this.state[this.state.current_slide] + " " + "#Important";
+        this.setState({[this.state.current_slide]: added_text});
+  }
+
+
 
   render() {
     let index = 0;
@@ -506,7 +523,7 @@ export default class NotesScreen extends React.Component {
           />
         </View>
       </View>
-      
+
     );
   }
 }
@@ -635,8 +652,8 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingTop: 30,
   },
-  
-  // --------- SLIDE VIEW AREA --------- 
+
+  // --------- SLIDE VIEW AREA ---------
   slideContainer: {
     flex: 1,
     alignItems: 'center',
