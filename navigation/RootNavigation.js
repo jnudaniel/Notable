@@ -1,6 +1,12 @@
 import { Notifications } from 'expo';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
@@ -9,6 +15,7 @@ import SideMenu from 'react-native-side-menu';
 import NotesScreen from '../screens/NotesScreen';
 import CompareScreen from '../screens/CompareScreen';
 import DrawScreen from '../screens/DrawScreen';
+import AddClass from '../screens/AddClass';
 
 
 const RootStackNavigator = StackNavigator(
@@ -19,7 +26,10 @@ const RootStackNavigator = StackNavigator(
     Notes: {
     screen: NotesScreen,
   },
-  Draw: {
+  Class: {
+  screen: AddClass,
+},
+Draw: {
   screen: DrawScreen,
 },
     Compare: {
@@ -36,6 +46,15 @@ const RootStackNavigator = StackNavigator(
 );
 
 export default class RootNavigator extends React.Component {
+  constructor(props) {
+  super(props);
+
+  this.toggle = this.toggle.bind(this);
+
+  this.state = {
+    isOpen: false,
+  };
+}
   state = {currentScreen: null}
 
   componentDidMount() {
@@ -50,13 +69,28 @@ export default class RootNavigator extends React.Component {
     this.setState({...this.state, route_index: newState.index});
   }
 
+  toggle() {
+   this.setState({
+     isOpen: !this.state.isOpen,
+   });
+ }
+
   render() {
     const menuContents = <MenuSide />
 
     return (
       <SideMenu menu={menuContents}>
        <RootStackNavigator onNavigationStateChange={this._onNavigationStateChange} screenProps={this.state}/>
-      </SideMenu>
+       </SideMenu>
+
+       // <TouchableOpacity
+       //   onPress={this.toggle}
+       // >
+       //   <Image
+       //     source={{uri: 'https://cdn4.iconfinder.com/data/icons/tupix-1/30/list-512.png'}}
+       //     style={{ width: 32, height: 32 }}
+       //   />
+       // </TouchableOpacity>
       );
   }
 

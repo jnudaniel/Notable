@@ -7,7 +7,7 @@ import Colors from '../constants/Colors';
 
 import NotesScreen from '../screens/NotesScreen';
 import CompareScreen from '../screens/CompareScreen';
-import DrawScreen from '../screens/DrawScreen';
+import AddClass from '../screens/AddClass';
 
 
 export default TabNavigator(
@@ -15,9 +15,12 @@ export default TabNavigator(
     Notes: {
       screen: NotesScreen,
     },
-    // Compare: {
-    //   screen: CompareScreen,
-    // },
+    Class: {
+      screen: AddClass,
+    },
+    Compare: {
+      screen: CompareScreen,
+    },
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -32,7 +35,7 @@ export default TabNavigator(
                 ? `ios-text${focused ? '' : '-outline'}`
                 : 'md-text';
             break;
-            case 'Draw':
+            case 'Class':
               iconName =
                 Platform.OS === 'ios'
                   ? `ios-brush${focused ? '' : '-outline'}`
@@ -59,5 +62,16 @@ export default TabNavigator(
     tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false,
+    tabBarOptions: {
+    activeBackgroundColor: '#87CEFA',
+    style: {
+      backgroundColor: '#eafbff',
+    },
+    tabStyle: {
+   //borderRadius: 20,
+    },
+  },
+
+
   }
 );
