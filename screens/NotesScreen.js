@@ -131,7 +131,7 @@ const Bio_Cards = [{
 }]
 
 cards = CS_Cards;
-aggregate_info = ["the remote is too big", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
+aggregate_info = ["pick up what they miss", "the remote is white", "too many buttons make it confusing", "this is hall of shame"]
 
 Format = (props) => {
     const possTags = ["#def", "#section", "#key", "#exam", "#what"];
@@ -989,7 +989,8 @@ const styles = StyleSheet.create({
   },
   whatText: {
     fontWeight: 'bold',
-    color: 'green',
+    fontSize: 20,
+    color: '#8B0000',
   },
   buttonTags: {
     backgroundColor: medium_blue, // for some reason, the button isn't styling color
