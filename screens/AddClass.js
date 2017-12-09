@@ -55,7 +55,7 @@ export default class App extends Component {
           <View style={styles.logoContainer}>
             <Image source={require('../images/logo-notable-med.png')} />
           </View>
-      <Text style={styles.text}>Email</Text>
+      <Text style={styles.text}>University Email</Text>
         <TextInput style={styles.inputField}
           onChangeText={ (text) => {this.setState({email: text}) }}
 
@@ -97,7 +97,7 @@ export default class App extends Component {
             <Image source={require('../images/logo-notable-med.png')} />
           </View>
 
-          <Text style={styles.text}>Email</Text>
+          <Text style={styles.text}>University Email</Text>
           <TextInput
             onChangeText={ (text) => {this.setState({username: text}) }}
             style={styles.inputField}
@@ -128,9 +128,8 @@ export default class App extends Component {
            />
 
           <TouchableOpacity
-            style={styles.buttonTags}
             onPress={() => this.setState({login:true})} >
-              <Text>Sign in with an existing account</Text>
+              <Text style={{color: '#637898'}}>Sign in with an existing account</Text>
             </TouchableOpacity>
 
         </View>

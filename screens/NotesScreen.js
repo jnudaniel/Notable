@@ -137,11 +137,12 @@ Format = (props) => {
     const possTags = ["#def", "#section", "#key", "#exam", "#what"];
     const means = ["Def", "Section", "Key", "Exam", "What"]
     const currLine = props.line;
-    const toFormat = currLine[0] == '#';
+    var newLine = currLine.trim();
+    const toFormat = newLine[0] == '#';
     // if it is not a hashtag, returns the text
     if(!toFormat) {  <Text>{props.line}</Text> }
     // if it is a drawing
-    if (currLine.indexOf(".png") !== -1) {
+    if (newLine.indexOf(".png") !== -1) {
       if(props.compare) {
         return null;
       }
@@ -154,14 +155,14 @@ Format = (props) => {
                         resizeMode: 'contain'
                     }
                 }>
-          <Image source={{uri: currLine}} resizeMode="contain" style ={{width:100, height:100}} />
+          <Image source={{uri: newLine}} resizeMode="contain" style ={{width:100, height:100}} />
        </Lightbox>)
     }
-      const tag = currLine.split(" ", 1)[0];
-      const content = currLine.substring(currLine.indexOf(" "));
-
+      const tag = newLine.split(" ", 1)[0];
+      const content = newLine.substring(newLine.indexOf(" "));
+      var new_tag = tag.toLowerCase();
       // if it is a hashtag, it styles the text
-      switch (possTags.indexOf(tag)) {
+      switch (possTags.indexOf(new_tag)) {
         case 0: return <Text style={styles.definitionText}>{content}{'\n'}</Text>;
         case 1: return <Text style={styles.sectionText}>{content}{'\n'}</Text>;
         case 2: return <Text style={styles.importantText}>{content}{'\n'}</Text>;
@@ -305,6 +306,7 @@ export default class NotesScreen extends React.Component {
       await this._loadStoredText();
       await this._loadCurrentSlideState();
       await this._loadSlideDeck();
+      await this.getEmail()
       var storedDrawing = await AsyncStorage.getItem("drawing");
       if (storedDrawing != null && storedDrawing != undefined) {
         this.setState({drawing: storedDrawing})
@@ -376,6 +378,11 @@ export default class NotesScreen extends React.Component {
     }
   }
 
+  _handleLogout = () => {
+    const { navigate } = this.props.navigation;
+    navigate("Login");
+  }
+
 // this toggles every time the user clicks the toggle notes button between compare notes and view notes
   _handleToggleNotesButton = () => {
     console.log("In handle toggle notes");
@@ -420,6 +427,7 @@ export default class NotesScreen extends React.Component {
               {this.state.class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: medium_blue, marginLeft: 5, marginRight: 5}}/>  {this.state.lecture_name}
             </Text>*/}
           </View>
+          <Text style={styles.email}>{this.state.email}</Text>
           <TouchableOpacity
             onPress={this._handleToggleNotesButton}
             style={this.toggleCompareStyleButton()}>
@@ -430,10 +438,20 @@ export default class NotesScreen extends React.Component {
             style={this.toggleNotesStyleButton()}>
             <Text style={this.toggleNotesStyleText()}>Compare</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+              onPress={this._handleLogout}
+              style={styles.addMargin}><Text style={styles.logoutText}>Log Out</Text></TouchableOpacity>
           <View style={{height: 2, width: 50}}></View>
         </View>
       </View>
     )
+  }
+
+  getEmail = async () => {
+
+    var storedText = await AsyncStorage.getItem("email");
+    if(storedText == undefined || storedText == null) storedText = ""
+    this.setState({email: storedText});
   }
 
   toggleNotesStyleButton = () => {
@@ -1047,6 +1065,31 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: white,
   },
+  logoutButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 2,
+    backgroundColor: white,
+    borderColor: medium_blue,
+    borderWidth: 3,
+    width: 180,
+    marginRight: 0,
+    marginLeft: 20,
+    paddingVertical: 8,
+  },
+  logoutText: {
+    fontWeight: 'bold',
+    color: medium_blue,
+    textDecorationLine: 'underline',
+  },
+  email: {
+    fontWeight: 'bold',
+    color: darkest_blue,
+    marginRight: 20,
+  },
+  addMargin : {
+    marginLeft: 10,
+  }
   /*
   // --------- SEEM NO LONGER IN USE ---------
   buttonSmall:{

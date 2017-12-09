@@ -77,6 +77,13 @@ export default class MenuSide extends React.Component {
    this.getEmail()
   }
 
+  getEmail = async () => {
+
+    var storedText = await AsyncStorage.getItem("email");
+    if(storedText == undefined || storedText == null) storedText = "No Email Entered"
+    this.setState({email: storedText});
+  }
+
   // chooseLecture(slide_index) {
   //   console.log(slide_index);
   // }
@@ -90,18 +97,17 @@ export default class MenuSide extends React.Component {
     // const { navigate } = this.props.navigation;
     console.log("Saving slide deck number:")
     console.log(this)
-    // console.log("Saving slide deck number:")
-    // console.log(slide_index);
-    // try {
-    //   await AsyncStorage.setItem("slide_deck", slide_index.toString());
-    // } catch (error) {
-    //   console.log('Unable to save slide_deck to AsyncStorage')
-    //   return;
-    // }
-    // NotesScreen.forceUpdateHandler().catch(function(error) {
-    //   console.log(error.message);
-    // });
-    // navigate("Notes");
+    console.log(slide_index);
+    try {
+      await AsyncStorage.setItem("slide_deck", slide_index.toString());
+    } catch (error) {
+      console.log('Unable to save slide_deck to AsyncStorage')
+      return;
+    }
+    NotesScreen.forceUpdateHandler().catch(function(error) {
+      console.log(error.message);
+    });
+    navigate("Notes");
   };
 
   setClass(title, content) {
@@ -137,7 +143,7 @@ export default class MenuSide extends React.Component {
         data={classes.length === 1 && comp(classes_query, classes[0].title) ? [] : classes}
         defaultValue={classes_query}
         onChangeText={text => this.setState({ classes_query: text })}
-        placeholder="Enter the class wish to join"
+        placeholder="Enter your class name   "
         renderItem={({title, content}) => (
            <TouchableOpacity onPress={() => this.setClass(title, content)}>
             <Text >
@@ -160,10 +166,14 @@ export default class MenuSide extends React.Component {
     this.setState({classes_query: ''});
     this.setState({class_done: false});
     var index = this.state.classes_unchosen.map(function(e) { return e.title; }).indexOf(this.state.classes_query);
+    if (index < 0) {
+      this.setState({class_done: false})
+    } else {
     var chosen = this.state.classes_chosen.slice()
     chosen.push(this.state.classes_unchosen[index])
     this.setState({ classes_chosen: chosen })
     this.setState({ classes_unchosen: this.state.classes_unchosen.filter((_, i) => i !== index)});
+    }
   }
 
   render_modal() {
@@ -200,13 +210,6 @@ export default class MenuSide extends React.Component {
         </Text>
       </View>
     );
-  }
-
-  getEmail = async () => {
-
-    var storedText = await AsyncStorage.getItem("email");
-    if(storedText == undefined || storedText == null) storedText = "No Email Entered"
-    this.setState({email: storedText});
   }
 
   _renderContent(section) {
@@ -266,9 +269,6 @@ export default class MenuSide extends React.Component {
           </View>
           <View style={styles.sideMenuLogout}>
             <Text style={styles.email}>{this.state.email}</Text>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={styles.logoutButton}><Text style={styles.logoutText}>Log Out</Text></TouchableOpacity>
           </View>
         </View>
 		  </View>
