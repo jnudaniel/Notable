@@ -7,6 +7,8 @@ import Modal from 'react-native-modal'; // 2.4.0
 import Autocomplete from 'react-native-autocomplete-input';
 import Nav from '../screens/global-widgets/nav'
 import { NotesScreen } from '../screens/NotesScreen.js'
+import { AddClass } from '../screens/AddClass.js'
+
 import {
   setCustomView,
   setCustomTextInput,
@@ -29,6 +31,7 @@ export default class MenuSide extends React.Component {
     super(props);
     this.state = {
      showModal: false,
+     email: 'yourEmail@website.com',
      classes_chosen : [],
      classes_unchosen :[
       {
@@ -71,6 +74,7 @@ export default class MenuSide extends React.Component {
     class_done:false,
    }
    this._renderContent = this._renderContent.bind(this)
+   this.getEmail()
   }
 
   // chooseLecture(slide_index) {
@@ -198,6 +202,13 @@ export default class MenuSide extends React.Component {
     );
   }
 
+  getEmail = async () => {
+
+    var storedText = await AsyncStorage.getItem("email");
+    if(storedText == undefined || storedText == null) storedText = "No Email Entered"
+    this.setState({email: storedText});
+  }
+
   _renderContent(section) {
     return (
       <View style={styles.content}>
@@ -254,7 +265,7 @@ export default class MenuSide extends React.Component {
             </View>
           </View>
           <View style={styles.sideMenuLogout}>
-            <Text style={styles.email}>Email goes here</Text>
+            <Text style={styles.email}>{this.state.email}</Text>
             <TouchableOpacity
               onPress={() => {}}
               style={styles.logoutButton}><Text style={styles.logoutText}>Log Out</Text></TouchableOpacity>
