@@ -74,15 +74,15 @@ export default class MenuSide extends React.Component {
     class_done:false,
    }
    this._renderContent = this._renderContent.bind(this)
-   this.getEmail()
+   // this.getEmail()
   }
 
-  getEmail = async () => {
+  // getEmail = async () => {
 
-    var storedText = await AsyncStorage.getItem("email");
-    if(storedText == undefined || storedText == null) storedText = "No Email Entered"
-    this.setState({email: storedText});
-  }
+  //   var storedText = await AsyncStorage.getItem("email");
+  //   if(storedText == undefined || storedText == null) storedText = "No Email Entered"
+  //   this.setState({email: storedText});
+  // }
 
   // chooseLecture(slide_index) {
   //   console.log(slide_index);
@@ -180,12 +180,12 @@ export default class MenuSide extends React.Component {
     return (
       <Modal isVisible={this.state.visibleModal} >
         <View style={styles.modalContent}>
-        <Button
+           <Button
             title="X"
             borderWidth={10}
             borderColor='medium_blue'
             onPress={() => this.closeModal()}
-            buttonStyle={styles.buttonTags}
+            buttonStyle={styles.buttonTags1}
           />
           <Text style={styles.text}> Enter your class </Text>
             {this.render_class_autocomplete()}
@@ -194,8 +194,8 @@ export default class MenuSide extends React.Component {
             title="Add"
             disabled={!(this.state.class_done)}
             onPress={() => this.addClassToList()}
-            backgroundColor = '#FF6347'
-            buttonStyle={styles.buttonTags}
+            backgroundColor = '#667797'
+            buttonStyle={styles.buttonTags2}
           />
         </View>
       </Modal>
@@ -266,9 +266,6 @@ export default class MenuSide extends React.Component {
               />
               {this.render_modal()}
             </View>
-          </View>
-          <View style={styles.sideMenuLogout}>
-            <Text style={styles.email}>{this.state.email}</Text>
           </View>
         </View>
 		  </View>
@@ -383,5 +380,18 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     borderRadius:40
-  }
+  }, 
+  buttonTags1: {
+    backgroundColor: medium_blue, // for some reason, the button isn't styling color
+    overflow: 'hidden',
+    borderRadius: 10,
+    margin: 4,
+    alignSelf: 'flex-end',
+  },
+  buttonTags2: {
+    backgroundColor: medium_blue, // for some reason, the button isn't styling color
+    overflow: 'hidden',
+    borderRadius: 10,
+    margin: 4,
+  },
 });

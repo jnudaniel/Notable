@@ -115,7 +115,6 @@ export default class App extends Component {
             onChangeText={ (text) => {this.setState({repeat: text}) }}
 
           />
-          <Text> {this.state.email} </Text>
           <Button
             title="Join"
             disable = {(this.state.email.length) == 0}

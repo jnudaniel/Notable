@@ -138,6 +138,9 @@ Format = (props) => {
     const means = ["Def", "Section", "Key", "Exam", "What"]
     const currLine = props.line;
     var newLine = currLine.trim();
+    if (newLine == ""){
+      return <Text>{props.line}</Text>
+    }
     const toFormat = newLine[0] == '#';
     // if it is not a hashtag, returns the text
     if(!toFormat) {  <Text>{props.line}</Text> }
@@ -422,7 +425,7 @@ export default class NotesScreen extends React.Component {
             </Text>
           </View>*/}
           <View style={styles.headerTitles}>
-            <Image source={require('../images/notable-swipe.png')} style={{flex: 1}} />
+            <Image source={require('../images/notable-swipe.png')} style={{marginLeft: 10, flex: 1}} />
             {/*<Text style={styles.class_name}>
               {this.state.class_name}  <FontAwesome name="angle-right" size={20} style={{fontWeight: 'bold', color: medium_blue, marginLeft: 5, marginRight: 5}}/>  {this.state.lecture_name}
             </Text>*/}
