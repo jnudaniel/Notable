@@ -73,9 +73,9 @@ export default class MenuSide extends React.Component {
    this._renderContent = this._renderContent.bind(this)
   }
 
-  chooseLecture(slide_index) {
-    console.log(slide_index);
-  }
+  // chooseLecture(slide_index) {
+  //   console.log(slide_index);
+  // }
 
   componentWillReceiveProps(newProps) {
     console.log("IN MENU");
@@ -85,16 +85,19 @@ export default class MenuSide extends React.Component {
   chooseLecture = async (slide_index) => {
     // const { navigate } = this.props.navigation;
     console.log("Saving slide deck number:")
-    console.log(slide_index);
-    try {
-      await AsyncStorage.setItem("slide_deck", slide_index.toString());
-    } catch (error) {
-      console.log('Unable to save slide_deck to AsyncStorage')
-      return;
-    }
-    NotesScreen.forceUpdateHandler().catch(function(error) {
-      console.log(error.message);
-    });
+    console.log(this)
+    // console.log("Saving slide deck number:")
+    // console.log(slide_index);
+    // try {
+    //   await AsyncStorage.setItem("slide_deck", slide_index.toString());
+    // } catch (error) {
+    //   console.log('Unable to save slide_deck to AsyncStorage')
+    //   return;
+    // }
+    // NotesScreen.forceUpdateHandler().catch(function(error) {
+    //   console.log(error.message);
+    // });
+    // navigate("Notes");
   };
 
   setClass(title, content) {
@@ -166,7 +169,6 @@ export default class MenuSide extends React.Component {
         <Button
             title="X"
             borderWidth={10}
-            backgroundColor='light_blue'
             borderColor='medium_blue'
             onPress={() => this.closeModal()}
             buttonStyle={styles.buttonTags}

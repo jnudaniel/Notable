@@ -33,6 +33,9 @@ const RootStackNavigator = StackNavigator(
     Compare: {
       screen: CompareScreen,
     },
+    MenuSide: {
+      screen: MenuSide,
+    }
   },
   {
     navigationOptions: () => ({
