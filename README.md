@@ -1,19 +1,14 @@
 # Notable
+## A collaborative note taking app
 
-TODOS:
-- plug login screen into workflow
-- make logout screen
-- fix sidebar formatting
-- get compare functionality done
-- fix font
-- fix buggy draw thing
-- fix slide dimensions
-- get all prefilled notes data in
+[Course Website](http://hci.stanford.edu/courses/cs147/2017/au/index.html)
 
 
-- link classes to changing slides
-- button styling
-- populate class notes & what notes
+
+[Project Website](http://web.stanford.edu/class/cs147/projects/equalizingsociety/notable/) *(...or navigate from [here](http://hci.stanford.edu/courses/cs147/2017/au/projects.html))*
+  
 
 
-export app
+
+
+
